@@ -26,7 +26,7 @@
 
     <!-- Button to delete account -->
     <h2>Delete Account</h2>
-    <button id="delete-btn">Delete Account</button>
+    <button id="delete-btn" onclick="deleteUserAccount">Delete Account</button>
 
     <script>
         // JavaScript code to handle form submission and button click events
@@ -41,7 +41,7 @@
             const newPhone = document.getElementById('new-phone').value;
             const newPassword = document.getElementById('new-password').value;
             const original_username = window.location.pathname.split('/')[2];
-            console.log(original_username);
+            // console.log(original_username);
             const formData = {
                 newUsername,
                 newEmail,
@@ -63,13 +63,18 @@
         }
 
         // Function to delete user account
-        function deleteUserAccount() {
-            // Code to delete user account using AJAX/fetch request
-            // Replace this with your actual delete logic
-            // Example: fetch('/delete-user', { method: 'DELETE' });
-
-            // After successful deletion, you may redirect the user to a different page or show a confirmation message
-            alert('User account deleted successfully!');
+        function deleteUserAccount(event) {
+            const original_username = window.location.pathname.split('/')[2];
+            console.log(original_username);
+            fetch(`/user/${original_username}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).catch(error => {
+                console.error('Error delete:', error);
+                alert('Failed to delete user');
+            });
         }
 
         // Add event listeners

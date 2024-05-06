@@ -90,6 +90,7 @@ app.post('/user/:username/delete', async(req, res) => {
   try {
       // Call delete_user function with provided username
       const [response_code, response_msg] = await function_user.delete_user(username);
+      console.log([response_code, response_msg]);
       res.status(response_code).send(response_msg);
   } catch (error) {
       console.error("Error deleting user account:", error);

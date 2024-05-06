@@ -85,7 +85,7 @@ async function delete_user(username: string): Promise<[number, string]>{
     try{
         const query_user = await User.findOne({'username': username});
         if(query_user){
-            User.deleteOne({'username': username});
+            await User.deleteOne({'username': username});
             return [200, 'User deleted successfully.'];
         }
         else{
