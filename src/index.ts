@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { json } from 'body-parser';
 import { connectMongoDB } from './config/connectMongoDB';
-import User from './models/user';
+import * as function_user from './functions/function_user';
 import bodyParser from 'body-parser';
 
 dotenv.config();
@@ -23,6 +23,7 @@ app.get('/', (req, res) => {
   res.send('hello');
 });
 
+// Handling sign up
 app.get('/signup', (req, res) => {
   res.sendFile(__dirname +'/views/signup.html');
 });
@@ -31,25 +32,12 @@ app.get('/signup', (req, res) => {
 app.post('/signup', async (req, res) => {
   console.log(req.body);
   const { username, email, phone, password } = req.body;
-  console.log(username, email, phone, password);
   try {
-      // Check if user with the given username already exists
-      const existingUser = await User.findOne({ username });
-      if (existingUser) {
-          return res.status(400).send('User already exists');
-      }
-      // Create a new user document
-      const newUser = new User({ 
-        username: username, 
-        user_phone: phone,
-        user_email: email,
-        user_password: password
-      });
-      await newUser.save(); // Save the new user to the database
-      res.status(201).send('User created successfully');
-  } catch (err) {
-      console.error('Error creating user:', err);
-      res.status(500).send('Server error');
+    const [response_code, response_msg] = await function_user.create_user(username, email, phone, password);
+    res.status(response_code).send(response_msg);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
