@@ -40,25 +40,24 @@ async function read_user(username: string): Promise<[number, any]> {
 }
 
 // from provided information, update user details
-async function update_user(username: string, newUsername?: string, newEmail?: string, newPhone?: string, newPassword?: string): Promise<[number, string]>{
+async function update_user(username: string, newUsername?: string, newEmail?: string, newPhone?: string, newPassword?: string): Promise<[number, string, string]>{
     try {
+        var return_username = username;
         const user = await User.findOne({ 'username': username });
-
         if (!user) {
-            return [400, 'Cannot fetch this user'];
+            return [400, 'Cannot fetch this user', username];
         }
-
         // Check if new username or email already exists
         if (newUsername !== undefined && newUsername !== user.username && await exist_username(newUsername)) {
-            return [400, 'Invalid new username'];
+            return [400, 'Invalid new username', username];
         }
         if (newEmail !== undefined && newEmail !== user.user_email && await exist_email(newEmail)) {
-            return [400, 'Invalid new email'];
+            return [400, 'Invalid new email', username];
         }
         // Update user fields if new values are provided
         if (newUsername !== undefined && newUsername !== '') {
-            // console.log("AAAAAAAAAAAAAAAAAAA");
             user.username = newUsername;
+            return_username = newUsername;
         }
         if (newEmail !== undefined && newEmail !== '') {
             user.user_email = newEmail;
@@ -72,10 +71,10 @@ async function update_user(username: string, newUsername?: string, newEmail?: st
         // Save the updated user object to the database
         await user.save();
 
-        return [200, 'User updated successfully.'];
+        return [200, 'User updated successfully.', return_username];
     } catch (error) {
         console.error('Error updating user:', error);
-        return [500, 'Internal Server Error'];
+        return [500, 'Internal Server Error', username];
     }
     
 }

@@ -38,7 +38,9 @@ app.post('/signup', async (req, res) => {
     if(response_code == 200){
       res.redirect('/user/' + username);
     }
-    res.status(response_code).send(response_msg);
+    else{
+      res.status(response_code).send(response_msg);
+    }
   } catch (error) {
     console.error("Error creating user:", error);
     res.status(500).send("Internal Server Error");
@@ -54,7 +56,6 @@ app.get('/user/:username', async (req, res) => {
   } catch (error){
     res.status(500).send(error);
   }
-
 });
 
 // Handling updating account information
@@ -69,11 +70,11 @@ app.post('/user/:username/update', async (req, res) => {
   console.log(req.body);
   try {
       // Call update_user function with provided parameters
-      const [response_code, response_msg] = await function_user.update_user(username, newUsername, newEmail, newPhone, newPassword);
-      console.log([response_code, response_msg]);
+      const [response_code, response_msg, uname] = await function_user.update_user(username, newUsername, newEmail, newPhone, newPassword);
+      console.log([response_code, response_msg, uname]);
       // this currently doesnt work
       if(response_code == 200){
-        res.redirect('../../user/' + newUsername);
+        res.redirect('/user/' + uname);
         // res.redirect('/signup')
       }
       else{
@@ -92,7 +93,12 @@ app.post('/user/:username/delete', async(req, res) => {
       // Call delete_user function with provided username
       const [response_code, response_msg] = await function_user.delete_user(username);
       console.log([response_code, response_msg]);
-      res.status(response_code).send(response_msg);
+      if(response_code == 200){
+        res.redirect('/signup');
+      }
+      else{
+        res.status(response_code).send(response_msg);
+      }
   } catch (error) {
       console.error("Error deleting user account:", error);
       res.status(500).send("Internal Server Error");
