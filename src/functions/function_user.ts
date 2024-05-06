@@ -55,18 +55,18 @@ async function update_user(username: string, newUsername?: string, newEmail?: st
         if (newEmail !== undefined && newEmail !== user.user_email && await exist_email(newEmail)) {
             return [400, 'Invalid new email'];
         }
-
         // Update user fields if new values are provided
-        if (newUsername !== undefined) {
+        if (newUsername !== undefined && newUsername !== '') {
+            // console.log("AAAAAAAAAAAAAAAAAAA");
             user.username = newUsername;
         }
-        if (newEmail !== undefined) {
+        if (newEmail !== undefined && newEmail !== '') {
             user.user_email = newEmail;
         }
-        if (newPhone !== undefined) {
+        if (newPhone !== undefined && newPhone !== '') {
             user.user_phone = newPhone;
         }
-        if (newPassword !== undefined) {
+        if (newPassword !== undefined && newPassword !== '') {
             user.user_password = newPassword;
         }
         // Save the updated user object to the database

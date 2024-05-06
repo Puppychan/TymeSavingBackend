@@ -73,7 +73,8 @@ app.post('/user/:username/update', async (req, res) => {
       console.log([response_code, response_msg]);
       // this currently doesnt work
       if(response_code == 200){
-        res.redirect('/user/' + username);
+        res.redirect('../../user/' + newUsername);
+        // res.redirect('/signup')
       }
       else{
         res.status(response_code).send(response_msg);
