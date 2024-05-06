@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 let isConnected = false;
-const MONGODB_URI: string = process.env.MONGODB_URI || '';
+
 
 export const connectMongoDB = async () => {
+  const MONGODB_URI: string = process.env.MONGODB_URI || '';
   mongoose.set("strictQuery", true);
 
   if (isConnected) {
@@ -14,8 +15,8 @@ export const connectMongoDB = async () => {
       MONGODB_URI, 
       {
         // dbName: "share_prompt",
-        // useNewUrlParser: true,
-        // useUnifiedTopology: true,
+        // useNewUrlParser: true,    //default is true -> remove
+        // useUnifiedTopology: true, //default is true -> remove
       }
     );
 
