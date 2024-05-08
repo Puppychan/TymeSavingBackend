@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 let isConnected = false;
 
-
 export const connectMongoDB = async () => {
   const MONGODB_URI: string = process.env.MONGODB_URI || '';
   mongoose.set("strictQuery", true);
 
   if (isConnected) {
+    console.log("MongoDB already connected")
     return;
   }
   try {

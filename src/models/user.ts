@@ -1,7 +1,7 @@
 import mongoose, {Schema, Document} from 'mongoose';
 
 // Interface for user document
-interface User extends Document {
+interface IUser extends Document {
     // user provided information
     username: string;
     user_phone: string;
@@ -32,4 +32,4 @@ const userSchema: Schema = new Schema({
     user_points:  { type: [Schema.Types.Mixed], default: []}, // list of points in different groups - specify format later
   });
 
-export default mongoose.model<User>('User', userSchema);
+export default mongoose.models.User || mongoose.model<IUser>('User', userSchema);
