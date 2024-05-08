@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/User";
 
+
 export const GET = async (req: NextRequest, { params }: { params: { username: string } }) => {
   try {
       await connectMongoDB();
