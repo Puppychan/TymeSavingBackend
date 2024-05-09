@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
-import User from "src/models/User";
-
+import User from "src/models/user/model";
 export const POST = async (req: NextRequest) => {
   try {
-      await connectMongoDB();
-      const payload = await req.json()
-      const {username, password} = payload
-      const user = await User.findOne({'username': username }, {'password': password });
-      if (!user) {
-        return new  NextResponse(JSON.stringify('Login credentials invalid'), { status: 404 });
-      }
+    await connectMongoDB();
+    const payload = await req.json()
+    const {username, password} = payload
+    const user = await User.findOne({'username': username }, {'password': password });
+    if (!user) {
+      return NextResponse.json({ response: 'Login credentials invalid' }, { status: 404 });
+    }
 
-      return new  NextResponse(JSON.stringify('Login successfully'), { status: 200 });
+    return NextResponse.json({ response: 'Login successfully' }, { status: 200 });
   } catch (error: any) {
-      return new NextResponse(error.message, { status: 500 });
+    return NextResponse.json({ response: error.message}, { status: 500 });
   }
 };

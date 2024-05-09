@@ -5,7 +5,7 @@ import "../../public/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "TymeSavingg",
+  title: "TymeSaving",
   description: "TymeSaving - Backend Server",
 };
 

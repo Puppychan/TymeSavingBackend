@@ -14,7 +14,7 @@ export const connectMongoDB = async () => {
     await mongoose.connect(
       MONGODB_URI, 
       {
-        // dbName: "share_prompt",
+        dbName: "tymedata",
         // useNewUrlParser: true,    //default is true -> remove
         // useUnifiedTopology: true, //default is true -> remove
       }
