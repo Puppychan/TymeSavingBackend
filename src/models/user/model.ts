@@ -12,6 +12,7 @@ const userSchema: Schema = new Schema({
     role: {
       type: String,
       enum: Object.values(UserRole),
+      default: UserRole.Customer
     },
 
     // user financial information
