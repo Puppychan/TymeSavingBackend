@@ -6,7 +6,8 @@ export const POST = async (req: NextRequest) => {
     await connectMongoDB();
     const payload = await req.json()
     const {username, password} = payload
-    const user = await User.findOne({'username': username }, {'password': password });
+    const user = await User.findOne({username: username, password: password });
+    console.log(user)
     if (!user) {
       return NextResponse.json({ response: 'Login credentials invalid' }, { status: 404 });
     }
