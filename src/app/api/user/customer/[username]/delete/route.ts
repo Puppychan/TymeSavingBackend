@@ -1,44 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectMongoDB } from "../../../../../config/connectMongoDB";
-import User from "../../../../../models/user/model";
+import { connectMongoDB } from "../../../../../../config/connectMongoDB";
+import User from "../../../../../../models/user/model";
 
-// Check if username exists: return false if no such user exists, true otherwise
-async function exist_username(username:string): Promise<boolean>{
-    try{
-        const query_user = await User.findOne({'username': username});
-        if(query_user){
-            return true;
-        }
-        else{
-            return false;
-        }
-    } catch (error){
-        console.log(error);
-        return true;
-    }
-}
-
-// Check if email exists - we may use phone number in the future
-async function exist_email(email:string): Promise<boolean>{
-    try{
-        const query_user = await User.findOne({'user_email': email});
-        if(query_user){
-            return true;
-        }
-        else{
-            return false;
-        }
-    } catch (error){
-        console.log(error);
-        return true;
-    }
-}
-
-// update user information
+// delete user
 export const POST = async (req: NextRequest, { params }: { params: { username: string }}) => {
     try {
         const username = params.username;
         try{
+            await connectMongoDB();
             const query_user = await User.findOne({'username': username});
             if(query_user){
                 await User.deleteOne({'username': username});

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectMongoDB } from "../../../../config/connectMongoDB";
-import User from "../../../../models/user/model";
+import { connectMongoDB } from "../../../../../config/connectMongoDB";
+import User from "../../../../../models/user/model";
 
 export const POST = async (req: NextRequest) => {
   try {

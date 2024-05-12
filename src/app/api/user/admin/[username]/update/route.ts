@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectMongoDB } from "../../../../../config/connectMongoDB";
-import User from "../../../../../models/user/model";
+import { connectMongoDB } from "../../../../../../config/connectMongoDB";
+import User from "../../../../../../models/user/model";
 
 // Check if username exists: return false if no such user exists, true otherwise
 async function exist_username(username:string): Promise<boolean>{

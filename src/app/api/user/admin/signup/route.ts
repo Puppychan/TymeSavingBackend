@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectMongoDB } from "../../../../config/connectMongoDB";
-import User from "../../../../models/user/model";
+import { connectMongoDB } from "../../../../../config/connectMongoDB";
+import User from "../../../../../models/user/model";
+import {UserRole} from "../../../../../models/user/interface";
 
 // Create user
 export const POST = async (req: NextRequest) => {
@@ -18,7 +19,8 @@ export const POST = async (req: NextRequest) => {
       phone: phone,
       email: email,
       password: password,
-      fullname: fullname
+      fullname: fullname,
+      role:UserRole.Admin
     });
     await newUser.save(); // Save the new user to the database
     return  NextResponse.json({ response: newUser }, { status: 200 });
