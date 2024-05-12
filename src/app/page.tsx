@@ -6,7 +6,7 @@ export default function Home() {
     <main className={styles.main}>
       <div className={styles.description}>
         <p>
-          This is the backend server of TymeSaving
+          This is the backend server of TymeSaving.
         </p>
       </div>
     </main>

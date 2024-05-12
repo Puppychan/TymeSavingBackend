@@ -5,3 +5,4 @@ node_modules/*
 
 # Ignore the build directory
 dist/*
+.next
