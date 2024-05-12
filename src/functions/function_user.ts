@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User from '../models/user';
+import User from '../models/user/model';
 
 // from provided information, create customer user
 async function create_user(username: string, email:string, phone:string, password:string): Promise<[number, string]>{
@@ -29,7 +29,7 @@ async function read_user(username: string): Promise<[number, any]> {
     try{
         const user = await User.findOne({'username': username});
         if (user){
-            return [200, [user.username, user.user_phone, user.user_email, user.role, user.bankAccounts, user.user_points]];
+            return [200, [user.username, user.phone, user.email, user.role, user.bankAccounts, user.userPoints]];
         }
         else{
             return [404, null];
@@ -51,7 +51,7 @@ async function update_user(username: string, newUsername?: string, newEmail?: st
         if (newUsername !== undefined && newUsername !== user.username && await exist_username(newUsername)) {
             return [400, 'Invalid new username', username];
         }
-        if (newEmail !== undefined && newEmail !== user.user_email && await exist_email(newEmail)) {
+        if (newEmail !== undefined && newEmail !== user.email && await exist_email(newEmail)) {
             return [400, 'Invalid new email', username];
         }
         // Update user fields if new values are provided
@@ -60,13 +60,13 @@ async function update_user(username: string, newUsername?: string, newEmail?: st
             return_username = newUsername;
         }
         if (newEmail !== undefined && newEmail !== '') {
-            user.user_email = newEmail;
+            user.email = newEmail;
         }
         if (newPhone !== undefined && newPhone !== '') {
-            user.user_phone = newPhone;
+            user.phone = newPhone;
         }
         if (newPassword !== undefined && newPassword !== '') {
-            user.user_password = newPassword;
+            user.password = newPassword;
         }
         // Save the updated user object to the database
         await user.save();
