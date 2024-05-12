@@ -8,7 +8,7 @@ export const POST = async (req: NextRequest) => {
     await connectMongoDB();
     const payload = await req.json()
     const {username, password, email, fullname, phone } = payload
-    const existingUser = await User.findOne({ $or: [{'username': username }, {'user_email': email }] });
+    const existingUser = await User.findOne({ $or: [{'username': username }, {'email': email }] });
     if (existingUser) {
       return NextResponse.json({response: 'User already exists'}, { status: 400 });
     }
