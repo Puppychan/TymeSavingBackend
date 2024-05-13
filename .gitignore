@@ -39,3 +39,4 @@ next-env.d.ts
 
 # Ignore the build directory
 dist/*
+.next
