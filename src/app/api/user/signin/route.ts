@@ -12,12 +12,12 @@ export const POST = async (req: NextRequest) => {
     const {username, password} = payload
     const user = await User.findOne({username: username});
     if (!user) {
-      return NextResponse.json({ response: `Login credentials invalid. No account with username ${username}` }, { status: 404 });
+      return NextResponse.json({ response: `Login credentials invalid. No account with username ${username}` }, { status: 401});
     }
 
     const same = await checkPassword(password, user.password)
     if (!same) {
-      return NextResponse.json({ response: 'Login credentials invalid. Wrong password' }, { status: 400 });
+      return NextResponse.json({ response: 'Login credentials invalid. Wrong password' }, { status: 401 });
     }
 
     let token = newToken(user)
