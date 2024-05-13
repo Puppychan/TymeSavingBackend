@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
 const SALT = {
-  salt: process.env.SALT || 12
+  saltRounds: parseInt(process.env.SALT_ROUNDS) || '12'
 }
 const JWT = {
   jwt: process.env.JWT_SECRET || '12345-67890-09876-54321',
@@ -22,12 +22,18 @@ export const checkPassword = (passwordInput, passwordHash) => {
 
 export const hashPassword = (password) => {
   return new Promise((resolve, reject) => {
-    bcrypt.hash(password, SALT.salt, (err, hash) => {
+    bcrypt.genSalt(SALT.saltRounds, (err, salt) => {
       if (err) {
         reject(err)
       }
-      resolve(hash)
-    })
+      
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(hash)
+      })
+      });
   })
 }
 
