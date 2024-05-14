@@ -103,7 +103,7 @@ try {
 };
 
 // DELETE: Delete a user from their username.
-export const POST = async (req: NextRequest, { params }: { params: { username: string }}) => {
+export const DELETE = async (req: NextRequest, { params }: { params: { username: string }}) => {
   try {
       const username = params.username;
       try{
