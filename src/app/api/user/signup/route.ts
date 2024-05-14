@@ -1,3 +1,4 @@
+import { UserRole } from './../../../../models/user/interface';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { hashPassword } from "src/lib/authentication";
@@ -25,6 +26,7 @@ export const POST = async (req: NextRequest) => {
     const hashPw = await hashPassword(password)
     // Create a new user document
     const newUser = new User({ 
+      role: UserRole.Customer,
       username: username, 
       phone: phone,
       email: email,

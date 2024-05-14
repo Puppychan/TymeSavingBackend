@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     let token = newToken(user)
-    return NextResponse.json({ response: token }, { status: 200 });
+    return NextResponse.json({ response: token, role: user.role }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
