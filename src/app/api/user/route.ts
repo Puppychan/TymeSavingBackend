@@ -36,7 +36,7 @@ export const POST = async (req: NextRequest) => {
             // 1) Filter by role
             if(vnpParams.hasOwnProperty('filterRole') && (vnpParams['filterRole'] === 'Customer' || vnpParams['filterRole'] === 'Admin')){
                 aggregate.match({ role: vnpParams['filterRole']});
-                console.log(await aggregate.exec());
+                // console.log(await aggregate.exec());
             }
             // 2) Sort username 
             if (vnpParams.hasOwnProperty('sortUsername') && (vnpParams['sortUsername'] === 'ascending' || vnpParams['sortUsername'] === 'descending')) {
@@ -45,20 +45,20 @@ export const POST = async (req: NextRequest) => {
             }
             // 3) Group and sort by role
             if (vnpParams.hasOwnProperty('sortRole') && vnpParams['sortRole'] === 'ascending') {
-                aggregate.group({  _id: "$role" });
+                aggregate.group({ _id: "$role", users: { $push: "$$ROOT" } });
+                aggregate.unwind("$users");
+
                 const sortRoleParam = vnpParams['sortRole'] === 'ascending'? 1:-1;
                 aggregate.sort({ role: sortRoleParam});
+                
             }
-            // 4) Unwind
-            aggregate.unwind("$users");
-            
             // 5) By creation date. Since MongoDB id embeds creation time, we can sort by id.
             if (vnpParams.hasOwnProperty('sortCreation') && vnpParams['sortCreation'] === 'ascending' || vnpParams['sortCreation'] === 'descending') {
                 const sortCreationParam = vnpParams['sortCreation'] === 'ascending'? 1:-1;
                 aggregate.sort({ "users._id": sortCreationParam});
             }
             // Output
-            aggregate.append({ $project: { username: "$users.username", role: "$users.role", email: "$users.email", fullname: "$users.fullname", phone: "$users.phone"  } });
+            aggregate.append({ $project: {password: 0}});
             let result = await aggregate.exec();
 
             return NextResponse.json({ response: result }, { status: 200 });
