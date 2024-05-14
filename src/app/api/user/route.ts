@@ -2,10 +2,10 @@
 
 import { NextRequest, NextResponse } from "next/server";
 // import { useSearchParams } from 'next/navigation';
-import { connectMongoDB } from "../../../../../config/connectMongoDB";
-import User from "../../../../../models/user/model";
+import { connectMongoDB } from "src/config/connectMongoDB";
+import User from "src/models/user/model";
 
-/* The admin page will do the following:
+/* This is the admin page. It will do the following:
   - Show the current user's information
   - List users in the database based on query parameters:
       + byUsername (ascending (1) /descending (-1)): sort the users by their username
