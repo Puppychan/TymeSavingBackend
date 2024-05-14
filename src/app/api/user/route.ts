@@ -8,58 +8,61 @@ import User from "src/models/user/model";
 /* This is the admin page. It will do the following:
   - Show the current user's information
   - List users in the database based on query parameters:
-      + byUsername (ascending (1) /descending (-1)): sort the users by their username
-      + byRole (true/false) separate users by role
-      + byCreation (ascending (1) /descending (-1)): order the users by creation date
+      + sortUsername (ascending /descending): sort the users by their username
+      + sortRole (true/false) separate users by role
+      + sortCreation (ascending/descending): order the users by creation date
+      + filterRole (customer/admin): only show customer/admin users
   {
-    "byUsername": 1,
-    "byRole": "true",
-    "byCreation": -1
+    "sortUsername": "ascending",
+    "sortRole": "true",
+    "sortCreation": "ascending",
+    "filterRole": "admin"
 }
 */
 
-export const POST = async (req: NextRequest, { params }: { params: { username: string } }) => {
+export const POST = async (req: NextRequest) => {
   // const searchParams = useSearchParams();
   // Set default values 
-  // var byUsername: string|null; //default: ascending
-  // var byRole: string|null;
-  // var byCreation: string|null;
+  // var sortUsername: string|null; //default: ascending
+  // var sortRole: string|null;
+  // var sortCreation: string|null;
   // Assign values from search parameter
   // const payload: JSON = JSON.parse(await req.json());
-  // if(payload.hasOwnProperty('byUsername') && ((payload['byUsername'] === 'ascending' || payload.get('byUsername') === 'descending'))){
-  //   byUsername = payload.get('byUsername');
+  // if(payload.hasOwnProperty('sortUsername') && ((payload['sortUsername'] === 'ascending' || payload.get('sortUsername') === 'descending'))){
+  //   sortUsername = payload.get('sortUsername');
   // }
-  // if(payload.hasOwnProperty('byRole') && ((payload.get('byRole') === 'true' || payload.get('byRole') === 'false'))){
-  //   byRole = payload.get('byRole');
+  // if(payload.hasOwnProperty('sortRole') && ((payload.get('sortRole') === 'true' || payload.get('sortRole') === 'false'))){
+  //   sortRole = payload.get('sortRole');
   // }
-  // if(payload.hasOwnProperty('byCreation') && ((payload.('byCreation') === 'ascending' || payload.get('byCreation') === 'descending'))){
-  //   byCreation = payload.get('byCreation');
+  // if(payload.hasOwnProperty('sortCreation') && ((payload.('sortCreation') === 'ascending' || payload.get('sortCreation') === 'descending'))){
+  //   sortCreation = payload.get('sortCreation');
   // }
-  var { byUsername= 1, byRole = 'false', byCreation  = 1 } = await req.json();
+  var { sortUsername = 'ascending', sortRole = 'false', sortCreation = 'descending', filterRole = 'Customer' } = await req.json();
   try {
     await connectMongoDB();
-    const user = await User.findOne({'username': params.username });
-    if (!user) {
-      return NextResponse.json({ response: 'User not found' }, { status: 404 });
-    }
     // User found. Display their information and all users' information.
     // Query options based on query parameters
     var aggregate = User.aggregate();
-    // 1) Sort username
-    if (byUsername === 1 || byUsername === -1) {
-      aggregate.append({ $sort: { username: byUsername } }) ;
+    // 1) Filter by role
+    if(filterRole === 'Customer' || filterRole === 'Admin'){
+        aggregate.append({$match: { role: filterRole}});
     }
-    // 2) Group by role
-    if (byRole === 'true') {
+    // 2) Sort username 
+    if (sortUsername === 'ascending' || sortUsername === 'descending') {
+        const sortUsernameParam = sortUsername === 'ascending' ? 1:-1;
+        aggregate.append({ $sort: { username: sortUsernameParam } }) ;
+    }
+    // 3) Group by role
+    if (sortRole === 'true') {
       aggregate.append({ $group: {  _id: "$role", users: { $push: "$$ROOT" }  } });
     }
-    // 3) Unwind
+    // 4) Unwind
     aggregate.unwind("$users");
     
-    // 4) By creation date. Since MongoDB id embeds creation time, we can sort by id.
-    if (byCreation === 1 || byCreation === -1) {
-      // var byCreationParam:string = byCreation == 'ascending'? 'asc':'desc';
-      aggregate.append({ $sort: { "users._id": byCreation } });
+    // 5) By creation date. Since MongoDB id embeds creation time, we can sort by id.
+    if (sortCreation === 'ascending' || sortCreation === 'descending') {
+      const sortCreationParam = sortCreation === 'ascending'? 1:-1;
+      aggregate.append({ $sort: { "users._id": sortCreationParam} });
     }
     // Output
     aggregate.append({ $project: { username: "$users.username", role: "$users.role", email: "$users.email", fullname: "$users.fullname", phone: "$users.phone"  } });
