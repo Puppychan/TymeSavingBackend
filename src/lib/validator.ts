@@ -1,4 +1,4 @@
-export const usernameValidator = (username) => {
+export const usernameValidator = (username: string) => {
   return (username.length >= 8 && username.length <= 15 && (/^[A-Za-z0-9]*$/.test(username)));
 }
 
@@ -7,7 +7,7 @@ export interface Validator {
   message?: string
 }
 
-export const passwordValidator = (password) => {
+export const passwordValidator = (password: string) => {
   // min 8 character, max 20 character
   if (password.length < 8 || password.length > 20) 
     return {status: false, message: "Password must be at least 8 characters and at most 20 characters"} as Validator;
