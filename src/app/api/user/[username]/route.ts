@@ -109,13 +109,13 @@ export const DELETE = async (req: NextRequest, { params }: { params: { username:
       try{
           await connectMongoDB();
           const query_user = await User.findOne({'username': username}).select('-password');
-          if(query_user){
-              await User.deleteOne({'username': username});
-              return NextResponse.json({ response: 'User deleted successfully.' }, { status: 200 });
+          if(!query_user){
+            return NextResponse.json({ response: 'No such user.' }, { status: 400 });
           }
-          else{
-              return NextResponse.json({ response: 'No such user.' }, { status: 400 });
-          }
+          
+          await User.deleteOne({'username': username});
+          return NextResponse.json({ response: 'User deleted successfully.' }, { status: 200 });
+          
       } catch (error){
           console.log(error);
           return NextResponse.json({ response: username + ' could not be deleted.' }, { status: 500 });
