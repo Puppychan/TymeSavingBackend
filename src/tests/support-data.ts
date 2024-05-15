@@ -5,4 +5,3 @@ export const defaultUser = {
   password: "Rmit123@",
   fullname: "Khanh Tran",
 };
-

@@ -7,6 +7,7 @@ export const GET = async (req: NextRequest, { params }: { params: { username: st
   try {
     await connectMongoDB();
     const user = await User.findOne({'username': params.username }).select('-password');
+    console.log("User", user);
     if (!user) {
       return NextResponse.json({ response: 'User not found' }, { status: 404 });
     }
@@ -108,7 +109,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { username:
       const username = params.username;
       try{
           await connectMongoDB();
-          const query_user = await User.findOne({'username': username}).select('-password');
+          const query_user = await User.findOne({'username': username});
           if(query_user){
               await User.deleteOne({'username': username});
               return NextResponse.json({ response: 'User deleted successfully.' }, { status: 200 });

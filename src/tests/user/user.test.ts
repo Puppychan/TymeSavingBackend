@@ -4,8 +4,6 @@ import { POST } from "../../app/api/user/signup/route";
 import { NextRequest } from "next/server";
 import { disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
-import bcrypt from 'bcrypt'
-import { checkPassword, hashPassword } from "src/lib/authentication";
 import { defaultUser } from "../support-data";
 
 // const res: jest.Mocked<NextResponse> = {
@@ -15,15 +13,10 @@ import { defaultUser } from "../support-data";
 
 describe("/api/user", () => {
   beforeEach(async () => {
-    // await connectMongoDB();
-    // await connectMongoDBTest();
 
     jest.resetAllMocks();
   });
   afterEach(async () => {
-    // await mongoose.connection.dropDatabase();
-    // await mongoose.connection.close();
-    // await disconnectDBTest();
     await disconnectDB();
     jest.clearAllMocks();
   });
@@ -80,15 +73,9 @@ describe("/api/user", () => {
     jest
       .spyOn(User, "findOne")
       .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce({ email: "hakhanhne@gmail.com" });
+      .mockResolvedValueOnce({ email: defaultUser.email });
     const req = {
-      json: async () => ({
-        username: "hakhanhne",
-        phone: "0938881145",
-        email: "hakhanhne@gmail.com",
-        password: "Rmit123@",
-        fullname: "Khanh Tran",
-      }),
+      json: async () => (defaultUser),
     } as NextRequest;
 
     const res = await POST(req);
@@ -101,16 +88,12 @@ describe("/api/user", () => {
   test("Invalid Password", async () => {
     // Mock the functions
     // mock for findOne by username and email
-    // Mock the functions
     jest.spyOn(User, "findOne").mockReturnValue(null).mockReturnValue(null);
 
     const req = {
       json: async () => ({
-        username: "hakhanhne",
-        phone: "0938881145",
-        email: "hakhanhne@gmail.com",
+        ...defaultUser,
         password: "123123",
-        fullname: "Khanh Tran",
       }),
     } as NextRequest;
 
@@ -130,13 +113,7 @@ describe("/api/user", () => {
     })
 
     const req = {
-      json: async () => ({
-        username: "hakhanhne",
-        phone: "0938881145",
-        email: "hakhanhne@gmail.com",
-        password: "Rmit123@",
-        fullname: "Khanh Tran",
-      }),
+      json: async () => (defaultUser),
     } as NextRequest;
 
     const res = await POST(req);
@@ -145,6 +122,4 @@ describe("/api/user", () => {
     expect(res.status).toBe(500);
     expect(json.response).toEqual("Internal error");
   });
-
-  // Additional tests for PUT, DELETE, and other scenarios like error handling
 });
