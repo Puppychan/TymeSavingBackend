@@ -133,13 +133,12 @@ describe("User Handlers", () => {
   describe('DELETE', () => {
     it('should delete user if user exists', async () => {
       const mockUser = { username: defaultUser.username };
-      (User.findOne as jest.Mock).mockResolvedValueOnce({
-        select: jest.fn().mockResolvedValueOnce(mockUser),
-      });
+      jest.spyOn(User, "findOne").mockResolvedValue({ username: defaultUser.username });
       (User.deleteOne as jest.Mock).mockResolvedValueOnce({});
 
+
       const req = {} as NextRequest;
-      const params = { username: 'john_doe' };
+      const params = { username: defaultUser.username };
       const res = await DELETE(req, { params });
       const json = await res.json();
 
@@ -148,12 +147,10 @@ describe("User Handlers", () => {
     });
 
     it('should return 400 if user not found', async () => {
-      (User.findOne as jest.Mock).mockResolvedValueOnce({
-        select: jest.fn().mockResolvedValueOnce(null),
-      });
+      jest.spyOn(User, "findOne").mockResolvedValue(null);
 
       const req = {} as NextRequest;
-      const params = { username: 'unknown_user' };
+      const params = { username: defaultUser.username };
       const res = await DELETE(req, { params });
       const json = await res.json();
 
@@ -166,12 +163,12 @@ describe("User Handlers", () => {
       (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
 
       const req = {} as NextRequest;
-      const params = { username: 'john_doe' };
+      const params = { username: defaultUser.username };
       const res = await DELETE(req, { params });
       const json = await res.json();
 
       expect(res.status).toBe(500);
-      expect(json.response).toBe('john_doe could not be deleted.');
+      expect(json.response).toBe(`${defaultUser.username} could not be deleted.`);
     });
   });
 });
