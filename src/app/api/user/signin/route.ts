@@ -4,7 +4,7 @@ import { checkPassword, newToken } from "src/lib/authentication";
 import User from "src/models/user/model";
 
 // body: {username, password}
-// response: token
+// response: {token: token, role: role }
 export const POST = async (req: NextRequest) => {
   try {
     await connectMongoDB();
@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     let token = newToken(user)
-    return NextResponse.json({ response: token, role: user.role }, { status: 200 });
+    return NextResponse.json({ response: {token: token, role: user.role} }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
