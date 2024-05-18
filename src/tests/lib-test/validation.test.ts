@@ -2,7 +2,7 @@ import { usernameValidator, passwordValidator, Validator } from 'src/lib/validat
 
 describe('usernameValidator', () => {
   it('should return true for valid username', () => {
-    expect(usernameValidator('ValidUser1')).toBe(true);
+    expect(usernameValidator('ValidUser_1')).toBe(true);
   });
 
   it('should return false for username less than 8 characters', () => {
@@ -12,9 +12,8 @@ describe('usernameValidator', () => {
   it('should return false for username more than 15 characters', () => {
     expect(usernameValidator('ThisIsAVeryLongUsername')).toBe(false);
   });
-
   it('should return false for username with invalid characters', () => {
-    expect(usernameValidator('Invalid_User')).toBe(false);
+    expect(usernameValidator('Invalid_User;')).toBe(false);
   });
 });
 

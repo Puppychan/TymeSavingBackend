@@ -18,10 +18,10 @@ export const POST = async (req: NextRequest) => {
     if (existingMail) {
       return NextResponse.json({response: 'This email is already used'}, { status: 400 });
     }
-    
+
     const validUsername = usernameValidator(username)
-    if (!validUsername)
-      return NextResponse.json({ response: 'Invalid username'}, { status: 400 });
+    if (!validUsername.status)
+      return NextResponse.json({ response: validUsername.message ?? 'Invalid username'}, { status: 400 });
 
     const validPassword = passwordValidator(password)
     if (!validPassword.status)
