@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { pinValidator } from "src/lib/validator";
 import User from "src/models/user/model";
 
 // Set/update PIN
@@ -19,6 +20,10 @@ export const POST = async (req: NextRequest, { params }: { params: { username: s
         return NextResponse.json({ response: `Cannot update: PIN is incorrect` }, { status: 401 }); 
     }
 
+    const validPin = pinValidator(newPIN)
+    if (!validPin.status)
+      return NextResponse.json({ response: validPin.message ?? 'Invalid PIN'}, { status: 400 });
+    
     const  updatedUser = await User.findOneAndUpdate(
         { username: params.username },
         { $set: {pin: newPIN} },
