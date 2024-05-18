@@ -20,7 +20,7 @@ import User from "src/models/user/model";
 }
 */
 
-export const GET = async (req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
     try {
         let urlSearchParams = req.nextUrl.searchParams;
         let vnpParams:  { [key: string]: string } = {};
