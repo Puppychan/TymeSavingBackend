@@ -1,5 +1,5 @@
 export const usernameValidator = (username: string) => {
-  return (username.length >= 8 && username.length <= 15 && (/^[A-Za-z0-9]*$/.test(username)));
+  return (username.length >= 8 && username.length <= 15 && (/^[A-Za-z0-9_]*$/.test(username)));
 }
 
 export interface Validator {

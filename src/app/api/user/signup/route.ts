@@ -2,7 +2,7 @@ import { UserRole } from './../../../../models/user/interface';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { hashPassword } from "src/lib/authentication";
-import { passwordValidator } from "src/lib/validator";
+import { passwordValidator, usernameValidator } from "src/lib/validator";
 import User from "src/models/user/model";
 
 export const POST = async (req: NextRequest) => {
@@ -18,6 +18,10 @@ export const POST = async (req: NextRequest) => {
     if (existingMail) {
       return NextResponse.json({response: 'This email is already used'}, { status: 400 });
     }
+    
+    const validUsername = usernameValidator(username)
+    if (!validUsername)
+      return NextResponse.json({ response: 'Invalid username'}, { status: 400 });
 
     const validPassword = passwordValidator(password)
     if (!validPassword.status)

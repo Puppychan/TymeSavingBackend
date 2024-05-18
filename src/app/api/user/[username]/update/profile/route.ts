@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { usernameValidator } from "src/lib/validator";
 import { IUser } from "src/models/user/interface";
 import User from "src/models/user/model";
 
@@ -57,8 +58,11 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
           return NextResponse.json({ response: 'User not found' }, { status: 404 });
       }
       // If username/email is being updated: Check if new username or email already exists
-      if (payload.username && payload.username !== user.username && await exist_username(payload.username)) {
-        return NextResponse.json({ response: 'This username is used by another account' }, { status: 400 });
+      if (payload.username && payload.username !== user.username) {
+        const exist = await exist_username(payload.username)
+        if (exist) return NextResponse.json({ response: 'This username is used by another account' }, { status: 400 });
+        const valid = usernameValidator(payload.username)
+        if (!valid) return NextResponse.json({ response: 'Username is invalid' }, { status: 400 });
       }
       if (payload.email && payload.email !== user.email && await exist_email(payload.email)) {
         return NextResponse.json({ response: 'This email is used by another account' }, { status: 400 });
@@ -66,7 +70,8 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
 
       const updateQuery: any = {};
       Object.keys(payload).forEach(key => {
-          updateQuery[`${key}`] = payload[key as keyof IUser];
+          if (key !== 'password' && key !== 'pin' )
+            updateQuery[`${key}`] = payload[key as keyof IUser];
       });
 
       const updatedUser = await User.findOneAndUpdate(
