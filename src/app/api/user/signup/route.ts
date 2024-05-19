@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const validUsername = usernameValidator(username)
-    if (!validUsername.status)
+    if (!validUsername.status) 
       return NextResponse.json({ response: validUsername.message ?? 'Invalid username'}, { status: 400 });
 
     const validPassword = passwordValidator(password)

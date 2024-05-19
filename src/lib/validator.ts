@@ -8,13 +8,13 @@ export interface Validator {
 // }
 
 export const usernameValidator = (username: string) : Validator =>  {
-  // min 8 character, max 20 character
-  if (username.length < 8 || username.length > 15) 
-    return {status: false, message: "Username must be at least 8 characters and at most 15 characters"};
+  // min 5 character, max 15 character
+  if (username.length < 5 || username.length > 15) 
+    return {status: false, message: "Username must be at least 5 characters and at most 15 characters"};
 
   // false if string contains other kind of character
   if (!(/^[A-Za-z0-9_]*$/.test(username))) 
-    return {status: false, message: "Password can only be A-Z a-z 0-9 !@#$%^&*"};
+    return {status: false, message: "Username can only be A-Z a-z 0-9 _"};
 
   return {status: true};
 }

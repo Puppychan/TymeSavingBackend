@@ -85,6 +85,25 @@ describe("/api/user", () => {
     expect(json.response).toEqual("This email is already used");
   });
 
+  test("Invalid Username", async () => {
+    // Mock the functions
+    // mock for findOne by username and email
+    jest.spyOn(User, "findOne").mockReturnValue(null).mockReturnValue(null);
+
+    const req = {
+      json: async () => ({
+        ...defaultUser,
+        username: "hi"
+      }),
+    } as NextRequest;
+
+    const res = await POST(req);
+    const json = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(json.response).toEqual("Username must be at least 5 characters and at most 15 characters");
+  });
+
   test("Invalid Password", async () => {
     // Mock the functions
     // mock for findOne by username and email

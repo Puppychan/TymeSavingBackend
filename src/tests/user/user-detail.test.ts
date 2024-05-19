@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
-import { GET, PUT, DELETE } from "src/app/api/user/[username]/route";
+import { GET, DELETE } from "src/app/api/user/[username]/route";
 import { defaultUser } from "../support-data";
 
 // Mock the dependencies

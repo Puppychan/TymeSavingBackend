@@ -1,19 +1,27 @@
-import { usernameValidator, passwordValidator, Validator } from 'src/lib/validator';
+import { usernameValidator, passwordValidator, Validator, pinValidator } from 'src/lib/validator';
 
 describe('usernameValidator', () => {
   it('should return true for valid username', () => {
-    expect(usernameValidator('ValidUser_1')).toBe(true);
+    const result = usernameValidator('ValidUser_1');
+    expect(result.status).toBe(true);
   });
 
-  it('should return false for username less than 8 characters', () => {
-    expect(usernameValidator('Short1')).toBe(false);
+  it('should return false for username less than 5 characters', () => {
+    const result: Validator = usernameValidator('hi');
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('Username must be at least 5 characters and at most 15 characters');
   });
 
   it('should return false for username more than 15 characters', () => {
-    expect(usernameValidator('ThisIsAVeryLongUsername')).toBe(false);
+    const result: Validator = usernameValidator('ThisIsAVeryLongUsername');
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('Username must be at least 8 characters and at most 15 characters');
   });
+
   it('should return false for username with invalid characters', () => {
-    expect(usernameValidator('Invalid_User;')).toBe(false);
+    const result: Validator = usernameValidator('Invalid_User@');
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('Username can only be A-Z a-z 0-9 _');
   });
 });
 
@@ -58,5 +66,26 @@ describe('passwordValidator', () => {
     const result: Validator = passwordValidator('InvalidChar1@_');
     expect(result.status).toBe(false);
     expect(result.message).toBe('Password can only be A-Z a-z 0-9 !@#$%^&*');
+  });
+});
+
+
+describe('pinValidator', () => {
+  it('should return true for valid pin', () => {
+    const result: Validator = pinValidator('0123');
+    expect(result.status).toBe(true);
+  });
+
+  it('should return false for not being exactly 4 digits ', () => {
+    const result: Validator = pinValidator('12345');
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('PIN must have 4 digits');
+  });
+
+
+  it('should return false for having other than numbers', () => {
+    const result: Validator = pinValidator('123a');
+    expect(result.status).toBe(false);
+    expect(result.message).toBe('PIN must contain only numbers');
   });
 });
