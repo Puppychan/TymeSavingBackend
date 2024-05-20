@@ -21,11 +21,11 @@ export const POST = async (req: NextRequest) => {
 
     const validUsername = usernameValidator(username)
     if (!validUsername.status) 
-      return NextResponse.json({ response: validUsername.message ?? 'Invalid username'}, { status: 400 });
+      return NextResponse.json({ response: validUsername.message }, { status: 400 });
 
     const validPassword = passwordValidator(password)
     if (!validPassword.status)
-      return NextResponse.json({ response: validPassword.message ?? 'Invalid password'}, { status: 400 });
+      return NextResponse.json({ response: validPassword.message }, { status: 400 });
 
     const hashPw = await hashPassword(password)
     // Create a new user document

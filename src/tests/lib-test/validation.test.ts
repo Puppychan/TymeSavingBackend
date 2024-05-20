@@ -15,7 +15,7 @@ describe('usernameValidator', () => {
   it('should return false for username more than 15 characters', () => {
     const result: Validator = usernameValidator('ThisIsAVeryLongUsername');
     expect(result.status).toBe(false);
-    expect(result.message).toBe('Username must be at least 8 characters and at most 15 characters');
+    expect(result.message).toBe('Username must be at least 5 characters and at most 15 characters');
   });
 
   it('should return false for username with invalid characters', () => {
