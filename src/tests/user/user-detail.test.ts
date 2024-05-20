@@ -12,8 +12,8 @@ describe("User Handlers", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
-  afterEach(async () => {
-    // await disconnectDB();
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -51,7 +51,6 @@ describe("User Handlers", () => {
       const req = {} as NextRequest;
       const params = { username: 'unknown_user' };
       const res = await GET(req, { params });
-      console.log("User", res);
       const json = await res.json();
 
       expect(res.status).toBe(404);

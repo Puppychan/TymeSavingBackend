@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { checkPassword, newToken } from "src/lib/authentication";
+import { UserRole } from "src/models/user/interface";
 import User from "src/models/user/model";
 
 // body: {username, password}
@@ -21,8 +22,9 @@ export const POST = async (req: NextRequest) => {
     }
 
     let token = newToken(user)
-    return NextResponse.json({ response: {token: token, role: user.role} }, { status: 200 });
+    return NextResponse.json({ response: {token: token, role: user.role ?? UserRole.Customer} }, { status: 200 });
   } catch (error: any) {
+    console.log(error)
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
 };

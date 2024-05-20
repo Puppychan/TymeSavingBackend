@@ -5,39 +5,9 @@ import { usernameValidator } from "src/lib/validator";
 import { IUser } from "src/models/user/interface";
 import User from "src/models/user/model";
 
-// // Check if username exists: return false if no such user exists, true otherwise
-// async function exist_username(username:string): Promise<boolean>{
-//   try{
-//     const query_user = await User.findOne({'username': username}).select('-password');
-//     if(query_user){
-//       return true;
-//     }
-//     return false;
-//   } catch (error){
-//     console.log(error);
-//     return true;
-//   }
-// }
-
-// // Check if email exists - we may use phone number in the future
-// async function exist_email(email:string): Promise<boolean>{
-//   try{
-//     const query_user = await User.findOne({'email': email}).select('-password');
-//     if(query_user){
-//       return true;
-//     }
-//     return false;
-//   } catch (error){
-//     console.log(error);
-//     return true;
-//   }
-// }
-
-// PUT: update user information
+// PUT: update user information (except for password and pin)
 export const PUT = async (req: NextRequest, { params }: { params: { username: string }}) => {
   try {
-      // const {newUsername, newEmail, newFullname, newPhone} = payload
-      // const user = await User.findOne({'username': username });
       await connectMongoDB();
       const payload = await req.json() as Partial<IUser> //payload = newUser
       const user = await User.findOne({ 'username': params.username }).select('-password');
