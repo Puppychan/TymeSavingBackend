@@ -21,7 +21,10 @@ export const POST = async (req: NextRequest) => {
     }
 
     let token = newToken(user)
-    return NextResponse.json({ response: token, role: user.role }, { status: 200 });
+    // Convert the user document to a plain JavaScript object and remove the password field
+    let returnUser = user.toObject();
+    delete returnUser.password;
+    return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
