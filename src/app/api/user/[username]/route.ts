@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyUser } from "src/lib/authentication";
 import User from "src/models/user/model";
 
 // GET: Read the user information
@@ -9,13 +10,16 @@ export const GET = async (
 ) => {
   try {
     await connectMongoDB();
-    const user = await User.findOne({ username: params.username }).select(
-      "-password"
-    );
-    console.log("User", user);
+    const verification = await verifyUser(req.headers, params.username)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
+    const user = await User.findOne({ username: params.username }).select("-password")
     if (!user) {
       return NextResponse.json({ response: "User not found" }, { status: 404 });
     }
+
     return NextResponse.json({ response: user }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ response: error.message }, { status: 500 });
@@ -31,6 +35,11 @@ export const DELETE = async (
   const username = params.username;
   try {
     await connectMongoDB();
+    const verification = await verifyUser(req.headers, params.username)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
     const query_user = await User.findOne({ username: username });
     if (query_user) {
       await User.deleteOne({ username: username });

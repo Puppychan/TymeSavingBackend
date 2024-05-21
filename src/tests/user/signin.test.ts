@@ -45,6 +45,27 @@ describe("/api/user/signin", () => {
     expect(json.response.role).toEqual(UserRole.Admin);
   });
 
+  test("SIGN IN: Success (role not found -> auto assume Customer)", async () => {
+    jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, role: undefined});
+    (bcrypt.compare as jest.Mock).mockImplementation((password, hash, callback) => {
+      callback(null, true);
+    });
+
+    const body = {username: defaultUser.username, password: defaultUser.password}
+    // simulate the request body
+    let req = {
+      json: async () => (body),
+    } as NextRequest;
+
+    // simulate the POST request
+    const res = await POST(req);
+    const json = await res.json();
+    console.log(json.response)
+
+    expect(res.status).toBe(200);
+    expect(json.response.role).toEqual(UserRole.Customer);
+  });
+
   test("SIGN IN: not found username", async () => {
     // // Mock the functions
     jest

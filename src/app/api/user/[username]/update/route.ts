@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyUser } from "src/lib/authentication";
 import { exist_email, exist_username } from "src/lib/checkExist";
 import { usernameValidator } from "src/lib/validator";
 import { IUser } from "src/models/user/interface";
@@ -9,6 +10,11 @@ import User from "src/models/user/model";
 export const PUT = async (req: NextRequest, { params }: { params: { username: string }}) => {
   try {
       await connectMongoDB();
+      const verification = await verifyUser(req.headers, params.username)
+      if (verification.status !== 200) {
+        return NextResponse.json({ response: verification.response }, { status: verification.status });
+      }
+
       const payload = await req.json() as Partial<IUser> //payload = newUser
       const user = await User.findOne({ 'username': params.username }).select('-password');
       if (!user) {

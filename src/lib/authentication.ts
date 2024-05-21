@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { UserRole } from 'src/models/user/interface'
+import User from 'src/models/user/model'
 
 // const SALT = {
 //   saltRounds: parseInt(process.env.SALT_ROUNDS) || 12
@@ -44,10 +46,35 @@ export const newToken = (user) => {
   })
 }
 
-export const verifyToken = (token) =>
+export const verifyToken = (token): any =>
   new Promise((resolve, reject) => {
     jwt.verify(token, JWT.jwt, (err, payload) => {
       if (err) return reject(err)
       resolve(payload)
     })
   })
+
+export const verifyUser = async (headers: Headers, username?) => {
+  try {
+    const auth = headers.get('Authorization');
+    const token = auth?.split(" ")[1];
+    if(!auth || !token) 
+      return { response: "Unauthorized: Token is required in request header", status: 401 };
+  
+    const decoded = await verifyToken(token)
+    const authuser = await User.findOne({ _id: decoded.id })
+    if (!authuser)
+      return { response: "Unauthorized: User not found", status: 401 };
+  
+    if (username)
+      if (authuser.role !== UserRole.Admin && authuser.username !== username) {
+        return { response: "Forbidden action", status: 403 };
+      }
+  
+    return { response: {...authuser, password: undefined}, status: 200 };  
+  }
+  catch (err) {
+    console.log(err)
+    return { response: `Unauthorized: ${err.message}`, status: 401 };
+  }
+}
