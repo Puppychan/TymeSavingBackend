@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { checkPassword, newToken } from "src/lib/authentication";
+import { UserRole } from "src/models/user/interface";
 import User from "src/models/user/model";
 
 // body: {username, password}
-// response: token
+// response: {token: token, role: role }
 export const POST = async (req: NextRequest) => {
   try {
     await connectMongoDB();
@@ -26,6 +27,7 @@ export const POST = async (req: NextRequest) => {
     delete returnUser.password;
     return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
   } catch (error: any) {
+    console.log(error)
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
 };

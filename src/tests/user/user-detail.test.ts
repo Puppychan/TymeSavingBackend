@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
-import { GET, PUT, DELETE } from "src/app/api/user/[username]/route";
+import { GET, DELETE } from "src/app/api/user/[username]/route";
 import { defaultUser } from "../support-data";
 
 // Mock the dependencies
@@ -12,8 +12,8 @@ describe("User Handlers", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
-  afterEach(async () => {
-    // await disconnectDB();
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
@@ -51,7 +51,6 @@ describe("User Handlers", () => {
       const req = {} as NextRequest;
       const params = { username: 'unknown_user' };
       const res = await GET(req, { params });
-      console.log("User", res);
       const json = await res.json();
 
       expect(res.status).toBe(404);

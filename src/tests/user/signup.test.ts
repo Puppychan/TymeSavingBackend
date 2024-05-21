@@ -6,38 +6,24 @@ import { disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
 import { defaultUser } from "../support-data";
 
-// const res: jest.Mocked<NextResponse> = {
-//   status: jest.fn().mockReturnThis(),
-//   response: jest.fn(),
-// } as unknown as jest.Mocked<NextResponse>;
-
-describe("/api/user", () => {
-  beforeEach(async () => {
-
+describe("/api/user/signup", () => {
+  beforeEach(() => {
     jest.resetAllMocks();
   });
-  afterEach(async () => {
-    await disconnectDB();
+
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  // test("GET /api/user - Success", async () => {
-  //   const { req, res } = createMocks({
-  //     method: "GET",
-  //   });
+  afterAll(async () => {  
+    await disconnectDB();
+  });
 
-  //   // await POS(req, res);
-
-  //   expect(res._getStatusCode()).toBe(200);
-  //   expect(Array.isArray(JSON.parse(res._getData()))).toBeTruthy();
-  // });
-
-  test("POST /api/user/signup - Success", async () => {
+  test("SIGN UP: Success", async () => {
     // Mock the functions
     jest.spyOn(User, "findOne").mockReturnValue(null).mockReturnValue(null);
     // Mock to ensure the save function is called but not saving to the database
-    jest.spyOn(User.prototype, "save").mockResolvedValueOnce(null);
-
+    jest.spyOn(User.prototype, "save").mockImplementation();
 
     // simulate the request body
     let req = {
@@ -53,7 +39,7 @@ describe("/api/user", () => {
     expect(json.response.fullname).toEqual(defaultUser.fullname);
   });
 
-  test("Username already used", async () => {
+  test("SIGN UP: Username already used", async () => {
     // Mock the functions
     jest.spyOn(User, "findOne").mockResolvedValue({ username: defaultUser.username });
 
@@ -68,7 +54,7 @@ describe("/api/user", () => {
     expect(json.response).toEqual("This username is already used");
   });
 
-  test("Email already used", async () => {
+  test("SIGN UP: Email already used", async () => {
     // Mock the functions to return null for the first call (findOne by username) and a user object for the second call (findOne by email)
     jest
       .spyOn(User, "findOne")
@@ -85,7 +71,26 @@ describe("/api/user", () => {
     expect(json.response).toEqual("This email is already used");
   });
 
-  test("Invalid Password", async () => {
+  test("SIGN UP: Invalid Username", async () => {
+    // Mock the functions
+    // mock for findOne by username and email
+    jest.spyOn(User, "findOne").mockReturnValue(null).mockReturnValue(null);
+
+    const req = {
+      json: async () => ({
+        ...defaultUser,
+        username: "hi"
+      }),
+    } as NextRequest;
+
+    const res = await POST(req);
+    const json = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(json.response).toEqual("Username must be at least 5 characters and at most 15 characters");
+  });
+
+  test("SIGN UP: Invalid Password", async () => {
     // Mock the functions
     // mock for findOne by username and email
     jest.spyOn(User, "findOne").mockReturnValue(null).mockReturnValue(null);
@@ -105,8 +110,7 @@ describe("/api/user", () => {
   });
 
 
-
-  test("Internal server error", async () => {
+  test("SIGN UP: Internal server error", async () => {
     // Mock the functions
     jest.spyOn(User, "findOne").mockImplementationOnce(() => {
       throw new Error("Internal error");

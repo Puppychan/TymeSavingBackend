@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 
-const SALT = {
-  saltRounds: parseInt(process.env.SALT_ROUNDS) || 12
-}
+// const SALT = {
+//   saltRounds: parseInt(process.env.SALT_ROUNDS) || 12
+// }
 const JWT = {
   jwt: process.env.JWT_SECRET || '12345-67890-09876-54321',
   jwtExp: '5d', //5 days
@@ -22,7 +22,8 @@ export const checkPassword = (passwordInput, passwordHash) => {
 
 export const hashPassword = (password: string) => {
   return new Promise((resolve, reject) => {
-    bcrypt.genSalt(SALT.saltRounds, (err, salt) => {
+
+    bcrypt.genSalt(parseInt(process.env.SALT_ROUNDS), (err, salt) => {
       if (err) {
         reject(err)
       }
