@@ -23,7 +23,7 @@ export const POST = async (req: NextRequest, { params }: { params: { username: s
     // validate new password
     const validPassword = passwordValidator(newPassword)
     if (!validPassword.status)
-      return NextResponse.json({ response: validPassword.message ?? 'Invalid password'}, { status: 400 });
+      return NextResponse.json({ response: validPassword.message}, { status: 400 });
 
     // check if current password is correct
     const same = await checkPassword(currentPassword, user.password)

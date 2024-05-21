@@ -16,7 +16,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       }
 
       const payload = await req.json() as Partial<IUser> //payload = newUser
-      const user = await User.findOne({ 'username': params.username }).select('-password');
+      const user = await User.findOne({ 'username': params.username });
       if (!user) {
         return NextResponse.json({ response: 'User not found' }, { status: 404 });
       }
@@ -26,7 +26,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
         if (exist) return NextResponse.json({ response: 'This username is used by another account' }, { status: 400 });
         const validUsername = usernameValidator(payload.username)
         if (!validUsername.status)
-          return NextResponse.json({ response: validUsername.message ?? 'Invalid username'}, { status: 400 });
+          return NextResponse.json({ response: validUsername.message}, { status: 400 });
       }
       if (payload.email && payload.email !== user.email && await exist_email(payload.email)) {
         return NextResponse.json({ response: 'This email is used by another account' }, { status: 400 });
@@ -49,7 +49,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       console.log('updatedUser:', updatedUser);
       return NextResponse.json({ response: updatedUser }, { status: 200 });
   } catch (error: any) {
-    console.error('Error updating user:', error);
+    console.log('Error updating user:', error);
     return NextResponse.json({ response: 'Cannot update user ' + params.username }, { status: 500 });
   }
 };
