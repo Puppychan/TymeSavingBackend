@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 // import { useSearchParams } from 'next/navigation';
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
+import { csvToDB } from "src/lib/readCSV";
 
 /* This is the admin page. It will do the following:
   - Show the current user's information
@@ -67,5 +68,16 @@ export const GET = async (req: NextRequest) => {
         }
     } catch (error){
         console.log(error);
+    }
+}
+
+export const POST = async (req: NextRequest) => {
+    try{
+        let filePath = 'data/NI Data - User.csv';
+        const result = await csvToDB(filePath);
+        return NextResponse.json({response: result}, {status: 200});
+    }
+    catch (error){
+        return NextResponse.json({response: error}, {status: 500});
     }
 }
