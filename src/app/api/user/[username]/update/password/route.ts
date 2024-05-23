@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest, { params }: { params: { username: s
         { $set: {password: hashPw} },
         { new: true }
       );
-      return NextResponse.json({ response: `Password is updated successfully` }, { status: 200 });
+    return NextResponse.json({ response: `Password is updated successfully` }, { status: 200 });
 
   } catch (error: any) {
     return NextResponse.json({ response: error.message}, { status: 500 });

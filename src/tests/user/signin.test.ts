@@ -8,7 +8,6 @@ import { defaultUser } from "../support-data";
 import { UserRole } from "src/models/user/interface";
 import bcrypt from 'bcrypt';
 
-
 jest.mock('bcrypt');
 
 describe("/api/user/signin", () => {

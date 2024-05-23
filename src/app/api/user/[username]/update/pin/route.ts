@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest, { params }: { params: { username: s
 
     const validPin = pinValidator(newPIN)
     if (!validPin.status)
-      return NextResponse.json({ response: validPin.message ?? 'Invalid PIN'}, { status: 400 });
+      return NextResponse.json({ response: validPin.message }, { status: 400 });
     
     const  updatedUser = await User.findOneAndUpdate(
         { username: params.username },
