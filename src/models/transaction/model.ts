@@ -3,12 +3,13 @@ import { ITransaction, TransactionType } from './interface';
 
 // Define the schema for the user
 const transactionSchema: Schema = new Schema({
-    // MongoDB IDs
-    id: {type: String, required: true, unique: true},
+    // MongoDB ID
     userId: {type: String, required: true},
 
-    createdDate: {type: Date, required: true},
-    editedDate: {type: Date, required: true},
+    // Transaction.id will be auto assigned by MongoDB
+    // createdDate and editedDate will be assigned when the transaction is created
+    createdDate: {type: Date, required: true, default: Date.now},
+    editedDate: {type: Date, required: true, default: Date.now},
     description: {type: String},
     type: {
         type: String,
@@ -23,8 +24,8 @@ const transactionSchema: Schema = new Schema({
     category: {type: String},
 
     // To be added
-    savingId: {type: String}, // MongoDB ID of the saving group that this transaction is in
-    budgetId: {type: String} // MongoDB ID of the budget group that this transaction is in
+    savingId: {type: String, default: ''}, // MongoDB ID of the saving group that this transaction is in
+    budgetId: {type: String, default: ''} // MongoDB ID of the budget group that this transaction is in
 });
 
 const Transaction = mongoose.models.Transaction || mongoose.model<ITransaction>('Transaction', transactionSchema);

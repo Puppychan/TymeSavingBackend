@@ -13,7 +13,6 @@ export enum Categories {
 // Interface for transaction document
 export interface ITransaction extends Document {
     // MongoDB IDs
-    id: string;
     userId: string;
 
     createdDate: Date;
