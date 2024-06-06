@@ -17,7 +17,7 @@ export const GET = async(req: NextRequest, { params }: { params: { mongoId: stri
         await connectMongoDB();
         const transaction = await Transaction.findOne({ _id: params.mongoId });
         if (!transaction) {
-            return NextResponse.json({ response: "User not found" }, { status: 404 });
+            return NextResponse.json({ response: "Transaction not found" }, { status: 404 });
         }
 
         return NextResponse.json({ response: transaction }, { status: 200 });
@@ -51,6 +51,7 @@ export const PUT = async(req: NextRequest, { params }: { params: {mongoId: strin
                 runValidators: true,
             }
         );
+        updatedTransaction.editedDate = Date.now();
         console.log('updatedTransaction:', updatedTransaction);
         console.log('updated fields: ', updateQuery);
         return NextResponse.json({ response: updatedTransaction }, { status: 200 });

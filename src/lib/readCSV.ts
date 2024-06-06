@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
+import Transaction from "src/models/transaction/model";
 import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse'
@@ -14,12 +15,19 @@ async function readCSV(filePath: string): Promise<any[]> {
     return records;
   }
 
-export const csvToDB = async (filePath: string) => {
+export const csvToDB = async (filePath: string, collection: string) => {
     await connectMongoDB();
     try {
       const data = await readCSV(filePath);
-      await User.insertMany(data);
-      console.log('Data inserted successfully');
+      if (collection === "User"){
+        await User.insertMany(data);
+        console.log('Data inserted successfully');
+      }
+      else if (collection === "Transaction"){
+        await Transaction.insertMany(data);
+        console.log('Data inserted successfully');
+      }
+      
     } catch (error) {
       console.error('Error inserting data:', error);
     } finally {

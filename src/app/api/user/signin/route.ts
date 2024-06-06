@@ -11,7 +11,7 @@ export const POST = async (req: NextRequest) => {
     await connectMongoDB();
     const payload = await req.json()
     const {username, password} = payload
-    const user = await User.findOne({username: username});
+    const user = await User.findOne({username: username}).select("-password");
     if (!user) {
       return NextResponse.json({ response: `Login credentials invalid. No account with username ${username}` }, { status: 401});
     }
