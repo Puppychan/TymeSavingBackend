@@ -58,10 +58,6 @@ export const POST = async (req:NextRequest) => {
     }
 }
 
-export const GET = async () => {
-
-}
-
 export const PUT = async () => {
     try{
         let filePath = 'data/NI Data - Transaction.csv';
