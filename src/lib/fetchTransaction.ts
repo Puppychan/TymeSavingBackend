@@ -11,6 +11,7 @@ export const currentMonthTotal = async(type: String) =>{
     try {    
         const currentDate = new Date();
         const firstDayOfMonth = startOfMonth(currentDate);
+        const currentMonth = format(currentDate, 'MMM').toUpperCase(); // get JUN instead of Jun
         await connectMongoDB();
 
         // Construct the aggregation pipeline
@@ -29,6 +30,13 @@ export const currentMonthTotal = async(type: String) =>{
                     _id: null,
                     totalAmount: { $sum: '$amount' }
                 } 
+            },
+            {
+                $project: {
+                    _id: 0, // Exclude _id
+                    totalAmount: 1,
+                    currentMonth: { $literal: currentMonth } // Add the currentMonth field
+                }
             }
         ];
 
@@ -65,7 +73,7 @@ export const pastMonthsTotal = async (transactionType: String) => {
         const months = Array.from({ length: 5 }, (_, i) => {
             const monthStart = startOfMonth(subMonths(currentDate, i));
             const monthEnd = i === 0 ? currentDate : endOfMonth(subMonths(currentDate, i));
-            const monthLabel = format(monthStart, 'MMM'); // Format month for labeling
+            const monthLabel = format(monthStart, 'MMM').toUpperCase();; // Format month for labeling
             return {
                 monthLabel,
                 monthStart,
@@ -233,8 +241,8 @@ export const compareToLastMonth = async() => {
 
         const summary = {
             // month abbreviations
-            currentMonth:format(firstDayOfThisMonth, 'MMM'),
-            lastMonth: format(firstDayOfLastMonth, 'MMM'),
+            currentMonth:format(firstDayOfThisMonth, 'MMM').toUpperCase(),
+            lastMonth: format(firstDayOfLastMonth, 'MMM').toUpperCase(),
             // income
             currentMonthIncome: result[0].currentMonthIncome[0]?.totalAmount || 0,
             lastMonthIncome: result[0].lastMonthIncome[0]?.totalAmount || 0,

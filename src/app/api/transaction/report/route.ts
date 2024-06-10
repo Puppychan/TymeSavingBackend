@@ -28,20 +28,32 @@ export const GET = async (req: NextRequest) => {
             vnpParams[key] = value;
         });
         console.log(vnpParams);
-        switch (vnpParams["functionName"]){
-            case "currentMonthTotal":   //done
-                var { status, response } = await currentMonthTotal(vnpParams["transactionType"]);
-                return NextResponse.json({response: response}, {status: status});
-            case "pastMonthsTotal":      //done
-                var { status, response } = await pastMonthsTotal(vnpParams["transactionType"]);
-                return NextResponse.json({response: response}, {status: status});
-            case "compareToLastMonth":  //done - in percentage already, just add %
-                var { status, response } = await compareToLastMonth();
-                return NextResponse.json({response: response}, {status: status});
-            case "topCategories":       //for this month only
-                var { status, response } = await topCategories(vnpParams["transactionType"]);
-                return NextResponse.json({response: response}, {status: status});
-        }
+        // these switches work as tests
+        // switch (vnpParams["functionName"]){
+        //     case "currentMonthTotal":   //done
+        //         var { status, response } = await currentMonthTotal(vnpParams["transactionType"]);
+        //         return NextResponse.json({response: response}, {status: status});
+        //     case "pastMonthsTotal":      //done
+        //         var { status, response } = await pastMonthsTotal(vnpParams["transactionType"]);
+        //         return NextResponse.json({response: response}, {status: status});
+        //     case "compareToLastMonth":  //done - in percentage already, just add %
+        //         var { status, response } = await compareToLastMonth();
+        //         return NextResponse.json({response: response}, {status: status});
+        //     case "topCategories":       //for this month only
+        //         var { status, response } = await topCategories(vnpParams["transactionType"]);
+        //         return NextResponse.json({response: response}, {status: status});
+        // }
+        var response = {
+            // transactionType: vnpParams["transactionType"]}, 
+            transactionType: vnpParams["transactionType"], 
+            currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories
+        };
+        response.currentMonthTotal = (await currentMonthTotal(vnpParams["transactionType"])).response;
+        response.pastMonthsTotal = (await pastMonthsTotal(vnpParams["transactionType"])).response;
+        response.compareToLastMonth =(await compareToLastMonth()).response;
+        response.topCategories = (await topCategories(vnpParams["transactionType"])).response;
+        console.log(response);
+        return NextResponse.json({response: response}, {status: 200});
     } catch (error){
         return NextResponse.json({response: error}, {status: 500});
     }
