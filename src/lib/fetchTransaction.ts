@@ -5,9 +5,28 @@ import { PipelineStage } from 'mongoose';
 
 // Add userId == some user ID and we cool
 
+// Call functions based on the parameters. Functions are: (May add more)
+// 1) currentMonthTotal: total expense/income of current month i.e. From the 1st to the current date. 
+//      params: transactionType: "Income" or "Expense"
+//              userId
+//      return: amount + month
+// 2) pastMonthTotal: total income/expense of past 5 months: from the 1st to the end of that month. 
+//      params: transactionType: "Income" or "Expense"
+//              userId
+//      return: amount + month
+// 3) compareToLastMonth: Total income and expense for this month. Compare them to the last month
+//      params: userId
+//      return: { total income for this month, percentage compared to the last month },
+//              { total expense for this month, percentage compared to the last month }
+// 4) topCategories: Group categories for this month. Top 3 categories + Group the others as "Other"
+//      params: transactionType: "Income" or "Expense"
+//              userId
+//      return: [{ category, total amount, percentage }]
+// req format: {transactionType: Income | Expense, userId}
+
 // total expense/income of current month: From the 1st to the current date
 // return amount + month
-export const currentMonthTotal = async(type: String, currentUserId) =>{
+export const currentMonthTotal = async(type: String, currentUserId: String): Promise<{status: number, response: any}> =>{
     try {    
         const currentDate = new Date();
         const firstDayOfMonth = startOfMonth(currentDate);
@@ -65,7 +84,7 @@ export const currentMonthTotal = async(type: String, currentUserId) =>{
 }
 
 // export const lastFiveMonths = async (transactionType: String) => {
-export const pastMonthsTotal = async (transactionType: String, currentUserId) => {
+export const pastMonthsTotal = async (transactionType: String, currentUserId: String): Promise<{status: number, response: any}> => {
     try {
         await connectMongoDB();
 
@@ -132,7 +151,7 @@ export const pastMonthsTotal = async (transactionType: String, currentUserId) =>
 // Total income and expense for this month. Compare them to the last month
 // return: total income for this month, percentage compared to the last month
 // return: total expense for this month, percentage compared to the last month
-export const compareToLastMonth = async(currentUserId) => {
+export const compareToLastMonth = async(currentUserId: String): Promise<{status: number, response: any}> => {
     try {
         await connectMongoDB();
 
@@ -290,7 +309,7 @@ export const compareToLastMonth = async(currentUserId) => {
 // Group category for this month
 // Top 3 categories + Group the others as "Other"
 // return: {category, total amount, percentage}
-export const topCategories = async(transactionType: String, currentUserId): Promise<{status: number, response: any}> => {
+export const topCategories = async(transactionType: String, currentUserId: String): Promise<{status: number, response: any}> => {
     try {
         await connectMongoDB();
 
@@ -378,10 +397,90 @@ export const topCategories = async(transactionType: String, currentUserId): Prom
     }
 }
 
-export const netSpend = async (userId: String) =>{
+export const netSpend = async (currentUserId: String) =>{
     try {
+        await connectMongoDB();
+        const currentDate = new Date();
+        const firstDayOfThisMonth = startOfMonth(currentDate);
+        const pipeline = [
+            {
+                $facet: {
+                    currentMonthIncome: [
+                        {
+                            $match: {
+                                type: 'Income',
+                                createdDate: {
+                                    $gte: firstDayOfThisMonth,
+                                    $lt: currentDate
+                                }
+                                , userId: currentUserId
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalAmount: { $sum: '$amount' }
+                            }
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                totalAmount: 1
+                            }
+                        }
+                    ],
+                    currentMonthExpense: [
+                        {
+                            $match: {
+                                type: 'Expense',
+                                createdDate: {
+                                    $gte: firstDayOfThisMonth,
+                                    $lt: currentDate
+                                }
+                                , userId: currentUserId
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalAmount: { $sum: '$amount' }
+                            }
+                        },
+                        {
+                            $project: {
+                                _id: 0,
+                                totalAmount: 1
+                            }
+                        }
+                    ]
+                }
+            }
+        ];
+        const result = await Transaction.aggregate(pipeline).exec();
+        const income = result[0].currentMonthIncome.length > 0 ? result[0].currentMonthIncome[0].totalAmount : 0;
+        const expense = result[0].currentMonthExpense.length > 0 ? result[0].currentMonthExpense[0].totalAmount : 0;
 
+        const netSpend = income - expense;
+
+        console.log({
+            currentMonthIncome: income,
+            currentMonthExpense: expense,
+            netSpend: netSpend
+        });
+
+        return {
+            status: 200,
+            response: {
+                currentMonthIncome: income,
+                currentMonthExpense: expense,
+                netSpend: netSpend
+            }
+        };
     } catch (error){
-        
+        console.error('Error fetching transactions:', error);
+        return {
+            status: 500,
+            response: error
+        };
     }
 }
