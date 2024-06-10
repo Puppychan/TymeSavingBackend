@@ -16,7 +16,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       }
 
       const payload = await req.json() as Partial<IUser> //payload = newUser
-      const user = await User.findOne({ 'username': params.username }).select("-password");
+      const user = await User.findOne({ 'username': params.username });
       if (!user) {
         return NextResponse.json({ response: 'User not found' }, { status: 404 });
       }

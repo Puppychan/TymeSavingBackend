@@ -10,7 +10,6 @@ export const GET = async (
 ) => {
   try {
     await connectMongoDB();
-    // Can comment out the verification below to test - it works
     const verification = await verifyUser(req.headers, params.username)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });
