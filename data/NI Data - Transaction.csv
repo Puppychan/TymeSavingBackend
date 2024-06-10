@@ -1,51 +1,201 @@
 userId,createdDate,editedDate,description,type,amount,payBy,category,savingId,budgetId
-Chad Ramirez,2024-03-10T22:05:23+00:00,2024-05-10T13:44:02+00:00,Groceries to Amber Mccall,Expense,3474000,Chad Ramirez,Groceries,Easy52SavingGroup,Change60BudgetGroup
-Michelle Barnes,2024-02-12T18:52:20+00:00,2024-05-16T20:14:30+00:00,Business Profits from Robert Calhoun,Income,5748000,Michelle Barnes,Business Profits,Result31SavingGroup,Together29BudgetGroup
-Julie Edwards,2024-02-08T02:45:37+00:00,2024-06-02T21:11:29+00:00,"Transportation to Johnson, Underwood and Smith",Expense,8661000,Julie Edwards,Transportation,Book53SavingGroup,Fact65BudgetGroup
-Nancy Patterson,2024-04-24T20:31:46+00:00,2024-05-15T16:59:01+00:00,Salary from Carl Murray,Income,9078000,Nancy Patterson,Salary,But57SavingGroup,Should76BudgetGroup
-Pamela Adams,2024-05-02T02:25:14+00:00,2024-06-04T23:00:56+00:00,Rent/Mortgage to Rhodes Group,Expense,1562000,Pamela Adams,Rent/Mortgage,Eye82SavingGroup,Film82BudgetGroup
-Billy Jarvis,2024-01-06T00:24:12+00:00,2024-03-28T03:20:26+00:00,Salary from Stanley PLC,Income,961000,Billy Jarvis,Salary,Citizen80SavingGroup,Home24BudgetGroup
-Diana Jimenez,2024-06-02T14:11:48+00:00,2024-06-02T17:19:14+00:00,Freelance Work from Jessica Wilson,Income,2872000,Diana Jimenez,Freelance Work,Along61SavingGroup,Themselves40BudgetGroup
-Aaron Grant,2024-02-17T21:37:19+00:00,2024-06-06T09:41:05+00:00,"Freelance Work from Donovan, Gonzalez and Anderson",Income,4177000,Aaron Grant,Freelance Work,We79SavingGroup,Wife86BudgetGroup
-Christine Miles,2024-03-02T17:25:38+00:00,2024-06-02T12:41:35+00:00,Transportation to Christopher Brown,Expense,784000,Christine Miles,Transportation,My44SavingGroup,Season95BudgetGroup
-Roger Cook,2024-02-23T05:32:31+00:00,2024-06-03T15:08:24+00:00,"Utilities to Fox, Turner and Mata",Expense,7590000,Roger Cook,Utilities,Think87SavingGroup,Low15BudgetGroup
-Austin Ramsey,2024-03-10T12:13:18+00:00,2024-06-03T08:55:40+00:00,Entertainment to Cindy Christensen,Expense,7758000,Austin Ramsey,Entertainment,Subject61SavingGroup,During74BudgetGroup
-Victor Yates,2024-04-20T22:04:52+00:00,2024-06-04T02:16:21+00:00,Business Profits from Jeffrey Elliott,Income,1586000,Victor Yates,Business Profits,Figure74SavingGroup,Finally99BudgetGroup
-Bill Porter,2024-06-02T21:50:35+00:00,2024-06-05T10:21:58+00:00,Entertainment to Jimmy Ross,Expense,7631000,Bill Porter,Entertainment,Campaign54SavingGroup,Imagine24BudgetGroup
-Heather Powers,2024-03-29T17:06:03+00:00,2024-06-04T01:59:56+00:00,Groceries to Maria Harris,Expense,975000,Heather Powers,Groceries,Buy42SavingGroup,Likely30BudgetGroup
-Ann Washington,2024-02-05T19:47:41+00:00,2024-05-28T08:18:54+00:00,Groceries to Kimberly Lloyd,Expense,7391000,Ann Washington,Groceries,That11SavingGroup,Stop74BudgetGroup
-Daniel Williams,2024-03-11T15:45:03+00:00,2024-05-31T12:10:33+00:00,Rent/Mortgage to Shelby Castillo,Expense,2130000,Daniel Williams,Rent/Mortgage,Table50SavingGroup,Itself72BudgetGroup
-Andrew Armstrong DVM,2024-02-08T10:21:42+00:00,2024-06-03T01:52:14+00:00,Rent/Mortgage to Nathan Schmidt,Expense,5999000,Andrew Armstrong DVM,Rent/Mortgage,Thing18SavingGroup,What44BudgetGroup
-Amy Ross,2024-01-23T04:17:06+00:00,2024-04-14T10:01:07+00:00,Utilities to Jason Holden,Expense,9918000,Amy Ross,Utilities,Food41SavingGroup,Drive95BudgetGroup
-Joseph Kane,2024-02-12T20:43:54+00:00,2024-06-05T09:20:24+00:00,Utilities to Jacqueline Lucas,Expense,1631000,Joseph Kane,Utilities,Class67SavingGroup,Risk49BudgetGroup
-Jacqueline Collins,2024-05-03T05:26:29+00:00,2024-05-27T17:30:36+00:00,Business Profits from Julie Hines,Income,5370000,Jacqueline Collins,Business Profits,But90SavingGroup,Other44BudgetGroup
-Cory Hobbs,2024-05-12T01:49:23+00:00,2024-06-06T00:20:39+00:00,Entertainment to Schneider-Morgan,Expense,286000,Cory Hobbs,Entertainment,Mr84SavingGroup,In75BudgetGroup
-Jennifer Lopez,2024-03-16T21:27:58+00:00,2024-06-03T20:43:33+00:00,Freelance Work from Kelley and Sons,Income,7110000,Jennifer Lopez,Freelance Work,Place92SavingGroup,Could60BudgetGroup
-Jamie Wilson,2024-03-06T16:56:09+00:00,2024-05-07T02:28:25+00:00,Freelance Work from Fuller-Lindsey,Income,6784000,Jamie Wilson,Freelance Work,Mouth85SavingGroup,Agent58BudgetGroup
-Dr. Jay Aguilar,2024-03-02T01:48:13+00:00,2024-06-02T18:12:22+00:00,Salary from Connor Bright,Income,2301000,Dr. Jay Aguilar,Salary,Day79SavingGroup,Produce67BudgetGroup
-James Pace,2024-02-17T03:17:22+00:00,2024-04-27T01:52:16+00:00,Rental Income from Tucker-Webb,Income,1142000,James Pace,Rental Income,Movement29SavingGroup,Dark39BudgetGroup
-Christina Bright,2024-01-22T12:24:14+00:00,2024-05-01T20:17:16+00:00,Salary from John Thompson,Income,6060000,Christina Bright,Salary,Everybody93SavingGroup,Cup79BudgetGroup
-Amy Perez,2024-03-14T18:26:10+00:00,2024-03-24T16:19:07+00:00,Salary from John Small,Income,5464000,Amy Perez,Salary,Business33SavingGroup,Increase62BudgetGroup
-Justin Flores,2024-06-05T16:08:38+00:00,2024-06-06T10:20:27+00:00,"Groceries to Adkins, Fischer and Rodgers",Expense,7432000,Justin Flores,Groceries,Tough64SavingGroup,First78BudgetGroup
-William Harding,2024-01-12T00:06:16+00:00,2024-06-01T02:12:52+00:00,Utilities to Donna Whitaker,Expense,6527000,William Harding,Utilities,According40SavingGroup,Effort38BudgetGroup
-Sean Browning,2024-06-01T21:04:05+00:00,2024-06-06T05:28:07+00:00,Transportation to Peter Hall,Expense,8279000,Sean Browning,Transportation,Tv29SavingGroup,Book13BudgetGroup
-Rachael Lamb,2024-03-03T16:35:38+00:00,2024-04-13T07:57:33+00:00,Business Profits from Estrada-Spencer,Income,3153000,Rachael Lamb,Business Profits,Interesting23SavingGroup,Face85BudgetGroup
-Cody Campbell,2024-02-26T20:46:40+00:00,2024-05-20T18:16:07+00:00,Rental Income from Courtney Hernandez,Income,8435000,Cody Campbell,Rental Income,Goal26SavingGroup,Man76BudgetGroup
-Brittany Collins,2024-01-21T01:38:10+00:00,2024-06-02T12:50:40+00:00,Salary from Ryan Mclaughlin,Income,3551000,Brittany Collins,Salary,Example79SavingGroup,Film61BudgetGroup
-Dan Nunez,2024-03-24T20:02:54+00:00,2024-04-27T19:28:24+00:00,"Rent/Mortgage to Young, Hughes and Martin",Expense,6725000,Dan Nunez,Rent/Mortgage,Record62SavingGroup,Future45BudgetGroup
-Donald Rowe,2024-06-01T08:55:24+00:00,2024-06-05T09:14:06+00:00,"Transportation to Elliott, Thompson and Vargas",Expense,5063000,Donald Rowe,Transportation,Wear59SavingGroup,Plan41BudgetGroup
-Ashley White,2024-01-08T14:21:08+00:00,2024-06-05T10:04:26+00:00,Business Profits from Dr. Charles Taylor,Income,909000,Ashley White,Business Profits,Increase24SavingGroup,Mother77BudgetGroup
-Anthony Cooper,2024-03-29T23:05:40+00:00,2024-06-01T03:55:04+00:00,Transportation to Kelly Harris,Expense,9867000,Anthony Cooper,Transportation,Bag19SavingGroup,Final75BudgetGroup
-Erin Martinez,2024-05-27T02:42:39+00:00,2024-06-05T11:06:03+00:00,Salary from Elizabeth Garza,Income,6138000,Erin Martinez,Salary,Court96SavingGroup,Parent19BudgetGroup
-Brian Clark,2024-05-06T11:21:01+00:00,2024-05-10T13:12:27+00:00,"Rent/Mortgage to Hill, Franco and Carroll",Expense,9980000,Brian Clark,Rent/Mortgage,And74SavingGroup,Throughout16BudgetGroup
-Margaret Wood,2024-02-07T05:28:35+00:00,2024-06-04T16:22:54+00:00,Transportation to Courtney Daniels,Expense,4757000,Margaret Wood,Transportation,Poor56SavingGroup,Challenge79BudgetGroup
-Brenda Miller,2024-04-02T23:47:49+00:00,2024-06-03T03:18:57+00:00,Utilities to Linda Mills,Expense,7656000,Brenda Miller,Utilities,Conference94SavingGroup,Main15BudgetGroup
-Diane Nicholson,2024-03-09T14:51:11+00:00,2024-04-07T17:53:06+00:00,Entertainment to Peterson-Mejia,Expense,1440000,Diane Nicholson,Entertainment,Nature54SavingGroup,Simply13BudgetGroup
-Jill Murray,2024-02-22T04:25:08+00:00,2024-05-24T23:47:46+00:00,"Entertainment to Wong, Baldwin and Benson",Expense,8745000,Jill Murray,Entertainment,Board74SavingGroup,Lose70BudgetGroup
-Fernando Roberts,2024-01-14T10:00:43+00:00,2024-06-03T19:46:08+00:00,"Entertainment to Wilson, Crawford and Long",Expense,402000,Fernando Roberts,Entertainment,Him33SavingGroup,Fill30BudgetGroup
-Nathaniel Mcmillan,2024-03-28T10:59:41+00:00,2024-06-02T15:10:18+00:00,Utilities to Allen Murray,Expense,568000,Nathaniel Mcmillan,Utilities,Go97SavingGroup,Cost84BudgetGroup
-Christine Williamson,2024-05-25T05:31:09+00:00,2024-05-26T09:36:47+00:00,Rent/Mortgage to Mr. William Ellis,Expense,665000,Christine Williamson,Rent/Mortgage,Exist85SavingGroup,During47BudgetGroup
-Heather Sosa,2024-03-07T02:32:03+00:00,2024-03-14T00:05:06+00:00,"Rental Income from Patterson, Knight and Jones",Income,5782000,Heather Sosa,Rental Income,Reality16SavingGroup,Stage21BudgetGroup
-Regina Tran,2024-06-01T08:19:19+00:00,2024-06-01T15:42:05+00:00,Groceries to Dr. Dana Perry,Expense,268000,Regina Tran,Groceries,Likely66SavingGroup,Seat14BudgetGroup
-Cody Pacheco,2024-04-12T18:31:24+00:00,2024-06-01T04:42:32+00:00,"Salary from Mack, Huffman and Duncan",Income,7795000,Cody Pacheco,Salary,Particularly54SavingGroup,Would84BudgetGroup
-Courtney Hicks,2024-01-24T14:18:12+00:00,2024-02-23T08:17:19+00:00,Utilities to Peter Bullock,Expense,2475000,Courtney Hicks,Utilities,If41SavingGroup,Current92BudgetGroup
+lanh_tran,2024-04-10T06:00:26+00:00,2024-06-05T20:58:44+00:00,Business Profits from Kimberly Long,Income,4418000,lanh_tran,Business Profits,Road81SavingGroup,Various22BudgetGroup
+long_nguyen,2024-02-18T06:11:39+00:00,2024-04-27T08:38:31+00:00,Salary from Sarah Williams,Income,4823000,long_nguyen,Salary,Modern71SavingGroup,Tax88BudgetGroup
+thong,2024-02-06T03:40:12+00:00,2024-05-11T14:25:23+00:00,Entertainment to Anthony Terrell,Expense,265000,thong,Entertainment,Line29SavingGroup,Fly19BudgetGroup
+dan_to,2024-01-27T12:39:21+00:00,2024-05-20T07:35:59+00:00,Rent/Mortgage to Duane Brewer,Expense,5176000,dan_to,Rent/Mortgage,No46SavingGroup,Simply56BudgetGroup
+thuy_nguyen,2024-02-08T14:41:57+00:00,2024-06-08T08:03:44+00:00,Investment Income from Chelsea Todd,Income,2031000,thuy_nguyen,Investment Income,Kitchen47SavingGroup,See79BudgetGroup
+vietanh,2024-02-02T20:00:49+00:00,2024-04-01T17:31:03+00:00,"Rental Income from Jones, Gonzalez and Garcia",Income,9731000,vietanh,Rental Income,Health18SavingGroup,Most15BudgetGroup
+anna_felipe,2024-01-11T19:49:11+00:00,2024-05-22T17:21:13+00:00,Rent/Mortgage to Jennifer Henry MD,Expense,2015000,anna_felipe,Rent/Mortgage,Record70SavingGroup,Story28BudgetGroup
+vuong_tran,2024-01-06T22:16:52+00:00,2024-01-09T06:26:14+00:00,Rent/Mortgage to Katherine Gamble,Expense,9055000,vuong_tran,Rent/Mortgage,Line29SavingGroup,Strategy51BudgetGroup
+thuy_nguyen,2024-01-05T06:42:26+00:00,2024-01-21T07:29:30+00:00,"Utilities to Johnson, Nolan and Goodman",Expense,6187000,thuy_nguyen,Utilities,Now54SavingGroup,Even72BudgetGroup
+minh_lam,2024-01-22T20:38:44+00:00,2024-02-01T08:48:52+00:00,"Investment Income from Lopez, Gonzalez and Jenkins",Income,6217000,minh_lam,Investment Income,Gun25SavingGroup,Tree16BudgetGroup
+vuong_tran,2024-04-11T12:12:09+00:00,2024-04-18T07:27:28+00:00,Groceries to Katelyn Richards,Expense,3861000,vuong_tran,Groceries,Grow97SavingGroup,Dinner48BudgetGroup
+nhung,2024-01-09T00:46:50+00:00,2024-01-27T03:59:36+00:00,Transportation to Griffith Group,Expense,8212000,nhung,Transportation,Director82SavingGroup,Reality71BudgetGroup
+duong,2024-04-24T01:25:19+00:00,2024-06-02T15:27:44+00:00,"Rental Income from Wilson, Carr and Sanchez",Income,425000,duong,Rental Income,High99SavingGroup,Avoid59BudgetGroup
+tung_nguyen,2024-02-02T17:31:41+00:00,2024-05-11T17:46:59+00:00,Salary from Danny Newman,Income,6582000,tung_nguyen,Salary,Continue30SavingGroup,Before63BudgetGroup
+minh_lam,2024-03-11T13:16:48+00:00,2024-06-07T05:30:24+00:00,Transportation to Joshua Wagner,Expense,8252000,minh_lam,Transportation,True98SavingGroup,Opportunity40BudgetGroup
+thong,2024-06-06T17:40:35+00:00,2024-06-07T09:36:47+00:00,Utilities to Kimberly Allen,Expense,9380000,thong,Utilities,Laugh34SavingGroup,One77BudgetGroup
+nhung,2024-04-12T17:53:36+00:00,2024-06-02T05:52:00+00:00,Investment Income from Williams PLC,Income,180000,nhung,Investment Income,Sign61SavingGroup,Believe37BudgetGroup
+hakhanhne,2024-03-03T07:46:02+00:00,2024-04-12T16:48:38+00:00,Groceries to Joshua Ray,Expense,2321000,hakhanhne,Groceries,Federal93SavingGroup,Hair69BudgetGroup
+nhung,2024-02-18T07:33:00+00:00,2024-05-23T04:25:30+00:00,Business Profits from Oconnell-Williams,Income,5517000,nhung,Business Profits,Name32SavingGroup,Know83BudgetGroup
+anna_felipe,2024-02-08T10:42:20+00:00,2024-03-28T07:07:55+00:00,"Rent/Mortgage to Gross, Smith and Mitchell",Expense,5547000,anna_felipe,Rent/Mortgage,Easy67SavingGroup,Above63BudgetGroup
+vuong_tran,2024-01-29T09:46:48+00:00,2024-04-01T08:54:31+00:00,Rental Income from Brennan-Barnes,Income,1075000,vuong_tran,Rental Income,Who43SavingGroup,Blood87BudgetGroup
+long_nguyen,2024-02-08T22:25:01+00:00,2024-06-04T15:46:33+00:00,Rent/Mortgage to Harry Curtis,Expense,971000,long_nguyen,Rent/Mortgage,Explain65SavingGroup,Rest15BudgetGroup
+duong,2024-01-06T14:53:27+00:00,2024-06-03T17:35:49+00:00,Investment Income from Mr. Phillip Smith,Income,3688000,duong,Investment Income,Current80SavingGroup,Federal35BudgetGroup
+nhung,2024-01-17T17:57:47+00:00,2024-05-22T12:54:12+00:00,Business Profits from Jessica Brown,Income,5402000,nhung,Business Profits,Me92SavingGroup,Where97BudgetGroup
+hakhanhne,2024-01-10T15:34:36+00:00,2024-05-18T14:07:49+00:00,"Groceries to Moss, Hernandez and Odonnell",Expense,2214000,hakhanhne,Groceries,Hear57SavingGroup,Push67BudgetGroup
+minh_lam,2024-06-01T06:41:26+00:00,2024-06-06T16:51:24+00:00,Rental Income from Bailey Inc,Income,3837000,minh_lam,Rental Income,System80SavingGroup,Mother14BudgetGroup
+thuy_nguyen,2024-02-23T12:44:14+00:00,2024-06-07T02:55:50+00:00,Rent/Mortgage to Dominique Reed,Expense,9373000,thuy_nguyen,Rent/Mortgage,Check33SavingGroup,Next44BudgetGroup
+vietanh,2024-01-15T16:06:26+00:00,2024-02-28T06:28:10+00:00,Freelance Work from Julie Howard,Income,7252000,vietanh,Freelance Work,Cold10SavingGroup,Few11BudgetGroup
+tung_nguyen,2024-02-29T06:39:44+00:00,2024-06-01T01:47:05+00:00,Rent/Mortgage to William Cooper,Expense,6187000,tung_nguyen,Rent/Mortgage,Cut46SavingGroup,Remain54BudgetGroup
+duong,2024-04-15T09:36:36+00:00,2024-06-04T05:29:54+00:00,Rent/Mortgage to Ross Franklin,Expense,9482000,duong,Rent/Mortgage,Artist75SavingGroup,Person11BudgetGroup
+thong,2024-03-29T09:21:29+00:00,2024-06-05T10:27:09+00:00,"Freelance Work from Stevens, Gregory and Thompson",Income,5733000,thong,Freelance Work,Radio95SavingGroup,Well38BudgetGroup
+long_nguyen,2024-02-24T01:08:28+00:00,2024-03-19T12:34:19+00:00,Utilities to Burns-Everett,Expense,6259000,long_nguyen,Utilities,Eight18SavingGroup,Through53BudgetGroup
+anna_felipe,2024-01-01T04:03:58+00:00,2024-04-27T02:30:32+00:00,"Business Profits from Chapman, Turner and Johnston",Income,4968000,anna_felipe,Business Profits,Age77SavingGroup,Health19BudgetGroup
+tuyen_nguyen,2024-05-08T14:14:16+00:00,2024-06-02T07:56:25+00:00,"Transportation to Williams, Fowler and Green",Expense,4481000,tuyen_nguyen,Transportation,Consumer20SavingGroup,Town34BudgetGroup
+anna_felipe,2024-04-09T23:59:54+00:00,2024-06-03T00:47:11+00:00,"Transportation to Foster, Smith and Johnson",Expense,1399000,anna_felipe,Transportation,Question78SavingGroup,Find62BudgetGroup
+vietanh,2024-04-30T17:03:52+00:00,2024-06-05T12:31:52+00:00,Groceries to Palmer-Banks,Expense,4623000,vietanh,Groceries,Mrs12SavingGroup,Determine82BudgetGroup
+hakhanhne,2024-01-22T16:28:46+00:00,2024-06-03T03:53:57+00:00,Rent/Mortgage to Douglas Wang,Expense,9290000,hakhanhne,Rent/Mortgage,Travel16SavingGroup,Morning83BudgetGroup
+duong,2024-01-13T08:09:47+00:00,2024-04-21T01:16:26+00:00,Groceries to Coleman PLC,Expense,9248000,duong,Groceries,Television87SavingGroup,Yes58BudgetGroup
+anna_felipe,2024-04-18T12:35:26+00:00,2024-06-04T05:31:39+00:00,Rent/Mortgage to Wesley Jenkins,Expense,2981000,anna_felipe,Rent/Mortgage,Lot26SavingGroup,Growth83BudgetGroup
+tuyen_nguyen,2024-01-28T15:51:52+00:00,2024-05-11T17:12:29+00:00,Business Profits from Lopez LLC,Income,9938000,tuyen_nguyen,Business Profits,Age85SavingGroup,Child96BudgetGroup
+vuong_tran,2024-01-12T01:35:46+00:00,2024-01-25T06:16:54+00:00,"Freelance Work from Flores, Hendricks and Murray",Income,1307000,vuong_tran,Freelance Work,Outside22SavingGroup,Administration87BudgetGroup
+minh_lam,2024-05-23T05:12:22+00:00,2024-06-02T08:27:44+00:00,Groceries to Courtney Murphy,Expense,6377000,minh_lam,Groceries,Me79SavingGroup,Black77BudgetGroup
+duong,2024-06-09T06:29:31+00:00,2024-06-10T00:52:39+00:00,Entertainment to Charlotte Nelson,Expense,7321000,duong,Entertainment,Serve80SavingGroup,Method82BudgetGroup
+anna_felipe,2024-03-02T09:22:27+00:00,2024-06-08T06:17:52+00:00,Transportation to Cathy Beasley,Expense,9273000,anna_felipe,Transportation,Court39SavingGroup,Be37BudgetGroup
+uyen_nguyen,2024-02-26T04:46:21+00:00,2024-05-29T10:17:32+00:00,Investment Income from Brian King,Income,283000,uyen_nguyen,Investment Income,Name99SavingGroup,North87BudgetGroup
+tung_nguyen,2024-05-24T19:41:44+00:00,2024-06-02T01:58:07+00:00,Utilities to Vanessa Noble,Expense,5386000,tung_nguyen,Utilities,Forget65SavingGroup,Organization14BudgetGroup
+long_nguyen,2024-04-01T23:15:36+00:00,2024-06-08T18:12:24+00:00,Groceries to Cameron Smith,Expense,1816000,long_nguyen,Groceries,Protect30SavingGroup,Admit44BudgetGroup
+thong,2024-01-30T09:12:47+00:00,2024-06-03T00:33:05+00:00,Transportation to Dr. Steven Long Jr.,Expense,6547000,thong,Transportation,Population61SavingGroup,Degree96BudgetGroup
+tuyen_nguyen,2024-01-06T21:14:42+00:00,2024-05-03T10:33:06+00:00,Freelance Work from Tara Young,Income,5960000,tuyen_nguyen,Freelance Work,Media21SavingGroup,Behavior14BudgetGroup
+vietanh,2024-04-08T12:04:38+00:00,2024-06-09T22:11:41+00:00,Rent/Mortgage to Wright-Smith,Expense,4816000,vietanh,Rent/Mortgage,Now68SavingGroup,Represent41BudgetGroup
+thong,2024-02-15T07:12:15+00:00,2024-06-10T06:05:06+00:00,"Rent/Mortgage to Lee, Perez and Alexander",Expense,484000,thong,Rent/Mortgage,Both23SavingGroup,Industry74BudgetGroup
+dan_to,2024-05-31T01:02:14+00:00,2024-06-02T05:30:36+00:00,Business Profits from Rodriguez-Ryan,Income,4572000,dan_to,Business Profits,Especially21SavingGroup,History61BudgetGroup
+long_nguyen,2024-01-10T00:05:08+00:00,2024-01-12T04:33:26+00:00,Investment Income from Cheryl Freeman,Income,7354000,long_nguyen,Investment Income,So85SavingGroup,Her99BudgetGroup
+uyen_nguyen,2024-06-04T19:02:55+00:00,2024-06-07T18:17:35+00:00,Transportation to Hayes Inc,Expense,7441000,uyen_nguyen,Transportation,Product66SavingGroup,Evidence53BudgetGroup
+duong,2024-02-08T05:44:53+00:00,2024-06-03T01:42:36+00:00,Transportation to Brenda Rodriguez,Expense,4329000,duong,Transportation,Church23SavingGroup,Its78BudgetGroup
+vuong_tran,2024-03-23T08:16:47+00:00,2024-05-26T19:12:44+00:00,Entertainment to Patel and Sons,Expense,5576000,vuong_tran,Entertainment,List68SavingGroup,Even87BudgetGroup
+tuyen_nguyen,2024-04-09T07:21:03+00:00,2024-06-01T02:01:40+00:00,Freelance Work from Jennifer Frank,Income,1125000,tuyen_nguyen,Freelance Work,Tv74SavingGroup,Because74BudgetGroup
+thuy_nguyen,2024-01-06T19:34:09+00:00,2024-01-29T17:23:15+00:00,"Salary from Wells, Conley and Jenkins",Income,1219000,thuy_nguyen,Salary,Best82SavingGroup,On11BudgetGroup
+vuong_tran,2024-04-18T00:43:35+00:00,2024-04-29T20:09:23+00:00,Business Profits from Amy Walker,Income,4772000,vuong_tran,Business Profits,Population41SavingGroup,Short93BudgetGroup
+nhung,2024-03-14T13:15:35+00:00,2024-05-04T23:58:20+00:00,"Utilities to Burton, Mahoney and Thompson",Expense,9457000,nhung,Utilities,Yet78SavingGroup,True98BudgetGroup
+dan_to,2024-03-03T22:20:16+00:00,2024-06-08T10:17:55+00:00,Rent/Mortgage to Shelly Harper,Expense,8684000,dan_to,Rent/Mortgage,Story41SavingGroup,Vote80BudgetGroup
+duong,2024-02-08T06:25:27+00:00,2024-05-02T02:59:43+00:00,Utilities to Teresa Rowland,Expense,580000,duong,Utilities,Deal93SavingGroup,Statement36BudgetGroup
+long_nguyen,2024-03-23T12:06:09+00:00,2024-04-08T08:49:46+00:00,Transportation to Natalie Carr,Expense,9238000,long_nguyen,Transportation,Assume92SavingGroup,Air33BudgetGroup
+vuong_tran,2024-04-25T01:58:07+00:00,2024-06-02T08:05:39+00:00,Utilities to Gonzalez PLC,Expense,8589000,vuong_tran,Utilities,Beat16SavingGroup,Voice16BudgetGroup
+lanh_tran,2024-05-01T04:34:03+00:00,2024-06-02T11:40:07+00:00,Freelance Work from Salazar Ltd,Income,6522000,lanh_tran,Freelance Work,Security75SavingGroup,Relationship96BudgetGroup
+tung_nguyen,2024-05-24T03:16:29+00:00,2024-06-03T11:01:27+00:00,Groceries to Melanie Mills,Expense,5171000,tung_nguyen,Groceries,Chair25SavingGroup,Return22BudgetGroup
+thuy_nguyen,2024-03-22T08:48:42+00:00,2024-06-07T22:50:55+00:00,Salary from Erin Reyes,Income,550000,thuy_nguyen,Salary,Paper50SavingGroup,Protect60BudgetGroup
+duong,2024-02-13T19:12:09+00:00,2024-06-04T09:07:05+00:00,Utilities to Jennifer Gray,Expense,9314000,duong,Utilities,Sound71SavingGroup,Animal37BudgetGroup
+lanh_tran,2024-05-14T19:48:21+00:00,2024-06-04T05:48:07+00:00,Transportation to Shane Thompson,Expense,1067000,lanh_tran,Transportation,Over47SavingGroup,Boy98BudgetGroup
+duong,2024-06-04T11:43:27+00:00,2024-06-04T15:47:43+00:00,Entertainment to Cisneros-Taylor,Expense,5588000,duong,Entertainment,Treat66SavingGroup,Be86BudgetGroup
+nhung,2024-06-02T15:40:49+00:00,2024-06-04T16:04:48+00:00,Investment Income from Saunders-Jackson,Income,4777000,nhung,Investment Income,Building54SavingGroup,Continue10BudgetGroup
+minh_lam,2024-06-02T02:10:27+00:00,2024-06-06T06:27:20+00:00,"Rent/Mortgage to Cruz, Norris and Lane",Expense,3800000,minh_lam,Rent/Mortgage,Fact94SavingGroup,During85BudgetGroup
+duong,2024-04-01T23:53:08+00:00,2024-06-07T13:00:30+00:00,Business Profits from Catherine Wallace,Income,8570000,duong,Business Profits,Practice90SavingGroup,Only84BudgetGroup
+anna_felipe,2024-03-19T01:32:29+00:00,2024-04-15T03:24:18+00:00,Utilities to Wiley and Sons,Expense,5460000,anna_felipe,Utilities,Push96SavingGroup,Section25BudgetGroup
+vietanh,2024-06-07T21:20:00+00:00,2024-06-08T11:45:39+00:00,Rental Income from Robert Ramirez,Income,6563000,vietanh,Rental Income,Cup97SavingGroup,Really40BudgetGroup
+thong,2024-05-08T13:04:46+00:00,2024-05-31T10:12:21+00:00,"Investment Income from Best, Wagner and Howard",Income,4263000,thong,Investment Income,Laugh54SavingGroup,Take39BudgetGroup
+long_nguyen,2024-01-01T19:00:13+00:00,2024-03-16T21:20:41+00:00,Rent/Mortgage to William Jones,Expense,112000,long_nguyen,Rent/Mortgage,Star55SavingGroup,Financial50BudgetGroup
+hakhanhne,2024-01-09T23:50:11+00:00,2024-06-01T01:57:01+00:00,Investment Income from Miguel Herman,Income,7689000,hakhanhne,Investment Income,Already16SavingGroup,Someone10BudgetGroup
+lanh_tran,2024-05-23T23:13:02+00:00,2024-06-07T19:41:47+00:00,Transportation to Corey Lopez,Expense,324000,lanh_tran,Transportation,Visit12SavingGroup,True45BudgetGroup
+lanh_tran,2024-03-31T18:54:09+00:00,2024-06-04T09:54:47+00:00,"Rent/Mortgage to Perkins, Hayes and Cunningham",Expense,8450000,lanh_tran,Rent/Mortgage,Until15SavingGroup,Everyone31BudgetGroup
+vietanh,2024-01-28T03:12:48+00:00,2024-05-24T12:40:40+00:00,Business Profits from Guzman Ltd,Income,2421000,vietanh,Business Profits,War27SavingGroup,Improve78BudgetGroup
+thuy_nguyen,2024-01-18T06:16:52+00:00,2024-05-11T19:13:33+00:00,Groceries to Mitchell Group,Expense,6835000,thuy_nguyen,Groceries,Wall30SavingGroup,During97BudgetGroup
+thong,2024-02-26T05:22:33+00:00,2024-05-09T22:42:05+00:00,"Utilities to Schaefer, Cooke and Bridges",Expense,2563000,thong,Utilities,Move40SavingGroup,Surface79BudgetGroup
+long_nguyen,2024-02-25T13:05:38+00:00,2024-03-07T05:46:03+00:00,"Transportation to Martinez, Leonard and Gamble",Expense,6132000,long_nguyen,Transportation,Call14SavingGroup,Ten63BudgetGroup
+vuong_tran,2024-04-25T01:26:45+00:00,2024-06-01T13:41:33+00:00,Groceries to Erika Franco,Expense,4132000,vuong_tran,Groceries,Appear26SavingGroup,Eat24BudgetGroup
+thuy_nguyen,2024-02-04T15:13:51+00:00,2024-05-19T16:07:56+00:00,Salary from Newman-Andersen,Income,7127000,thuy_nguyen,Salary,Produce29SavingGroup,Item50BudgetGroup
+vuong_tran,2024-02-29T08:48:00+00:00,2024-05-10T06:47:01+00:00,Transportation to Kimberly Rose,Expense,4189000,vuong_tran,Transportation,Energy52SavingGroup,Store90BudgetGroup
+tuyen_nguyen,2024-01-02T16:48:51+00:00,2024-06-06T03:10:48+00:00,Rental Income from Gary Rivera,Income,6257000,tuyen_nguyen,Rental Income,Various19SavingGroup,Finally39BudgetGroup
+uyen_nguyen,2024-02-22T13:07:20+00:00,2024-03-31T13:04:30+00:00,Rental Income from Gregory Ford,Income,742000,uyen_nguyen,Rental Income,National47SavingGroup,Remain69BudgetGroup
+vuong_tran,2024-01-07T11:46:16+00:00,2024-01-18T04:54:54+00:00,Entertainment to Knight Inc,Expense,4297000,vuong_tran,Entertainment,Build91SavingGroup,Nice17BudgetGroup
+lanh_tran,2024-01-03T13:32:44+00:00,2024-04-11T15:18:26+00:00,"Transportation to Cameron, Lee and Valenzuela",Expense,1285000,lanh_tran,Transportation,By14SavingGroup,Southern34BudgetGroup
+hakhanhne,2024-01-09T09:42:11+00:00,2024-06-01T04:09:39+00:00,Entertainment to Dawn Casey,Expense,5966000,hakhanhne,Entertainment,Nor15SavingGroup,Six98BudgetGroup
+thong,2024-02-07T01:57:29+00:00,2024-06-03T20:01:10+00:00,Business Profits from Griffin-Miller,Income,7704000,thong,Business Profits,Modern91SavingGroup,Painting80BudgetGroup
+anna_felipe,2024-03-23T18:22:40+00:00,2024-04-21T06:17:55+00:00,Groceries to Adam Gilbert,Expense,7611000,anna_felipe,Groceries,Inside86SavingGroup,Inside44BudgetGroup
+long_nguyen,2024-01-05T04:12:22+00:00,2024-06-09T22:58:24+00:00,Groceries to Melissa Myers,Expense,530000,long_nguyen,Groceries,Dinner66SavingGroup,Institution35BudgetGroup
+long_nguyen,2024-06-03T22:59:04+00:00,2024-06-05T04:07:28+00:00,Freelance Work from Hooper-Stevens,Income,1698000,long_nguyen,Freelance Work,Modern84SavingGroup,Watch75BudgetGroup
+dan_to,2024-06-04T18:46:19+00:00,2024-06-06T07:45:11+00:00,"Transportation to Douglas, Ortiz and Marshall",Expense,8267000,dan_to,Transportation,Least43SavingGroup,Institution49BudgetGroup
+tuyen_nguyen,2024-02-01T03:44:05+00:00,2024-05-18T04:21:11+00:00,Groceries to Newton and Sons,Expense,798000,tuyen_nguyen,Groceries,Machine15SavingGroup,Among24BudgetGroup
+minh_lam,2024-01-09T07:35:25+00:00,2024-03-09T10:14:12+00:00,Rental Income from Valentine-Hicks,Income,2513000,minh_lam,Rental Income,Yeah64SavingGroup,This80BudgetGroup
+tuyen_nguyen,2024-04-10T00:26:44+00:00,2024-06-08T22:32:43+00:00,Rent/Mortgage to Jennifer Walters,Expense,7373000,tuyen_nguyen,Rent/Mortgage,Bar11SavingGroup,Probably24BudgetGroup
+lanh_tran,2024-03-10T17:50:36+00:00,2024-06-04T21:22:40+00:00,Salary from Mrs. Christine Pruitt MD,Income,6121000,lanh_tran,Salary,Million74SavingGroup,Success10BudgetGroup
+tung_nguyen,2024-04-05T07:58:27+00:00,2024-06-08T15:54:29+00:00,Investment Income from Alisha Hill,Income,8682000,tung_nguyen,Investment Income,Might12SavingGroup,Nothing85BudgetGroup
+vietanh,2024-06-07T21:51:15+00:00,2024-06-08T22:10:41+00:00,Business Profits from Fisher and Sons,Income,6724000,vietanh,Business Profits,Play10SavingGroup,Rise95BudgetGroup
+lanh_tran,2024-02-15T06:18:27+00:00,2024-02-16T22:49:12+00:00,Investment Income from Jennifer Spence,Income,5159000,lanh_tran,Investment Income,Image38SavingGroup,Them29BudgetGroup
+thong,2024-05-31T05:12:15+00:00,2024-06-04T00:20:22+00:00,Salary from Tanya Cooper,Income,2002000,thong,Salary,Threat11SavingGroup,Miss60BudgetGroup
+anna_felipe,2024-02-08T06:01:29+00:00,2024-05-13T18:57:13+00:00,Rent/Mortgage to Robinson LLC,Expense,4220000,anna_felipe,Rent/Mortgage,Now56SavingGroup,Join25BudgetGroup
+anna_felipe,2024-04-14T12:47:34+00:00,2024-05-15T13:53:25+00:00,Investment Income from Matthew Guerra,Income,7313000,anna_felipe,Investment Income,Lawyer43SavingGroup,Certain47BudgetGroup
+vuong_tran,2024-02-26T06:39:07+00:00,2024-04-05T11:26:30+00:00,Salary from Welch-Anderson,Income,8595000,vuong_tran,Salary,Modern46SavingGroup,Worker75BudgetGroup
+vuong_tran,2024-02-05T00:12:57+00:00,2024-03-25T14:17:10+00:00,"Rental Income from Harrell, Bradley and Boone",Income,8528000,vuong_tran,Rental Income,May23SavingGroup,Let50BudgetGroup
+tuyen_nguyen,2024-06-07T14:08:05+00:00,2024-06-09T03:13:31+00:00,Investment Income from Hutchinson-Baker,Income,5404000,tuyen_nguyen,Investment Income,Play94SavingGroup,Nice61BudgetGroup
+thuy_nguyen,2024-06-05T03:53:14+00:00,2024-06-09T11:58:09+00:00,Freelance Work from Matthew Ellis,Income,8536000,thuy_nguyen,Freelance Work,Them92SavingGroup,Born42BudgetGroup
+nhung,2024-04-22T03:20:36+00:00,2024-06-03T21:17:44+00:00,Entertainment to Heidi Martin,Expense,9366000,nhung,Entertainment,People50SavingGroup,Fly25BudgetGroup
+long_nguyen,2024-05-19T06:09:48+00:00,2024-06-04T14:37:31+00:00,Rental Income from Khan LLC,Income,3523000,long_nguyen,Rental Income,Store73SavingGroup,Military45BudgetGroup
+vuong_tran,2024-02-25T16:52:44+00:00,2024-06-06T23:27:58+00:00,Business Profits from Ryan Ltd,Income,2239000,vuong_tran,Business Profits,Artist52SavingGroup,Sell15BudgetGroup
+thuy_nguyen,2024-05-10T23:32:42+00:00,2024-05-29T07:58:55+00:00,Transportation to Jessica Knapp,Expense,5109000,thuy_nguyen,Transportation,Discover34SavingGroup,Management81BudgetGroup
+tung_nguyen,2024-01-01T18:19:25+00:00,2024-05-13T07:36:43+00:00,"Rent/Mortgage to Porter, Wilson and Hoover",Expense,2375000,tung_nguyen,Rent/Mortgage,Power15SavingGroup,Reason29BudgetGroup
+anna_felipe,2024-03-10T18:23:17+00:00,2024-06-09T02:29:54+00:00,Transportation to Emily Moyer,Expense,8756000,anna_felipe,Transportation,Serve37SavingGroup,Ask74BudgetGroup
+lanh_tran,2024-02-13T14:25:17+00:00,2024-06-06T21:32:02+00:00,Entertainment to Gregory Garrett,Expense,3236000,lanh_tran,Entertainment,Arrive66SavingGroup,Bad40BudgetGroup
+thuy_nguyen,2024-03-09T14:13:58+00:00,2024-06-02T00:41:06+00:00,Rent/Mortgage to Snow Inc,Expense,2579000,thuy_nguyen,Rent/Mortgage,Congress34SavingGroup,Tell33BudgetGroup
+duong,2024-03-15T05:08:13+00:00,2024-05-15T20:16:24+00:00,Business Profits from Jasmine Bridges,Income,2265000,duong,Business Profits,Green54SavingGroup,Sell84BudgetGroup
+long_nguyen,2024-01-27T08:33:14+00:00,2024-06-10T04:12:03+00:00,Rental Income from Hays-Scott,Income,7981000,long_nguyen,Rental Income,Bad37SavingGroup,Change87BudgetGroup
+duong,2024-03-15T20:11:24+00:00,2024-04-14T22:03:54+00:00,Freelance Work from Avila LLC,Income,6912000,duong,Freelance Work,Wait27SavingGroup,Sit38BudgetGroup
+duong,2024-03-25T23:59:40+00:00,2024-05-16T16:26:57+00:00,"Business Profits from Wood, Williams and Williams",Income,342000,duong,Business Profits,Benefit25SavingGroup,All59BudgetGroup
+dan_to,2024-01-21T20:03:12+00:00,2024-06-09T09:05:09+00:00,"Salary from Dixon, Murphy and Horn",Income,5587000,dan_to,Salary,True73SavingGroup,Week69BudgetGroup
+hakhanhne,2024-02-06T09:38:01+00:00,2024-06-09T18:13:48+00:00,Groceries to Angie Ramirez,Expense,2561000,hakhanhne,Groceries,Same78SavingGroup,Could74BudgetGroup
+nhung,2024-02-28T01:04:19+00:00,2024-06-08T05:01:07+00:00,"Freelance Work from Patrick, Glover and Sims",Income,488000,nhung,Freelance Work,Assume80SavingGroup,Security70BudgetGroup
+thong,2024-03-18T12:55:46+00:00,2024-05-22T11:12:32+00:00,"Freelance Work from Johnson, Lopez and Cross",Income,1746000,thong,Freelance Work,Leave12SavingGroup,Six62BudgetGroup
+hakhanhne,2024-06-02T05:42:45+00:00,2024-06-03T15:26:41+00:00,Business Profits from Anna Clark,Income,6657000,hakhanhne,Business Profits,Administration69SavingGroup,Far22BudgetGroup
+tung_nguyen,2024-05-25T05:59:21+00:00,2024-06-05T13:31:52+00:00,Investment Income from Nolan-Stuart,Income,3215000,tung_nguyen,Investment Income,West90SavingGroup,We62BudgetGroup
+thuy_nguyen,2024-04-14T10:18:03+00:00,2024-06-08T23:47:40+00:00,Business Profits from Mitchell Grant,Income,2072000,thuy_nguyen,Business Profits,Treat10SavingGroup,Civil18BudgetGroup
+lanh_tran,2024-02-07T22:10:09+00:00,2024-05-03T14:56:02+00:00,Utilities to Davis-Thompson,Expense,4032000,lanh_tran,Utilities,Cause31SavingGroup,Edge27BudgetGroup
+vuong_tran,2024-01-01T05:47:02+00:00,2024-02-10T06:57:32+00:00,Utilities to Beth Moore,Expense,5662000,vuong_tran,Utilities,A17SavingGroup,International63BudgetGroup
+long_nguyen,2024-06-03T21:38:29+00:00,2024-06-08T21:11:00+00:00,Business Profits from Dwayne Hernandez,Income,874000,long_nguyen,Business Profits,Speech66SavingGroup,Cut48BudgetGroup
+anna_felipe,2024-04-30T03:55:57+00:00,2024-06-07T14:38:41+00:00,Salary from Charles Chan,Income,9637000,anna_felipe,Salary,Movie10SavingGroup,Often87BudgetGroup
+lanh_tran,2024-06-06T06:32:01+00:00,2024-06-10T04:41:03+00:00,Utilities to Donald Bennett,Expense,6595000,lanh_tran,Utilities,Speech92SavingGroup,Peace15BudgetGroup
+hakhanhne,2024-01-29T13:45:27+00:00,2024-04-01T13:24:57+00:00,Transportation to Gates LLC,Expense,11000,hakhanhne,Transportation,Cup66SavingGroup,What46BudgetGroup
+lanh_tran,2024-01-01T15:31:33+00:00,2024-06-04T18:14:06+00:00,Rent/Mortgage to Murphy-Oneill,Expense,5831000,lanh_tran,Rent/Mortgage,Change82SavingGroup,Set64BudgetGroup
+tuyen_nguyen,2024-01-18T12:29:15+00:00,2024-05-09T04:18:17+00:00,"Entertainment to Stewart, Baldwin and Dunn",Expense,5151000,tuyen_nguyen,Entertainment,Shoulder45SavingGroup,Operation83BudgetGroup
+nhung,2024-04-13T20:44:59+00:00,2024-06-09T02:09:42+00:00,Rent/Mortgage to Joe Bennett,Expense,600000,nhung,Rent/Mortgage,Movie48SavingGroup,Picture25BudgetGroup
+tuyen_nguyen,2024-04-15T01:44:20+00:00,2024-06-02T02:52:24+00:00,"Entertainment to Garcia, Weaver and Ramsey",Expense,2750000,tuyen_nguyen,Entertainment,Class52SavingGroup,Region49BudgetGroup
+dan_to,2024-02-07T02:22:42+00:00,2024-06-07T22:11:08+00:00,Transportation to Clark-Wells,Expense,3126000,dan_to,Transportation,Key92SavingGroup,Guess69BudgetGroup
+uyen_nguyen,2024-06-05T14:05:08+00:00,2024-06-06T01:11:36+00:00,Investment Income from James Roberts,Income,6062000,uyen_nguyen,Investment Income,Successful95SavingGroup,Six64BudgetGroup
+vuong_tran,2024-01-13T03:33:55+00:00,2024-06-06T02:27:42+00:00,Freelance Work from John Gonzales,Income,595000,vuong_tran,Freelance Work,Represent19SavingGroup,Bed93BudgetGroup
+thuy_nguyen,2024-03-06T12:10:17+00:00,2024-03-26T07:15:55+00:00,Utilities to John Young,Expense,7862000,thuy_nguyen,Utilities,Responsibility43SavingGroup,Hair69BudgetGroup
+duong,2024-02-08T09:43:25+00:00,2024-05-13T10:07:47+00:00,Utilities to Richard Lynn,Expense,1329000,duong,Utilities,Enjoy31SavingGroup,Truth95BudgetGroup
+uyen_nguyen,2024-01-27T17:16:31+00:00,2024-02-25T03:50:28+00:00,Business Profits from Dr. Sarah Beltran,Income,1777000,uyen_nguyen,Business Profits,Entire95SavingGroup,Despite12BudgetGroup
+tung_nguyen,2024-05-27T15:19:30+00:00,2024-06-02T00:02:19+00:00,Rental Income from Ford PLC,Income,4847000,tung_nguyen,Rental Income,Know64SavingGroup,Always34BudgetGroup
+minh_lam,2024-06-06T13:59:34+00:00,2024-06-07T13:08:25+00:00,Investment Income from Crawford-Oliver,Income,2538000,minh_lam,Investment Income,Test58SavingGroup,In37BudgetGroup
+tung_nguyen,2024-01-25T00:59:37+00:00,2024-06-08T14:30:16+00:00,Investment Income from Stephens LLC,Income,7671000,tung_nguyen,Investment Income,Point78SavingGroup,Two89BudgetGroup
+thuy_nguyen,2024-02-10T00:35:29+00:00,2024-04-12T12:37:52+00:00,Rent/Mortgage to Jake Brady,Expense,2073000,thuy_nguyen,Rent/Mortgage,National39SavingGroup,Civil76BudgetGroup
+dan_to,2024-06-04T02:48:29+00:00,2024-06-07T13:59:02+00:00,Transportation to Christina Hayes,Expense,7199000,dan_to,Transportation,Box26SavingGroup,Lawyer69BudgetGroup
+hakhanhne,2024-01-09T23:02:48+00:00,2024-04-13T11:00:16+00:00,Utilities to Joseph Schultz,Expense,7264000,hakhanhne,Utilities,Program47SavingGroup,Information66BudgetGroup
+hakhanhne,2024-01-19T04:46:16+00:00,2024-06-03T09:15:59+00:00,Freelance Work from Benson Group,Income,2205000,hakhanhne,Freelance Work,Daughter69SavingGroup,Start18BudgetGroup
+thuy_nguyen,2024-03-18T20:21:10+00:00,2024-04-13T01:19:45+00:00,Business Profits from James Smith,Income,8247000,thuy_nguyen,Business Profits,Center20SavingGroup,Can18BudgetGroup
+tung_nguyen,2024-04-13T02:14:46+00:00,2024-06-03T15:14:33+00:00,Entertainment to Thomas Swanson,Expense,3391000,tung_nguyen,Entertainment,Management34SavingGroup,Talk63BudgetGroup
+tung_nguyen,2024-04-02T13:16:46+00:00,2024-06-09T01:34:34+00:00,"Groceries to Hernandez, Thompson and Johnson",Expense,3123000,tung_nguyen,Groceries,Positive85SavingGroup,Effort55BudgetGroup
+uyen_nguyen,2024-01-20T08:34:33+00:00,2024-05-13T11:23:36+00:00,Entertainment to Sara Robertson,Expense,1652000,uyen_nguyen,Entertainment,Manager13SavingGroup,War23BudgetGroup
+tuyen_nguyen,2024-04-06T05:28:42+00:00,2024-04-14T12:43:31+00:00,Groceries to Pamela Coleman,Expense,7626000,tuyen_nguyen,Groceries,Have78SavingGroup,Hear53BudgetGroup
+thong,2024-03-11T19:12:04+00:00,2024-06-05T01:51:03+00:00,Investment Income from Ashley Morris,Income,6055000,thong,Investment Income,World85SavingGroup,High78BudgetGroup
+duong,2024-04-11T13:34:49+00:00,2024-04-26T04:21:32+00:00,Groceries to Corey Chase,Expense,9043000,duong,Groceries,Run69SavingGroup,Cup46BudgetGroup
+long_nguyen,2024-04-03T22:35:34+00:00,2024-06-02T05:48:48+00:00,Groceries to Daniel Jackson,Expense,8547000,long_nguyen,Groceries,Agree14SavingGroup,Phone54BudgetGroup
+tung_nguyen,2024-06-01T03:23:37+00:00,2024-06-07T20:26:20+00:00,Salary from Courtney Walters,Income,1433000,tung_nguyen,Salary,Usually89SavingGroup,Upon49BudgetGroup
+duong,2024-01-17T10:10:00+00:00,2024-02-06T16:47:53+00:00,Rental Income from Lee-Pratt,Income,2378000,duong,Rental Income,Cut42SavingGroup,Special32BudgetGroup
+tuyen_nguyen,2024-01-30T07:03:36+00:00,2024-03-21T05:13:54+00:00,Rent/Mortgage to Anthony Guerrero,Expense,3063000,tuyen_nguyen,Rent/Mortgage,Lead26SavingGroup,Second31BudgetGroup
+minh_lam,2024-01-11T03:02:56+00:00,2024-06-04T12:00:56+00:00,"Entertainment to Smith, Young and Chambers",Expense,2497000,minh_lam,Entertainment,Cold90SavingGroup,Degree60BudgetGroup
+lanh_tran,2024-03-08T22:47:30+00:00,2024-06-02T10:28:38+00:00,Salary from Omar Booker,Income,8717000,lanh_tran,Salary,Budget33SavingGroup,Get30BudgetGroup
+anna_felipe,2024-01-30T21:18:03+00:00,2024-06-06T16:20:02+00:00,Salary from Rivera-Rodriguez,Income,5658000,anna_felipe,Salary,Beat97SavingGroup,Share61BudgetGroup
+duong,2024-01-11T01:15:21+00:00,2024-05-27T01:31:26+00:00,"Utilities to Vincent, Vaughn and Harrison",Expense,5311000,duong,Utilities,Form96SavingGroup,Inside85BudgetGroup
+minh_lam,2024-01-20T10:42:28+00:00,2024-03-02T15:46:37+00:00,Investment Income from Wood and Sons,Income,2446000,minh_lam,Investment Income,Feel95SavingGroup,Window39BudgetGroup
+vuong_tran,2024-04-03T10:25:49+00:00,2024-06-10T06:45:16+00:00,Salary from Zachary Lee,Income,8772000,vuong_tran,Salary,Save42SavingGroup,Better21BudgetGroup
+hakhanhne,2024-04-27T15:07:09+00:00,2024-05-25T23:59:04+00:00,Rental Income from Mr. Cody Estes,Income,8994000,hakhanhne,Rental Income,Push35SavingGroup,Get84BudgetGroup
+thuy_nguyen,2024-02-20T18:09:00+00:00,2024-05-17T19:26:49+00:00,Freelance Work from Jack Huynh,Income,7731000,thuy_nguyen,Freelance Work,Fly16SavingGroup,Wall72BudgetGroup
+minh_lam,2024-06-07T14:47:22+00:00,2024-06-07T21:04:34+00:00,Salary from Chase Young,Income,9598000,minh_lam,Salary,Style13SavingGroup,Let86BudgetGroup
+lanh_tran,2024-05-02T20:15:10+00:00,2024-05-24T03:56:07+00:00,Rental Income from Raven Ross,Income,9397000,lanh_tran,Rental Income,Wind23SavingGroup,Attorney19BudgetGroup
+thuy_nguyen,2024-05-21T10:34:31+00:00,2024-06-04T17:39:30+00:00,Rent/Mortgage to Crawford-Luna,Expense,1829000,thuy_nguyen,Rent/Mortgage,Girl26SavingGroup,Policy70BudgetGroup
+uyen_nguyen,2024-03-14T01:34:32+00:00,2024-06-02T04:51:04+00:00,Rental Income from Angela Young,Income,4643000,uyen_nguyen,Rental Income,Discuss10SavingGroup,Have95BudgetGroup
+nhung,2024-06-01T23:47:21+00:00,2024-06-06T22:34:37+00:00,"Business Profits from Adkins, Woods and Phillips",Income,981000,nhung,Business Profits,Mind81SavingGroup,Value42BudgetGroup
+vietanh,2024-01-20T01:07:20+00:00,2024-06-05T14:26:02+00:00,"Utilities to Griffin, Moore and Martinez",Expense,409000,vietanh,Utilities,Laugh96SavingGroup,Person64BudgetGroup
+dan_to,2024-06-03T08:53:03+00:00,2024-06-08T23:50:34+00:00,Entertainment to Hutchinson-Lee,Expense,7219000,dan_to,Entertainment,Learn37SavingGroup,Girl73BudgetGroup
+tuyen_nguyen,2024-03-07T17:49:03+00:00,2024-06-05T02:55:17+00:00,Freelance Work from Mr. Jonathan Warren,Income,9671000,tuyen_nguyen,Freelance Work,Player89SavingGroup,Of56BudgetGroup
+tuyen_nguyen,2024-06-03T10:53:38+00:00,2024-06-07T04:28:52+00:00,Business Profits from Martin and Sons,Income,6394000,tuyen_nguyen,Business Profits,Hair75SavingGroup,Result76BudgetGroup
+uyen_nguyen,2024-01-29T23:12:52+00:00,2024-03-29T03:48:30+00:00,Salary from Johnston-Clark,Income,2784000,uyen_nguyen,Salary,Outside76SavingGroup,Front37BudgetGroup
+thong,2024-05-24T23:53:22+00:00,2024-06-02T07:35:45+00:00,Salary from Bethany Romero,Income,3370000,thong,Salary,Information58SavingGroup,Stock53BudgetGroup
+vuong_tran,2024-06-02T04:21:04+00:00,2024-06-08T20:09:47+00:00,Business Profits from Brian Jimenez,Income,8851000,vuong_tran,Business Profits,Action96SavingGroup,Cultural62BudgetGroup
+thong,2024-05-04T01:24:44+00:00,2024-06-09T01:32:54+00:00,Business Profits from Samantha Cruz,Income,1222000,thong,Business Profits,Weight90SavingGroup,Let55BudgetGroup
+dan_to,2024-01-10T01:52:46+00:00,2024-05-24T20:22:28+00:00,Rent/Mortgage to Amanda King,Expense,1064000,dan_to,Rent/Mortgage,Institution19SavingGroup,Between84BudgetGroup
+vuong_tran,2024-01-27T23:55:33+00:00,2024-02-11T05:02:52+00:00,Entertainment to Daniels-Nelson,Expense,6303000,vuong_tran,Entertainment,Might80SavingGroup,Soldier42BudgetGroup
+thuy_nguyen,2024-06-04T13:20:28+00:00,2024-06-06T12:03:23+00:00,Transportation to Quinn-Williams,Expense,4193000,thuy_nguyen,Transportation,Around28SavingGroup,You78BudgetGroup
+tuyen_nguyen,2024-04-19T20:03:36+00:00,2024-05-09T16:52:44+00:00,Entertainment to Collins-Olson,Expense,6582000,tuyen_nguyen,Entertainment,Worker31SavingGroup,Fire58BudgetGroup
+tung_nguyen,2024-01-03T05:36:45+00:00,2024-03-16T04:04:03+00:00,Rental Income from Carol Davenport,Income,3022000,tung_nguyen,Rental Income,To37SavingGroup,Stand59BudgetGroup
+duong,2024-01-13T02:44:06+00:00,2024-04-14T19:05:34+00:00,Freelance Work from Kelly Hodge,Income,1456000,duong,Freelance Work,Animal43SavingGroup,Almost69BudgetGroup
+long_nguyen,2024-02-03T01:54:22+00:00,2024-05-18T01:17:50+00:00,Freelance Work from Ashley Reid,Income,3782000,long_nguyen,Freelance Work,Manager71SavingGroup,Return84BudgetGroup
+dan_to,2024-01-13T20:47:29+00:00,2024-05-26T04:58:00+00:00,"Business Profits from Gutierrez, Allen and Knight",Income,8710000,dan_to,Business Profits,Easy26SavingGroup,Research54BudgetGroup
+vietanh,2024-02-23T13:28:34+00:00,2024-03-31T04:16:52+00:00,Investment Income from Jeffrey Morales,Income,1899000,vietanh,Investment Income,Sister60SavingGroup,Own75BudgetGroup
+tung_nguyen,2024-01-13T03:55:13+00:00,2024-02-14T21:52:26+00:00,"Utilities to Smith, Marsh and Baker",Expense,3845000,tung_nguyen,Utilities,When27SavingGroup,Bit89BudgetGroup
+duong,2024-02-07T02:50:18+00:00,2024-04-01T08:08:57+00:00,Rent/Mortgage to Harris Group,Expense,2149000,duong,Rent/Mortgage,Its43SavingGroup,Everything16BudgetGroup
+long_nguyen,2024-03-18T04:06:47+00:00,2024-06-06T22:17:03+00:00,Utilities to Corey Brandt,Expense,8589000,long_nguyen,Utilities,Skill16SavingGroup,Number58BudgetGroup
+thong,2024-05-16T02:22:36+00:00,2024-05-19T10:59:30+00:00,Utilities to Jason Anderson,Expense,1649000,thong,Utilities,Pm75SavingGroup,Lose36BudgetGroup
+uyen_nguyen,2024-05-22T04:54:26+00:00,2024-06-05T03:10:11+00:00,Business Profits from Sara Bird,Income,4248000,uyen_nguyen,Business Profits,Actually20SavingGroup,Whom25BudgetGroup
+tung_nguyen,2024-01-23T21:08:01+00:00,2024-06-09T20:14:19+00:00,Transportation to Kayla Mays,Expense,111000,tung_nguyen,Transportation,Local86SavingGroup,Fact10BudgetGroup

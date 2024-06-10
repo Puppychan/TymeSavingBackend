@@ -48,10 +48,14 @@ export const GET = async (req: NextRequest) => {
             transactionType: vnpParams["transactionType"], 
             currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories
         };
-        response.currentMonthTotal = (await currentMonthTotal(vnpParams["transactionType"])).response;
-        response.pastMonthsTotal = (await pastMonthsTotal(vnpParams["transactionType"])).response;
-        response.compareToLastMonth =(await compareToLastMonth()).response;
-        response.topCategories = (await topCategories(vnpParams["transactionType"])).response;
+        response.currentMonthTotal = 
+            (await currentMonthTotal(vnpParams["transactionType"], vnpParams["userId"])).response;
+        response.pastMonthsTotal = 
+            (await pastMonthsTotal(vnpParams["transactionType"], vnpParams["userId"])).response;
+        response.compareToLastMonth =
+            (await compareToLastMonth(vnpParams["userId"])).response;
+        response.topCategories = 
+            (await topCategories(vnpParams["transactionType"], vnpParams["userId"])).response;
         console.log(response);
         return NextResponse.json({response: response}, {status: 200});
     } catch (error){

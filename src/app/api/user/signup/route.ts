@@ -9,7 +9,7 @@ export const POST = async (req: NextRequest) => {
   try {
     await connectMongoDB();
     const payload = await req.json()
-    const {username, password, email, fullname, phone } = payload
+    const {username, password, email, fullname, phone } = payload;
     const existingUsername = await User.findOne({'username': username }).select("-password");
     const existingMail = await User.findOne({'email': email }).select("-password");
     if (existingUsername) {

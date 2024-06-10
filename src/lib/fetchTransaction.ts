@@ -3,11 +3,11 @@ import Transaction from 'src/models/transaction/model';
 import { startOfMonth, endOfMonth, subMonths, format } from 'date-fns';
 import { PipelineStage } from 'mongoose';
 
-
+// Add userId == some user ID and we cool
 
 // total expense/income of current month: From the 1st to the current date
 // return amount + month
-export const currentMonthTotal = async(type: String) =>{
+export const currentMonthTotal = async(type: String, currentUserId) =>{
     try {    
         const currentDate = new Date();
         const firstDayOfMonth = startOfMonth(currentDate);
@@ -23,6 +23,7 @@ export const currentMonthTotal = async(type: String) =>{
                         $lt: currentDate
                     },
                     type: type
+                    , userId: currentUserId
                 }
             },
             {
@@ -55,7 +56,7 @@ export const currentMonthTotal = async(type: String) =>{
             response: result.length > 0 ? result[0] : { totalAmount: 0 }
         };
     } catch (error) {
-        console.error('Error fetching transactions:', error);
+        console.error('currentMonthTotal: Error fetching transactions:', error);
         return {
             status: 500,
             response: error
@@ -64,13 +65,13 @@ export const currentMonthTotal = async(type: String) =>{
 }
 
 // export const lastFiveMonths = async (transactionType: String) => {
-export const pastMonthsTotal = async (transactionType: String) => {
+export const pastMonthsTotal = async (transactionType: String, currentUserId) => {
     try {
         await connectMongoDB();
 
         const currentDate = new Date();
         // length: number of months to show
-        const months = Array.from({ length: 5 }, (_, i) => {
+        const months = Array.from({ length: 12 }, (_, i) => {
             const monthStart = startOfMonth(subMonths(currentDate, i));
             const monthEnd = i === 0 ? currentDate : endOfMonth(subMonths(currentDate, i));
             const monthLabel = format(monthStart, 'MMM').toUpperCase();; // Format month for labeling
@@ -89,7 +90,8 @@ export const pastMonthsTotal = async (transactionType: String) => {
                             $gte: monthStart,
                             $lt: monthEnd
                         },
-                        type: transactionType
+                        type: transactionType, 
+                        userId: currentUserId
                     }
                 },
                 {
@@ -119,7 +121,7 @@ export const pastMonthsTotal = async (transactionType: String) => {
             response: summary
         };
     } catch (error) {
-        console.error('Error fetching transactions:', error);
+        console.error('pastMonthsTotal: Error fetching transactions:', error);
         return {
             status: 500,
             response: error
@@ -130,7 +132,7 @@ export const pastMonthsTotal = async (transactionType: String) => {
 // Total income and expense for this month. Compare them to the last month
 // return: total income for this month, percentage compared to the last month
 // return: total expense for this month, percentage compared to the last month
-export const compareToLastMonth = async() => {
+export const compareToLastMonth = async(currentUserId) => {
     try {
         await connectMongoDB();
 
@@ -149,6 +151,7 @@ export const compareToLastMonth = async() => {
                                     $gte: firstDayOfThisMonth,
                                     $lt: currentDate
                                 }
+                                , userId: currentUserId
                             }
                         },
                         {
@@ -172,6 +175,7 @@ export const compareToLastMonth = async() => {
                                     $gte: firstDayOfLastMonth,
                                     $lt: endOfLastMonth
                                 }
+                                , userId: currentUserId
                             }
                         },
                         {
@@ -195,6 +199,7 @@ export const compareToLastMonth = async() => {
                                     $gte: firstDayOfThisMonth,
                                     $lt: currentDate
                                 }
+                                , userId: currentUserId
                             }
                         },
                         {
@@ -218,6 +223,7 @@ export const compareToLastMonth = async() => {
                                     $gte: firstDayOfLastMonth,
                                     $lt: endOfLastMonth
                                 }
+                                , userId: currentUserId
                             }
                         },
                         {
@@ -273,7 +279,7 @@ export const compareToLastMonth = async() => {
                         "Expense": { "currentExpense": summary.currentMonthExpense, "expensePercentage": expensePercentage} }
         };
     } catch (error) {
-        console.error('Error fetching transactions:', error);
+        console.error('compareToLastMonths: Error fetching transactions:', error);
         return {
             status: 500,
             response: error
@@ -284,15 +290,22 @@ export const compareToLastMonth = async() => {
 // Group category for this month
 // Top 3 categories + Group the others as "Other"
 // return: {category, total amount, percentage}
-export const topCategories = async(transactionType: String): Promise<{status: number, response: any}> => {
+export const topCategories = async(transactionType: String, currentUserId): Promise<{status: number, response: any}> => {
     try {
         await connectMongoDB();
 
+        const currentDate = new Date();
+        const firstDayOfMonth = startOfMonth(currentDate);
         // First aggregation to get all categories with their total amounts
         const categoriesPipeline: PipelineStage[] = [
             {
                 $match: {
-                    type: transactionType
+                    type: transactionType, 
+                    userId: currentUserId,
+                    createdDate: {
+                        $gte: firstDayOfMonth,
+                        $lt: currentDate
+                    }
                 }
             },
             {
@@ -326,9 +339,17 @@ export const topCategories = async(transactionType: String): Promise<{status: nu
             percentage: totalExpense ? (item.totalAmount / totalExpense) * 100 : 0
         }));
 
-        // Calculate the percentage for the "Other" category
+        // Calculate the percentage for the "Other" category.
         const top3Percentage = top3Summary.reduce((acc, category) => acc + category.percentage, 0);
         const otherPercentage = 100 - top3Percentage;
+
+        // If there are no transactions so far, return empty object immediately
+        if (top3Percentage == 0){
+            return {
+                status: 200,
+                response: null
+            };
+        }
 
         // Calculate the total amount for the "Other" category
         const otherTotal = totalExpense - top3Total;
@@ -349,10 +370,18 @@ export const topCategories = async(transactionType: String): Promise<{status: nu
             response: top3Summary
         };
     } catch (error) {
-        console.error('Error fetching transactions:', error);
+        console.error('topCategories: Error fetching transactions:', error);
         return {
             status: 500,
-            response: 'Error fetching transactions'
+            response: 'topCategories: Error fetching transactions'
         };
+    }
+}
+
+export const netSpend = async (userId: String) =>{
+    try {
+
+    } catch (error){
+        
     }
 }
