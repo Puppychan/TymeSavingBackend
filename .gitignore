@@ -10,9 +10,7 @@
 /coverage
 
 # next.js
-/.next/
 /out/
-
 # production
 /build
 
@@ -40,3 +38,6 @@ next-env.d.ts
 # Ignore the build directory
 dist/*
 .next
+.next/
+/.next
+/.next/
