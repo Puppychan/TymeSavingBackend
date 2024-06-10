@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
-import { verifyUser } from "src/lib/authentication";
+import { verifyUser, newToken } from "src/lib/authentication";
 import { exist_email, exist_username } from "src/lib/checkExist";
 import { usernameValidator } from "src/lib/validator";
 import { IUser } from "src/models/user/interface";
@@ -16,7 +16,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       }
 
       const payload = await req.json() as Partial<IUser> //payload = newUser
-      const user = await User.findOne({ 'username': params.username }).select("-password");
+      const user = await User.findOne({ 'username': params.username });
       if (!user) {
         return NextResponse.json({ response: 'User not found' }, { status: 404 });
       }
@@ -47,7 +47,13 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
           }
       );
       console.log('updatedUser:', updatedUser);
-      return NextResponse.json({ response: updatedUser }, { status: 200 });
+
+      let token = newToken(user)
+      // Convert the user document to a plain JavaScript object and remove the password field
+      let returnUser = user.toObject();
+      delete returnUser.password;
+      // return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
+      return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
     console.log('Error updating user:', error);
     return NextResponse.json({ response: 'Cannot update user ' + params.username }, { status: 500 });

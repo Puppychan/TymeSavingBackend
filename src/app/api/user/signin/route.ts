@@ -11,7 +11,7 @@ export const POST = async (req: NextRequest) => {
     await connectMongoDB();
     const payload = await req.json()
     const {username, password} = payload
-    const user = await User.findOne({username: username}).select("-password");
+    const user = await User.findOne({username: username});
     if (!user) {
       return NextResponse.json({ response: `Login credentials invalid. No account with username ${username}` }, { status: 401});
     }
@@ -21,8 +21,11 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ response: 'Login credentials invalid. Wrong password' }, { status: 401 });
     }
 
-    let token = newToken(user)
-    return NextResponse.json({ response: {token: token, role: user.role ?? UserRole.Customer} }, { status: 200 });
+    let token = newToken(user);
+    // Convert the user document to a plain JavaScript object and remove the password field
+    let returnUser = user.toObject();
+    delete returnUser.password;
+    return NextResponse.json({ response: {token: token, role: returnUser.role ?? UserRole.Customer} }, { status: 200 });
   } catch (error: any) {
     console.log(error)
     return NextResponse.json({ response: error.message}, { status: 500 });
