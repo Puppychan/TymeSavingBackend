@@ -6,5 +6,6 @@ export const defaultUser = {
   email: "hakhanhne@gmail.com",
   password: "Rmit123@",
   fullname: "Khanh Tran",
-  role: UserRole.Admin
+  role: UserRole.Admin,
+  pin: '1234'
 };

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyUser } from "src/lib/authentication";
 import { pinValidator } from "src/lib/validator";
 import User from "src/models/user/model";
 
@@ -7,6 +8,11 @@ import User from "src/models/user/model";
 export const POST = async (req: NextRequest, { params }: { params: { username: string } }) => {
   try {
     await connectMongoDB();
+    const verification = await verifyUser(req.headers, params.username)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
     const payload = await req.json()
     const {newPIN, currentPIN} = payload
     const user = await User.findOne({'username': params.username });
@@ -22,7 +28,7 @@ export const POST = async (req: NextRequest, { params }: { params: { username: s
 
     const validPin = pinValidator(newPIN)
     if (!validPin.status)
-      return NextResponse.json({ response: validPin.message ?? 'Invalid PIN'}, { status: 400 });
+      return NextResponse.json({ response: validPin.message }, { status: 400 });
     
     const  updatedUser = await User.findOneAndUpdate(
         { username: params.username },
