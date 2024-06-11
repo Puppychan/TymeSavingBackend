@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
-import { csvToDB } from "src/lib/readCSV";
+
 /*
     POST: Create a transaction
     GET: For admins to view all transaction details - may change this route
