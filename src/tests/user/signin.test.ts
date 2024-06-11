@@ -4,7 +4,7 @@ import { POST } from "../../app/api/user/signin/route";
 import { NextRequest } from "next/server";
 import { disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
-import { defaultUser } from "../support-data";
+import { defaultUser, defaultUserCustomer } from "../support-data";
 import { UserRole } from "src/models/user/interface";
 import bcrypt from 'bcrypt';
 
@@ -50,7 +50,7 @@ describe("/api/user/signin", () => {
       callback(null, true);
     });
 
-    const body = {username: defaultUser.username, password: defaultUser.password}
+    const body = {username: defaultUserCustomer.username, password: defaultUserCustomer.password}
     // simulate the request body
     let req = {
       json: async () => (body),
@@ -59,7 +59,7 @@ describe("/api/user/signin", () => {
     // simulate the POST request
     const res = await POST(req);
     const json = await res.json();
-    console.log(json.response)
+    console.log("SIGN IN: Success:", json.response);
 
     expect(res.status).toBe(200);
     expect(json.response.role).toEqual(UserRole.Customer);

@@ -21,6 +21,7 @@
         "name": "next"
       }
     ],
+    "baseUrl": "",
     "paths": {
       "src/*": [
         "./src/*"
@@ -32,8 +33,9 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts"
-, "src/lib/readCSV.ts"  ],
+    ".next/types/**/*.ts",
+    "src/lib/readCSV.ts"
+  ],
   "exclude": [
     "node_modules"
   ]

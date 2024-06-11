@@ -65,7 +65,7 @@ describe("MongoDB Connection", () => {
 
       expect(mongoose.set).toHaveBeenCalledWith("strictQuery", true);
       expect(mongoose.connect).toHaveBeenCalledWith(process.env.MONGODB_URI, {
-        dbName: "tymedata",
+        dbName: process.env.MONGODB_DBNAME,
       });
       expect(console.log).toHaveBeenCalledWith("MongoDB connected");
     });

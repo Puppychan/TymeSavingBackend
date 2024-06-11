@@ -13,11 +13,7 @@ export const connectMongoDB = async () => {
     await mongoose.connect(
       MONGODB_URI, 
       {
-        // dbName: "tymedata",
-        // if testing e.g. entering csv data
-        dbName: "tymetest",
-        // useNewUrlParser: true,    //default is true -> remove
-        // useUnifiedTopology: true, //default is true -> remove
+        dbName: process.env.MONGODB_DBNAME,
       }
     );
 

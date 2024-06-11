@@ -70,14 +70,3 @@ export const GET = async (req: NextRequest) => {
         console.log(error);
     }
 }
-
-export const POST = async (req: NextRequest) => {
-    try{
-        let filePath = 'data/NI Data - User.csv';
-        const result = await csvToDB(filePath, "User");
-        return NextResponse.json({response: result}, {status: 200});
-    }
-    catch (error){
-        return NextResponse.json({response: error}, {status: 500});
-    }
-}

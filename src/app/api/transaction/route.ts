@@ -57,14 +57,3 @@ export const POST = async (req:NextRequest) => {
         return NextResponse.json({ response: error.message}, { status: 500 });
     }
 }
-
-export const PUT = async () => {
-    try{
-        let filePath = 'data/NI Data - Transaction.csv';
-        const result = await csvToDB(filePath, "Transaction");
-        return NextResponse.json({response: result}, {status: 200});
-    }
-    catch (error){
-        return NextResponse.json({response: error}, {status: 500});
-    }
-}
