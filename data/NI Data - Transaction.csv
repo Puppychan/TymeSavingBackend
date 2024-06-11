@@ -1,201 +1,201 @@
-userId,createdDate,editedDate,description,type,amount,payBy,category
-c92e838a4e5a4467c5dc5161,2024-03-07T18:51:24+00:00,2024-06-02T23:22:41+00:00,Rent/Mortgage to Kimberly Phillips,Expense,6924000,duong,Rent/Mortgage
-5be764e552bda4f8ee6b37dd,2024-05-16T10:46:10+00:00,2024-06-09T20:22:52+00:00,Business Profits from Emily Williams,Income,8331000,minh_lam,Business Profits
-5032656132b54e9c71298112,2024-01-24T03:31:39+00:00,2024-03-01T07:59:38+00:00,Groceries to Stone LLC,Expense,7743000,thong,Groceries
-c38ac3383b2950924e1e6e76,2024-02-07T11:20:45+00:00,2024-03-09T19:21:45+00:00,Salary from Joseph Rodriguez,Income,6917000,nhung,Salary
-53dc2588ca1d6ec40bb6bbaa,2024-05-09T17:29:47+00:00,2024-05-17T20:24:51+00:00,Investment Income from Gary Small,Income,7640000,tung_nguyen_admin,Investment Income
-7f9ff7a285edd769ee1ce78e,2024-06-08T11:33:24+00:00,2024-06-08T12:40:16+00:00,"Entertainment to Nicholson, Thomas and Rivera",Expense,3123000,admin3,Entertainment
-3ba22e4085e52a391d4f5caf,2024-02-21T07:28:45+00:00,2024-06-02T05:13:13+00:00,"Utilities to Fernandez, Young and Mccullough",Expense,9063000,dan_to_admin,Utilities
-ea6e018ac563020da685fa5e,2024-02-29T06:26:56+00:00,2024-03-28T16:48:07+00:00,Investment Income from Tucker-Foster,Income,7995000,vietanh,Investment Income
-3ba22e4085e52a391d4f5caf,2024-01-20T07:38:42+00:00,2024-02-24T13:43:20+00:00,Rent/Mortgage to Melissa Robbins,Expense,6162000,dan_to_admin,Rent/Mortgage
-244a4f4329331fa942db9ac7,2024-01-27T00:41:56+00:00,2024-06-04T14:51:28+00:00,Transportation to Melendez Ltd,Expense,2278000,long_nguyen,Transportation
-c38ac3383b2950924e1e6e76,2024-02-11T23:02:26+00:00,2024-03-05T01:11:56+00:00,Freelance Work from Boyd-Fuller,Income,1969000,nhung,Freelance Work
-ac84b0c52650b0f3d56bf29b,2024-01-27T08:26:41+00:00,2024-05-05T03:34:45+00:00,Rent/Mortgage to Gordon Inc,Expense,2281000,dan_to,Rent/Mortgage
-1181bc46be8f0c4e01f15912,2024-06-01T03:47:25+00:00,2024-06-05T20:09:02+00:00,Entertainment to Donald Montoya,Expense,6140000,uyen_nguyen_admin,Entertainment
-9657f92da38327892a96c9f9,2024-01-28T15:42:16+00:00,2024-02-19T13:17:46+00:00,"Transportation to Jones, Flores and Gonzalez",Expense,273000,thuy_nguyen_admin,Transportation
-244a4f4329331fa942db9ac7,2024-01-23T23:31:05+00:00,2024-06-01T17:09:17+00:00,"Salary from King, Gibson and Roberts",Income,1055000,long_nguyen,Salary
-0e5a58204972fb4f0c291484,2024-05-10T04:25:24+00:00,2024-06-03T12:03:38+00:00,Investment Income from Martin-Martinez,Income,2387000,anna_felipe,Investment Income
-cdea58d5c0604ed5fbafe76c,2024-02-19T22:43:51+00:00,2024-03-10T00:37:49+00:00,Groceries to Lee PLC,Expense,9226000,tuyen_nguyen,Groceries
-ac3d05183c515aba58407b9b,2024-01-07T15:30:43+00:00,2024-06-09T02:53:22+00:00,"Utilities to Kelly, Stewart and Dennis",Expense,9672000,lanh_tran_admin,Utilities
-53dc2588ca1d6ec40bb6bbaa,2024-04-17T04:41:26+00:00,2024-06-04T17:03:01+00:00,"Entertainment to Cunningham, Cantrell and Lucas",Expense,2602000,tung_nguyen_admin,Entertainment
-cdea58d5c0604ed5fbafe76c,2024-06-03T10:31:39+00:00,2024-06-06T23:02:12+00:00,Investment Income from Kimberly Schroeder,Income,4252000,tuyen_nguyen,Investment Income
-20aa75e8c4dc455ce933f93a,2024-01-09T11:48:38+00:00,2024-03-29T19:27:39+00:00,Transportation to Howard-Snyder,Expense,9036000,thuy_nguyen,Transportation
-c38ac3383b2950924e1e6e76,2024-06-04T06:10:05+00:00,2024-06-08T11:53:01+00:00,Transportation to Kim and Sons,Expense,4193000,nhung,Transportation
-9f261dac6ba58ce4138f9526,2024-01-28T12:51:27+00:00,2024-05-29T21:25:25+00:00,"Utilities to Gibson, Simpson and Webster",Expense,4952000,vuong_tran_admin,Utilities
-7f9ff7a285edd769ee1ce78e,2024-01-06T17:09:08+00:00,2024-06-07T04:41:51+00:00,Rental Income from Jill Joseph,Income,4616000,admin3,Rental Income
-a357fb19ed80959c3cf095aa,2024-03-22T03:25:25+00:00,2024-05-25T01:46:06+00:00,Rental Income from Lindsay Perez DDS,Income,3914000,long_nguyen_admin,Rental Income
-3ba22e4085e52a391d4f5caf,2024-05-13T12:09:34+00:00,2024-06-03T09:10:49+00:00,Investment Income from Cohen Group,Income,7144000,dan_to_admin,Investment Income
-20aa75e8c4dc455ce933f93a,2024-02-02T02:07:44+00:00,2024-04-01T02:51:18+00:00,"Transportation to Nguyen, Allen and Harris",Expense,8267000,thuy_nguyen,Transportation
-7f9ff7a285edd769ee1ce78e,2024-01-05T13:40:10+00:00,2024-03-10T15:08:10+00:00,Business Profits from Rodgers-Gilbert,Income,9545000,admin3,Business Profits
-ea6e018ac563020da685fa5e,2024-01-29T11:04:25+00:00,2024-05-25T16:27:32+00:00,Rent/Mortgage to Grant-Silva,Expense,3834000,vietanh,Rent/Mortgage
-6704fbff4ff2c6ccfceac46f,2024-01-27T21:57:04+00:00,2024-02-23T11:26:41+00:00,Business Profits from Emily Ferguson DDS,Income,6830000,minh_lam_admin,Business Profits
-3ba22e4085e52a391d4f5caf,2024-06-02T19:42:27+00:00,2024-06-07T13:05:20+00:00,Rental Income from Brandon Bell,Income,8647000,dan_to_admin,Rental Income
-cdea58d5c0604ed5fbafe76c,2024-02-28T00:51:50+00:00,2024-04-02T06:24:42+00:00,Business Profits from Moran Inc,Income,5912000,tuyen_nguyen,Business Profits
-7f9ff7a285edd769ee1ce78e,2024-01-16T04:07:36+00:00,2024-04-04T16:06:03+00:00,Utilities to David Ingram,Expense,7121000,admin3,Utilities
-5be764e552bda4f8ee6b37dd,2024-06-03T11:07:09+00:00,2024-06-11T04:05:38+00:00,Investment Income from Tyler Jones,Income,1169000,minh_lam,Investment Income
-f286134fbfc1132ccafce467,2024-01-12T16:56:27+00:00,2024-06-09T05:41:38+00:00,"Salary from Humphrey, Jones and Ramirez",Income,9151000,uyen_nguyen,Salary
-0e5a58204972fb4f0c291484,2024-05-23T17:42:21+00:00,2024-06-04T06:32:27+00:00,Freelance Work from Jessica Kirby,Income,9109000,anna_felipe,Freelance Work
-a357fb19ed80959c3cf095aa,2024-04-05T13:26:35+00:00,2024-06-06T00:54:49+00:00,Freelance Work from Amanda Nash,Income,6434000,long_nguyen_admin,Freelance Work
-3ba22e4085e52a391d4f5caf,2024-06-09T20:56:17+00:00,2024-06-11T00:52:17+00:00,Rental Income from Laura Jackson,Income,8547000,dan_to_admin,Rental Income
-7721ec844651916102196600,2024-03-29T05:19:15+00:00,2024-06-07T09:54:06+00:00,Rent/Mortgage to Schaefer-Paul,Expense,7744000,tuyen_nguyen_admin,Rent/Mortgage
-50a0f5c2f3c9e37fe558c85e,2024-01-10T17:11:43+00:00,2024-05-16T14:23:22+00:00,"Rental Income from Knapp, Lester and Reyes",Income,9882000,admin1,Rental Income
-7f9ff7a285edd769ee1ce78e,2024-02-07T17:39:04+00:00,2024-05-02T15:50:06+00:00,Rent/Mortgage to Sosa Group,Expense,6906000,admin3,Rent/Mortgage
-a06b22fd62a58f8479a75748,2024-01-27T19:26:02+00:00,2024-02-25T20:38:34+00:00,"Groceries to Jackson, Smith and Rodriguez",Expense,7344000,admin2,Groceries
-2d1d9b5bfe59628baf4f2c80,2024-03-19T22:02:08+00:00,2024-06-01T06:52:13+00:00,"Rent/Mortgage to Payne, Roberts and Hines",Expense,9640000,tung_nguyen,Rent/Mortgage
-5be764e552bda4f8ee6b37dd,2024-06-03T08:43:51+00:00,2024-06-10T02:57:43+00:00,Salary from Sherri Moore,Income,1223000,minh_lam,Salary
-9f261dac6ba58ce4138f9526,2024-01-14T06:56:15+00:00,2024-02-06T13:46:36+00:00,Groceries to Sabrina Hunter,Expense,1116000,vuong_tran_admin,Groceries
-c92e838a4e5a4467c5dc5161,2024-02-09T09:28:32+00:00,2024-04-03T22:51:21+00:00,Business Profits from Frank Harvey,Income,4225000,duong,Business Profits
-417f0041da844b8769ce3848,2024-04-03T12:32:11+00:00,2024-06-08T08:01:35+00:00,"Rent/Mortgage to Williamson, Clark and Thornton",Expense,2319000,vuong_tran,Rent/Mortgage
-69bc3fee208292f75d42b5c3,2024-02-09T17:13:54+00:00,2024-06-05T19:55:50+00:00,"Rental Income from Ross, Bowen and Smith",Income,7498000,anna_felipe_admin,Rental Income
-2d1d9b5bfe59628baf4f2c80,2024-01-10T22:35:12+00:00,2024-06-05T16:09:44+00:00,Utilities to Schmidt Ltd,Expense,5754000,tung_nguyen,Utilities
-cdea58d5c0604ed5fbafe76c,2024-04-15T01:20:55+00:00,2024-06-10T21:45:13+00:00,Transportation to Steven Massey,Expense,8792000,tuyen_nguyen,Transportation
-9657f92da38327892a96c9f9,2024-04-27T23:56:19+00:00,2024-06-05T16:07:56+00:00,Transportation to Mr. Darrell Moss DDS,Expense,2214000,thuy_nguyen_admin,Transportation
-7f9ff7a285edd769ee1ce78e,2024-02-14T03:10:47+00:00,2024-02-29T08:24:28+00:00,Transportation to Carrillo-Nguyen,Expense,3268000,admin3,Transportation
-5be764e552bda4f8ee6b37dd,2024-06-03T18:29:02+00:00,2024-06-04T23:29:04+00:00,Freelance Work from Burns-Davis,Income,931000,minh_lam,Freelance Work
-244a4f4329331fa942db9ac7,2024-04-11T09:15:08+00:00,2024-06-03T20:38:58+00:00,Freelance Work from Alexandra Cunningham,Income,8312000,long_nguyen,Freelance Work
-50a0f5c2f3c9e37fe558c85e,2024-01-29T20:42:46+00:00,2024-06-10T15:09:34+00:00,Freelance Work from Vanessa Wood,Income,1814000,admin1,Freelance Work
-1181bc46be8f0c4e01f15912,2024-03-31T11:44:14+00:00,2024-06-09T22:01:17+00:00,"Investment Income from Armstrong, Jones and Dudley",Income,4258000,uyen_nguyen_admin,Investment Income
-93c5fc1b5bee26864ab883a1,2024-05-08T22:39:09+00:00,2024-06-05T17:02:48+00:00,Investment Income from Wu and Sons,Income,7074000,admin4,Investment Income
-c38ac3383b2950924e1e6e76,2024-03-27T21:29:00+00:00,2024-06-03T03:31:07+00:00,"Rental Income from Curry, Yoder and Morales",Income,6696000,nhung,Rental Income
-a357fb19ed80959c3cf095aa,2024-03-25T04:48:54+00:00,2024-06-08T03:55:58+00:00,"Salary from Mitchell, Ayala and Davis",Income,7647000,long_nguyen_admin,Salary
-0e5a58204972fb4f0c291484,2024-01-01T16:44:10+00:00,2024-02-03T11:20:44+00:00,Business Profits from Gentry Group,Income,7134000,anna_felipe,Business Profits
-417f0041da844b8769ce3848,2024-02-26T09:01:42+00:00,2024-06-10T19:41:47+00:00,Entertainment to Travis Howe,Expense,7615000,vuong_tran,Entertainment
-ac3d05183c515aba58407b9b,2024-06-04T15:55:24+00:00,2024-06-06T00:30:17+00:00,Utilities to Richard Jacobs,Expense,4572000,lanh_tran_admin,Utilities
-93c5fc1b5bee26864ab883a1,2024-02-24T22:01:45+00:00,2024-06-07T05:44:03+00:00,Rent/Mortgage to Jenny Moon,Expense,8930000,admin4,Rent/Mortgage
-7721ec844651916102196600,2024-01-06T07:53:03+00:00,2024-04-09T15:24:22+00:00,Rent/Mortgage to Donald Perez,Expense,1266000,tuyen_nguyen_admin,Rent/Mortgage
-3ba22e4085e52a391d4f5caf,2024-01-31T04:37:08+00:00,2024-01-31T09:32:38+00:00,Freelance Work from Daniel Wilson,Income,3741000,dan_to_admin,Freelance Work
-9657f92da38327892a96c9f9,2024-02-19T02:16:54+00:00,2024-02-21T23:52:46+00:00,Investment Income from Ronald Jones PhD,Income,1899000,thuy_nguyen_admin,Investment Income
-20aa75e8c4dc455ce933f93a,2024-05-09T16:50:45+00:00,2024-06-07T09:24:49+00:00,"Rent/Mortgage to Butler, Stout and Hogan",Expense,1215000,thuy_nguyen,Rent/Mortgage
-0e5a58204972fb4f0c291484,2024-01-02T21:18:21+00:00,2024-06-03T09:58:15+00:00,Salary from Jones-Pruitt,Income,2898000,anna_felipe,Salary
-2d1d9b5bfe59628baf4f2c80,2024-02-04T14:00:10+00:00,2024-06-04T05:18:25+00:00,Rent/Mortgage to Patrick Olson,Expense,1998000,tung_nguyen,Rent/Mortgage
-ea6e018ac563020da685fa5e,2024-06-10T08:37:50+00:00,2024-06-11T07:12:36+00:00,Freelance Work from Hunt LLC,Income,2267000,vietanh,Freelance Work
-c92e838a4e5a4467c5dc5161,2024-01-20T04:18:01+00:00,2024-03-24T14:32:46+00:00,Salary from Danielle Lewis,Income,2836000,duong,Salary
-1181bc46be8f0c4e01f15912,2024-01-07T18:01:41+00:00,2024-03-20T06:37:27+00:00,Utilities to Virginia Gonzalez,Expense,3404000,uyen_nguyen_admin,Utilities
-244a4f4329331fa942db9ac7,2024-05-26T02:57:18+00:00,2024-06-03T06:41:56+00:00,Utilities to Sara Humphrey,Expense,4983000,long_nguyen,Utilities
-50a0f5c2f3c9e37fe558c85e,2024-03-20T16:01:32+00:00,2024-06-01T23:37:56+00:00,"Utilities to Gonzalez, Martinez and Garcia",Expense,771000,admin1,Utilities
-5032656132b54e9c71298112,2024-06-02T07:36:32+00:00,2024-06-02T13:52:27+00:00,Rent/Mortgage to Wendy Simmons,Expense,4491000,thong,Rent/Mortgage
-d5a723591a2b61d2e74ac816,2024-02-19T10:51:09+00:00,2024-04-19T11:24:41+00:00,Business Profits from Brendan Smith,Income,8672000,hakhanhne,Business Profits
-93c5fc1b5bee26864ab883a1,2024-03-08T15:33:49+00:00,2024-06-05T13:06:05+00:00,"Rental Income from Newman, Bell and Li",Income,7491000,admin4,Rental Income
-5032656132b54e9c71298112,2024-02-07T09:04:28+00:00,2024-02-13T14:44:06+00:00,Rental Income from Randy Brooks,Income,2622000,thong,Rental Income
-f286134fbfc1132ccafce467,2024-03-02T09:28:59+00:00,2024-03-04T06:39:26+00:00,Rental Income from Dean Mathis,Income,8782000,uyen_nguyen,Rental Income
-5be764e552bda4f8ee6b37dd,2024-01-03T04:39:08+00:00,2024-02-20T19:29:48+00:00,"Utilities to Townsend, Peterson and Houston",Expense,2973000,minh_lam,Utilities
-cdea58d5c0604ed5fbafe76c,2024-04-02T07:48:18+00:00,2024-05-17T21:10:49+00:00,"Salary from Austin, James and Gutierrez",Income,8420000,tuyen_nguyen,Salary
-5be764e552bda4f8ee6b37dd,2024-03-19T01:18:23+00:00,2024-04-26T01:39:19+00:00,Rental Income from Melton-Gonzalez,Income,192000,minh_lam,Rental Income
-93c5fc1b5bee26864ab883a1,2024-01-05T02:09:46+00:00,2024-06-02T19:35:17+00:00,"Utilities to Yang, Campbell and Walsh",Expense,9743000,admin4,Utilities
-5032656132b54e9c71298112,2024-01-14T21:49:57+00:00,2024-06-07T22:26:45+00:00,Freelance Work from Marco Espinoza,Income,5458000,thong,Freelance Work
-cdea58d5c0604ed5fbafe76c,2024-02-13T10:03:13+00:00,2024-06-09T12:41:33+00:00,"Rental Income from Hill, Garcia and Mcdonald",Income,8812000,tuyen_nguyen,Rental Income
-5be764e552bda4f8ee6b37dd,2024-04-15T18:52:14+00:00,2024-06-02T13:56:29+00:00,Groceries to Linda Meyer,Expense,9740000,minh_lam,Groceries
-cdea58d5c0604ed5fbafe76c,2024-06-09T16:20:13+00:00,2024-06-11T00:06:43+00:00,Utilities to Jeffery Young,Expense,3802000,tuyen_nguyen,Utilities
-7b93f811f620e80ad855c456,2024-04-01T13:36:46+00:00,2024-06-10T21:05:31+00:00,Freelance Work from Richards and Sons,Income,2702000,lanh_tran,Freelance Work
-ac3d05183c515aba58407b9b,2024-01-11T18:34:45+00:00,2024-06-04T10:17:46+00:00,Salary from Collins-Rubio,Income,3016000,lanh_tran_admin,Salary
-f286134fbfc1132ccafce467,2024-04-02T16:54:42+00:00,2024-06-05T15:32:31+00:00,Salary from Fleming Ltd,Income,2600000,uyen_nguyen,Salary
-ac3d05183c515aba58407b9b,2024-04-24T23:42:48+00:00,2024-06-06T21:30:09+00:00,"Investment Income from Ford, Morrison and Kelley",Income,1173000,lanh_tran_admin,Investment Income
-9f261dac6ba58ce4138f9526,2024-02-20T22:57:01+00:00,2024-03-15T18:07:54+00:00,Freelance Work from Emma Garcia,Income,4519000,vuong_tran_admin,Freelance Work
-7721ec844651916102196600,2024-04-01T04:34:43+00:00,2024-05-05T21:27:18+00:00,"Freelance Work from Ashley, Palmer and Kline",Income,2789000,tuyen_nguyen_admin,Freelance Work
-d5a723591a2b61d2e74ac816,2024-05-24T10:22:09+00:00,2024-06-10T12:04:10+00:00,Utilities to Austin Webb,Expense,4506000,hakhanhne,Utilities
-ac3d05183c515aba58407b9b,2024-04-01T08:13:45+00:00,2024-06-01T00:48:52+00:00,"Freelance Work from Washington, Mendoza and Clark",Income,909000,lanh_tran_admin,Freelance Work
-5be764e552bda4f8ee6b37dd,2024-01-19T19:20:00+00:00,2024-03-07T23:43:56+00:00,Investment Income from Madison Reynolds,Income,422000,minh_lam,Investment Income
-9657f92da38327892a96c9f9,2024-06-07T20:43:28+00:00,2024-06-08T04:23:47+00:00,Transportation to Olsen LLC,Expense,7795000,thuy_nguyen_admin,Transportation
-ac84b0c52650b0f3d56bf29b,2024-04-03T12:49:29+00:00,2024-06-10T08:59:54+00:00,"Groceries to Summers, Shah and Hess",Expense,6913000,dan_to,Groceries
-c92e838a4e5a4467c5dc5161,2024-03-18T18:34:29+00:00,2024-04-12T18:06:11+00:00,Freelance Work from Steven Gomez,Income,7241000,duong,Freelance Work
-9657f92da38327892a96c9f9,2024-03-07T19:44:39+00:00,2024-04-18T00:44:02+00:00,Utilities to Jones-Davis,Expense,4947000,thuy_nguyen_admin,Utilities
-93c5fc1b5bee26864ab883a1,2024-01-18T14:13:56+00:00,2024-02-13T18:20:23+00:00,Salary from Joseph Henderson,Income,8053000,admin4,Salary
-50a0f5c2f3c9e37fe558c85e,2024-02-08T19:55:23+00:00,2024-04-03T09:06:22+00:00,Freelance Work from Samantha Petty,Income,4379000,admin1,Freelance Work
-ac3d05183c515aba58407b9b,2024-02-15T02:38:10+00:00,2024-06-10T12:13:54+00:00,Groceries to Diana Vang DVM,Expense,4498000,lanh_tran_admin,Groceries
-7b93f811f620e80ad855c456,2024-02-09T01:01:47+00:00,2024-06-07T09:52:42+00:00,Transportation to Jon Lambert,Expense,5350000,lanh_tran,Transportation
-417f0041da844b8769ce3848,2024-03-15T10:48:07+00:00,2024-03-28T20:01:34+00:00,Entertainment to Kristin Chandler,Expense,2095000,vuong_tran,Entertainment
-244a4f4329331fa942db9ac7,2024-04-30T23:54:25+00:00,2024-06-06T20:39:59+00:00,"Groceries to Gomez, Keller and Higgins",Expense,3267000,long_nguyen,Groceries
-5be764e552bda4f8ee6b37dd,2024-03-13T14:55:48+00:00,2024-06-07T02:51:39+00:00,"Freelance Work from Robinson, Ramirez and Fowler",Income,3444000,minh_lam,Freelance Work
-d5a723591a2b61d2e74ac816,2024-03-26T23:45:35+00:00,2024-06-01T16:41:30+00:00,Utilities to Stephanie Coleman,Expense,6838000,hakhanhne,Utilities
-f286134fbfc1132ccafce467,2024-03-27T20:28:20+00:00,2024-04-08T13:21:50+00:00,Entertainment to Johnson Inc,Expense,5015000,uyen_nguyen,Entertainment
-ac3d05183c515aba58407b9b,2024-03-07T11:45:22+00:00,2024-04-08T07:03:15+00:00,Freelance Work from Alex Kim,Income,133000,lanh_tran_admin,Freelance Work
-93c5fc1b5bee26864ab883a1,2024-01-17T10:07:52+00:00,2024-06-08T19:51:59+00:00,Freelance Work from Stephen Thomas,Income,8334000,admin4,Freelance Work
-9657f92da38327892a96c9f9,2024-01-30T20:08:01+00:00,2024-03-04T15:52:36+00:00,Salary from Hull PLC,Income,9503000,thuy_nguyen_admin,Salary
-3ba22e4085e52a391d4f5caf,2024-02-28T10:40:54+00:00,2024-03-21T21:52:31+00:00,Utilities to Alyssa Sanchez,Expense,1028000,dan_to_admin,Utilities
-7b93f811f620e80ad855c456,2024-01-16T08:47:51+00:00,2024-05-23T16:35:11+00:00,Groceries to Michael Pierce,Expense,4333000,lanh_tran,Groceries
-d5a723591a2b61d2e74ac816,2024-02-22T03:59:50+00:00,2024-06-06T04:00:59+00:00,Utilities to Lisa Sullivan,Expense,2005000,hakhanhne,Utilities
-69bc3fee208292f75d42b5c3,2024-01-26T22:52:53+00:00,2024-06-09T01:56:28+00:00,Entertainment to Christian Gibson,Expense,8333000,anna_felipe_admin,Entertainment
-5be764e552bda4f8ee6b37dd,2024-04-14T02:45:57+00:00,2024-06-02T23:41:11+00:00,Rental Income from Richardson-Aguilar,Income,514000,minh_lam,Rental Income
-a357fb19ed80959c3cf095aa,2024-05-29T05:49:49+00:00,2024-06-01T06:15:18+00:00,Groceries to Deanna Simpson,Expense,1090000,long_nguyen_admin,Groceries
-d5a723591a2b61d2e74ac816,2024-06-01T19:45:03+00:00,2024-06-03T21:32:54+00:00,Rental Income from Christina Williamson,Income,9165000,hakhanhne,Rental Income
-d5a723591a2b61d2e74ac816,2024-02-13T16:59:01+00:00,2024-06-10T13:14:47+00:00,Groceries to Kristina Soto,Expense,3726000,hakhanhne,Groceries
-93c5fc1b5bee26864ab883a1,2024-03-17T17:25:47+00:00,2024-06-07T13:59:07+00:00,Business Profits from Shah and Sons,Income,1375000,admin4,Business Profits
-69bc3fee208292f75d42b5c3,2024-01-19T10:31:42+00:00,2024-05-07T16:04:40+00:00,Investment Income from White and Sons,Income,6266000,anna_felipe_admin,Investment Income
-53dc2588ca1d6ec40bb6bbaa,2024-02-15T09:30:39+00:00,2024-05-26T10:24:18+00:00,Transportation to Laura Mendoza,Expense,6511000,tung_nguyen_admin,Transportation
-cdea58d5c0604ed5fbafe76c,2024-01-18T18:17:12+00:00,2024-05-21T20:05:53+00:00,Rent/Mortgage to Coleman Group,Expense,9246000,tuyen_nguyen,Rent/Mortgage
-7f9ff7a285edd769ee1ce78e,2024-06-05T18:26:38+00:00,2024-06-10T13:05:00+00:00,Transportation to Robert Cooper,Expense,7231000,admin3,Transportation
-69bc3fee208292f75d42b5c3,2024-06-03T13:48:49+00:00,2024-06-05T10:01:30+00:00,Investment Income from Dwayne Tyler,Income,9434000,anna_felipe_admin,Investment Income
-d5a723591a2b61d2e74ac816,2024-01-22T23:48:19+00:00,2024-02-03T21:32:46+00:00,"Utilities to Robinson, Fox and Sanchez",Expense,1517000,hakhanhne,Utilities
-7f9ff7a285edd769ee1ce78e,2024-03-05T02:53:03+00:00,2024-06-06T06:46:03+00:00,"Entertainment to Joseph, Thompson and Morris",Expense,541000,admin3,Entertainment
-417f0041da844b8769ce3848,2024-06-08T11:59:51+00:00,2024-06-10T22:52:05+00:00,Rental Income from Heather Anderson,Income,2451000,vuong_tran,Rental Income
-a06b22fd62a58f8479a75748,2024-01-31T20:57:05+00:00,2024-02-02T23:55:46+00:00,Salary from Brent Barnes,Income,3268000,admin2,Salary
-cdea58d5c0604ed5fbafe76c,2024-04-06T22:54:10+00:00,2024-06-06T15:18:05+00:00,Freelance Work from Garcia Group,Income,2674000,tuyen_nguyen,Freelance Work
-93c5fc1b5bee26864ab883a1,2024-02-04T22:08:16+00:00,2024-06-03T13:35:10+00:00,Salary from Joseph Gross,Income,8804000,admin4,Salary
-69bc3fee208292f75d42b5c3,2024-02-24T04:00:42+00:00,2024-06-08T03:41:26+00:00,"Rent/Mortgage to Johnson, Marks and Nelson",Expense,8738000,anna_felipe_admin,Rent/Mortgage
-9657f92da38327892a96c9f9,2024-05-17T04:52:09+00:00,2024-05-26T09:07:03+00:00,Transportation to Boone PLC,Expense,3571000,thuy_nguyen_admin,Transportation
-244a4f4329331fa942db9ac7,2024-03-31T04:30:59+00:00,2024-05-31T13:46:11+00:00,Rent/Mortgage to Ashley Perez,Expense,3756000,long_nguyen,Rent/Mortgage
-244a4f4329331fa942db9ac7,2024-04-16T13:04:50+00:00,2024-05-17T12:49:08+00:00,Groceries to Cunningham LLC,Expense,6592000,long_nguyen,Groceries
-50a0f5c2f3c9e37fe558c85e,2024-03-04T20:06:51+00:00,2024-04-28T19:04:09+00:00,Utilities to Christine Fleming,Expense,9620000,admin1,Utilities
-ac3d05183c515aba58407b9b,2024-03-05T20:55:00+00:00,2024-03-16T16:24:56+00:00,"Entertainment to Lee, Jenkins and Pugh",Expense,3434000,lanh_tran_admin,Entertainment
-a357fb19ed80959c3cf095aa,2024-04-05T08:22:43+00:00,2024-04-28T20:39:13+00:00,Groceries to Margaret Parks,Expense,4673000,long_nguyen_admin,Groceries
-c38ac3383b2950924e1e6e76,2024-05-23T16:41:14+00:00,2024-06-07T07:18:29+00:00,"Rental Income from Macias, Combs and Mclaughlin",Income,8699000,nhung,Rental Income
-5be764e552bda4f8ee6b37dd,2024-05-30T21:36:57+00:00,2024-06-02T10:09:01+00:00,Groceries to Lisa Lynch,Expense,2871000,minh_lam,Groceries
-7721ec844651916102196600,2024-06-07T21:16:39+00:00,2024-06-10T03:25:36+00:00,Investment Income from Carr Inc,Income,9149000,tuyen_nguyen_admin,Investment Income
-d5a723591a2b61d2e74ac816,2024-03-25T16:40:39+00:00,2024-06-03T00:35:51+00:00,Groceries to Bobby Brown,Expense,9352000,hakhanhne,Groceries
-a357fb19ed80959c3cf095aa,2024-03-26T18:13:43+00:00,2024-06-02T04:53:19+00:00,Rental Income from Jay Wallace,Income,9573000,long_nguyen_admin,Rental Income
-5be764e552bda4f8ee6b37dd,2024-03-27T03:37:06+00:00,2024-06-04T10:33:50+00:00,Freelance Work from Amy Andrade,Income,398000,minh_lam,Freelance Work
-ac3d05183c515aba58407b9b,2024-04-16T10:51:36+00:00,2024-06-01T22:01:06+00:00,"Rental Income from Reed, Lane and Hawkins",Income,4465000,lanh_tran_admin,Rental Income
-7721ec844651916102196600,2024-01-04T23:40:37+00:00,2024-01-18T02:53:21+00:00,Entertainment to Bush-Jenkins,Expense,6577000,tuyen_nguyen_admin,Entertainment
-1181bc46be8f0c4e01f15912,2024-02-29T08:02:29+00:00,2024-06-08T16:42:36+00:00,"Groceries to Jones, Fitzgerald and Williams",Expense,8978000,uyen_nguyen_admin,Groceries
-3ba22e4085e52a391d4f5caf,2024-02-03T05:36:11+00:00,2024-04-17T22:26:47+00:00,Rent/Mortgage to Melissa Hamilton,Expense,9755000,dan_to_admin,Rent/Mortgage
-a06b22fd62a58f8479a75748,2024-02-16T05:31:41+00:00,2024-06-03T05:23:37+00:00,Groceries to Julie Brown,Expense,4442000,admin2,Groceries
-0e5a58204972fb4f0c291484,2024-01-25T20:39:24+00:00,2024-03-25T11:21:52+00:00,Investment Income from Anthony Chase,Income,2280000,anna_felipe,Investment Income
-6704fbff4ff2c6ccfceac46f,2024-03-13T00:03:29+00:00,2024-05-02T10:44:50+00:00,Rent/Mortgage to Garrett Lawson,Expense,9616000,minh_lam_admin,Rent/Mortgage
-cdea58d5c0604ed5fbafe76c,2024-04-11T11:25:52+00:00,2024-04-22T14:36:46+00:00,Groceries to Christopher Carroll,Expense,9454000,tuyen_nguyen,Groceries
-1181bc46be8f0c4e01f15912,2024-05-08T02:33:07+00:00,2024-06-02T06:38:39+00:00,Rent/Mortgage to Goodman and Sons,Expense,2123000,uyen_nguyen_admin,Rent/Mortgage
-20aa75e8c4dc455ce933f93a,2024-01-10T11:04:29+00:00,2024-03-02T04:45:20+00:00,"Entertainment to Wheeler, Hayes and Caldwell",Expense,1601000,thuy_nguyen,Entertainment
-7721ec844651916102196600,2024-02-29T16:16:13+00:00,2024-06-09T22:49:28+00:00,"Utilities to Whitaker, Johnson and Scott",Expense,1376000,tuyen_nguyen_admin,Utilities
-c38ac3383b2950924e1e6e76,2024-01-09T14:30:18+00:00,2024-01-24T06:38:10+00:00,Groceries to Bradley Carrillo,Expense,9144000,nhung,Groceries
-7721ec844651916102196600,2024-06-04T14:04:17+00:00,2024-06-04T18:58:01+00:00,Business Profits from Navarro-Brown,Income,131000,tuyen_nguyen_admin,Business Profits
-69bc3fee208292f75d42b5c3,2024-05-24T10:18:57+00:00,2024-06-08T10:23:32+00:00,Investment Income from Zachary Moreno,Income,8239000,anna_felipe_admin,Investment Income
-244a4f4329331fa942db9ac7,2024-02-04T08:00:25+00:00,2024-06-09T18:46:59+00:00,Freelance Work from Patterson PLC,Income,3622000,long_nguyen,Freelance Work
-7f9ff7a285edd769ee1ce78e,2024-05-02T06:45:03+00:00,2024-06-08T12:23:31+00:00,"Rent/Mortgage to Little, Miller and Hill",Expense,4994000,admin3,Rent/Mortgage
-cdea58d5c0604ed5fbafe76c,2024-06-05T15:26:31+00:00,2024-06-09T19:19:41+00:00,Freelance Work from Jones Ltd,Income,6825000,tuyen_nguyen,Freelance Work
-20aa75e8c4dc455ce933f93a,2024-02-07T12:06:00+00:00,2024-06-09T18:07:12+00:00,Utilities to Caldwell Ltd,Expense,8402000,thuy_nguyen,Utilities
-ea6e018ac563020da685fa5e,2024-01-11T12:46:43+00:00,2024-05-10T17:17:22+00:00,"Investment Income from Romero, Watson and Davis",Income,6614000,vietanh,Investment Income
-c38ac3383b2950924e1e6e76,2024-03-03T16:47:32+00:00,2024-05-15T22:59:26+00:00,Investment Income from Smith-Powell,Income,2417000,nhung,Investment Income
-2d1d9b5bfe59628baf4f2c80,2024-03-27T17:09:44+00:00,2024-06-02T09:11:56+00:00,Entertainment to Rebekah Daugherty,Expense,3390000,tung_nguyen,Entertainment
-7721ec844651916102196600,2024-03-12T07:18:20+00:00,2024-06-10T00:37:56+00:00,Entertainment to Evans-Wolfe,Expense,6443000,tuyen_nguyen_admin,Entertainment
-3ba22e4085e52a391d4f5caf,2024-02-11T03:39:31+00:00,2024-03-01T18:00:21+00:00,Freelance Work from Tracy Vazquez,Income,2375000,dan_to_admin,Freelance Work
-6704fbff4ff2c6ccfceac46f,2024-06-03T14:02:23+00:00,2024-06-07T01:44:23+00:00,Investment Income from Elizabeth Cochran,Income,8352000,minh_lam_admin,Investment Income
-5be764e552bda4f8ee6b37dd,2024-05-23T09:19:30+00:00,2024-06-09T09:48:21+00:00,Rent/Mortgage to Patrick Barnes,Expense,7196000,minh_lam,Rent/Mortgage
-ac3d05183c515aba58407b9b,2024-02-26T09:14:12+00:00,2024-04-14T12:20:21+00:00,Rent/Mortgage to Laura Villanueva,Expense,4900000,lanh_tran_admin,Rent/Mortgage
-69bc3fee208292f75d42b5c3,2024-01-22T23:20:00+00:00,2024-03-11T03:08:26+00:00,Business Profits from Beck-Huffman,Income,9560000,anna_felipe_admin,Business Profits
-93c5fc1b5bee26864ab883a1,2024-02-06T03:37:14+00:00,2024-03-29T15:59:12+00:00,Freelance Work from Charles Chen,Income,967000,admin4,Freelance Work
-d5a723591a2b61d2e74ac816,2024-01-23T07:53:49+00:00,2024-04-03T13:18:48+00:00,Salary from Jackson Todd,Income,6441000,hakhanhne,Salary
-c38ac3383b2950924e1e6e76,2024-01-13T20:51:04+00:00,2024-03-08T19:12:52+00:00,Transportation to Stephanie Caldwell,Expense,3250000,nhung,Transportation
-c38ac3383b2950924e1e6e76,2024-01-19T19:10:39+00:00,2024-03-20T06:16:48+00:00,Investment Income from Graham PLC,Income,5141000,nhung,Investment Income
-417f0041da844b8769ce3848,2024-01-11T23:38:00+00:00,2024-03-08T12:37:45+00:00,"Groceries to Robinson, Nixon and Williams",Expense,2306000,vuong_tran,Groceries
-c92e838a4e5a4467c5dc5161,2024-04-08T10:39:51+00:00,2024-06-04T07:34:45+00:00,Rent/Mortgage to Timothy Allen,Expense,6286000,duong,Rent/Mortgage
-a06b22fd62a58f8479a75748,2024-03-29T05:48:11+00:00,2024-05-26T22:51:31+00:00,Rental Income from Alison Gomez,Income,1181000,admin2,Rental Income
-d5a723591a2b61d2e74ac816,2024-02-13T15:33:38+00:00,2024-03-24T06:39:23+00:00,Salary from Fleming Ltd,Income,5963000,hakhanhne,Salary
-ac3d05183c515aba58407b9b,2024-03-04T18:21:39+00:00,2024-06-01T19:23:39+00:00,Rent/Mortgage to Luis Pierce,Expense,6843000,lanh_tran_admin,Rent/Mortgage
-ac84b0c52650b0f3d56bf29b,2024-03-21T05:45:14+00:00,2024-06-09T09:29:16+00:00,"Utilities to Mcfarland, Clements and Stewart",Expense,5907000,dan_to,Utilities
-2d1d9b5bfe59628baf4f2c80,2024-02-14T23:57:50+00:00,2024-03-04T18:48:56+00:00,Entertainment to Heather Monroe,Expense,4044000,tung_nguyen,Entertainment
-cdea58d5c0604ed5fbafe76c,2024-06-07T19:35:01+00:00,2024-06-07T21:27:17+00:00,"Freelance Work from Molina, Ponce and Page",Income,8561000,tuyen_nguyen,Freelance Work
-c38ac3383b2950924e1e6e76,2024-01-29T18:23:11+00:00,2024-06-06T03:57:32+00:00,Transportation to Mary Guerrero,Expense,5829000,nhung,Transportation
-417f0041da844b8769ce3848,2024-04-09T10:20:43+00:00,2024-06-04T11:06:08+00:00,Investment Income from Stephanie Cooper,Income,2556000,vuong_tran,Investment Income
-a06b22fd62a58f8479a75748,2024-01-23T20:24:23+00:00,2024-06-05T23:10:22+00:00,Freelance Work from Dean Smith,Income,5827000,admin2,Freelance Work
-c38ac3383b2950924e1e6e76,2024-02-02T19:16:01+00:00,2024-06-11T01:44:29+00:00,Salary from Michael Potter,Income,4952000,nhung,Salary
-5be764e552bda4f8ee6b37dd,2024-04-09T08:51:37+00:00,2024-06-03T08:50:21+00:00,Entertainment to Brenda Gutierrez,Expense,1387000,minh_lam,Entertainment
-7b93f811f620e80ad855c456,2024-03-25T21:41:42+00:00,2024-06-10T16:10:25+00:00,Utilities to Kline PLC,Expense,7719000,lanh_tran,Utilities
-7721ec844651916102196600,2024-05-30T06:15:04+00:00,2024-06-10T23:46:30+00:00,"Investment Income from Mason, Vaughn and Arnold",Income,8287000,tuyen_nguyen_admin,Investment Income
-d5a723591a2b61d2e74ac816,2024-03-01T16:10:56+00:00,2024-05-06T16:48:26+00:00,Salary from Miller Group,Income,2464000,hakhanhne,Salary
-69bc3fee208292f75d42b5c3,2024-05-03T23:46:47+00:00,2024-06-09T22:53:36+00:00,"Groceries to Gonzales, Gomez and Whitaker",Expense,8461000,anna_felipe_admin,Groceries
-50a0f5c2f3c9e37fe558c85e,2024-01-03T04:13:28+00:00,2024-01-04T17:32:46+00:00,Utilities to Gregory Armstrong,Expense,59000,admin1,Utilities
-ac84b0c52650b0f3d56bf29b,2024-03-11T11:04:43+00:00,2024-06-01T20:10:42+00:00,Investment Income from Matthew Gomez,Income,9034000,dan_to,Investment Income
-ea6e018ac563020da685fa5e,2024-02-19T14:33:12+00:00,2024-06-02T22:42:50+00:00,"Rent/Mortgage to Carpenter, Marshall and Schaefer",Expense,3737000,vietanh,Rent/Mortgage
-0e5a58204972fb4f0c291484,2024-05-04T22:59:44+00:00,2024-05-20T15:06:05+00:00,Transportation to Veronica Byrd,Expense,609000,anna_felipe,Transportation
-3ba22e4085e52a391d4f5caf,2024-02-01T13:43:09+00:00,2024-06-10T11:23:23+00:00,Business Profits from Sheila Sanders,Income,9787000,dan_to_admin,Business Profits
-53dc2588ca1d6ec40bb6bbaa,2024-01-29T21:02:58+00:00,2024-06-08T11:44:40+00:00,Utilities to Saunders Ltd,Expense,5040000,tung_nguyen_admin,Utilities
-9f261dac6ba58ce4138f9526,2024-02-17T02:12:31+00:00,2024-03-26T04:57:38+00:00,Rental Income from James Lopez,Income,7515000,vuong_tran_admin,Rental Income
+_id,userId,createdDate,editedDate,description,type,amount,payBy,category,savingId,budgetId
+fa88d2b6efc35c8e71a3f3b9,724d78f1564223798be803d4,2024-01-27T16:29:54+00:00,2024-03-26T20:01:09+00:00,Salary from Deborah Gould,Income,4068000,724d78f1564223798be803d4,Salary,,
+1d87eb4d8acae60d8e1edf73,0c6de89a3af134a6e9649c3a,2024-03-03T23:31:19+00:00,2024-06-05T01:51:51+00:00,Entertainment to David Cline,Expense,2445000,0c6de89a3af134a6e9649c3a,Entertainment,,
+c983978c13fcfc3b8bbc60af,73de57a79228d5b9480a379a,2024-01-08T15:01:05+00:00,2024-05-26T03:35:04+00:00,Rental Income from Christopher Park,Income,4607000,73de57a79228d5b9480a379a,Rental Income,,
+a84a1cc9b1ccdf221625d4ea,9452e3f221deae30d679dc0f,2024-02-24T13:01:11+00:00,2024-04-28T05:24:18+00:00,Transportation to Johnson Ltd,Expense,6284000,9452e3f221deae30d679dc0f,Transportation,,
+263094a350a405b3dab45272,924110c57621edac102dff73,2024-02-09T22:13:01+00:00,2024-05-05T09:36:11+00:00,Rent/Mortgage to Tracy Miller,Expense,467000,924110c57621edac102dff73,Rent/Mortgage,,
+a1e0f5bbd6890508e63af9f2,41f643acdc99ac7969ce2a80,2024-03-05T10:08:25+00:00,2024-03-18T10:34:47+00:00,Transportation to Rebecca Maldonado,Expense,4540000,41f643acdc99ac7969ce2a80,Transportation,,
+f23be3e4c6ac6216d3c50247,26280c7006fe0b91b215d2c5,2024-06-01T22:23:37+00:00,2024-06-02T20:11:14+00:00,"Salary from Mendez, Martin and Martin",Income,47000,26280c7006fe0b91b215d2c5,Salary,,
+ec32c32dc66bdbe4787d0268,aa2d35db79171da4ea032b14,2024-04-25T05:41:58+00:00,2024-05-02T16:51:05+00:00,Transportation to Adam Jackson,Expense,8507000,aa2d35db79171da4ea032b14,Transportation,,
+62e1a97c32a25fa0ba17c6c3,0cc5034b4578ae93b348fe91,2024-01-15T18:15:21+00:00,2024-02-28T11:41:06+00:00,Rental Income from Diane Fitzpatrick,Income,8235000,0cc5034b4578ae93b348fe91,Rental Income,,
+8918048121aa11d11bc155e2,40bb1a42d023776e9d27b9ac,2024-02-01T02:59:34+00:00,2024-03-29T16:09:45+00:00,Utilities to Janet Thornton,Expense,2639000,40bb1a42d023776e9d27b9ac,Utilities,,
+94449e2b1e8b6d80b90f8d00,8e0078b0ab15697ac5fdfcb7,2024-05-12T18:53:09+00:00,2024-06-08T03:22:44+00:00,"Investment Income from Rivas, Roberts and Grant",Income,2774000,8e0078b0ab15697ac5fdfcb7,Investment Income,,
+67f5e96530485ea8dff2a07f,90c14e44af57434ebac94540,2024-01-25T11:18:02+00:00,2024-03-21T20:20:49+00:00,Rent/Mortgage to James Rodriguez,Expense,5933000,90c14e44af57434ebac94540,Rent/Mortgage,,
+e3d93eeac65512882386b8d8,135091d66a8fba6ceac7a22e,2024-01-25T07:04:27+00:00,2024-06-03T22:59:20+00:00,Freelance Work from Christopher Ramirez,Income,9858000,135091d66a8fba6ceac7a22e,Freelance Work,,
+fef0e5e486f6532f57fd5dc1,b4e75527ed56810c1bf65825,2024-05-22T22:33:12+00:00,2024-06-05T22:47:01+00:00,Investment Income from Karen Christensen,Income,6883000,b4e75527ed56810c1bf65825,Investment Income,,
+f09669761c178f27526722a7,3a6201ba00694c75e96dac04,2024-06-05T04:14:31+00:00,2024-06-08T23:54:53+00:00,Transportation to Sanchez Group,Expense,498000,3a6201ba00694c75e96dac04,Transportation,,
+2be54d300208af70db08b474,724d78f1564223798be803d4,2024-01-17T06:19:42+00:00,2024-02-17T21:41:32+00:00,Salary from Ford and Sons,Income,3412000,724d78f1564223798be803d4,Salary,,
+ba3fa551be6afe6eee81ff09,0c6de89a3af134a6e9649c3a,2024-01-14T07:37:58+00:00,2024-02-17T20:36:44+00:00,"Salary from Jones, Stephenson and Bennett",Income,2226000,0c6de89a3af134a6e9649c3a,Salary,,
+424c08a090295c262e1919f4,73de57a79228d5b9480a379a,2024-03-02T19:29:36+00:00,2024-05-03T21:05:12+00:00,Rent/Mortgage to Johnson Ltd,Expense,6282000,73de57a79228d5b9480a379a,Rent/Mortgage,,
+d1fe5c309353654251b47e6a,9452e3f221deae30d679dc0f,2024-01-15T00:13:23+00:00,2024-02-07T15:35:08+00:00,Transportation to Breanna Harris,Expense,440000,9452e3f221deae30d679dc0f,Transportation,,
+fe0119d83ba24f5c54bb7089,924110c57621edac102dff73,2024-04-02T09:59:54+00:00,2024-06-01T05:23:17+00:00,Rental Income from Suzanne Berry,Income,3916000,924110c57621edac102dff73,Rental Income,,
+8126406589103e4f1b259acd,41f643acdc99ac7969ce2a80,2024-03-12T10:11:05+00:00,2024-05-25T03:04:32+00:00,Groceries to Latasha Jones,Expense,295000,41f643acdc99ac7969ce2a80,Groceries,,
+22c7a989dfb6ca893f8cf811,26280c7006fe0b91b215d2c5,2024-02-03T07:52:51+00:00,2024-02-12T21:02:46+00:00,Rent/Mortgage to Thomas Norris,Expense,9521000,26280c7006fe0b91b215d2c5,Rent/Mortgage,,
+e47e9f1f52b2ecfe4071b2f6,aa2d35db79171da4ea032b14,2024-01-03T19:31:47+00:00,2024-06-03T09:50:41+00:00,Salary from Good Inc,Income,2574000,aa2d35db79171da4ea032b14,Salary,,
+d9d3b6b03de26ad33a2bd259,0cc5034b4578ae93b348fe91,2024-03-05T04:26:53+00:00,2024-05-09T00:26:43+00:00,Transportation to Jason Perry,Expense,8444000,0cc5034b4578ae93b348fe91,Transportation,,
+b20a2caadeb7294f24e6bf60,40bb1a42d023776e9d27b9ac,2024-02-24T09:47:36+00:00,2024-03-14T11:19:19+00:00,"Rental Income from Smith, Bailey and Perez",Income,9282000,40bb1a42d023776e9d27b9ac,Rental Income,,
+f0663fbfaf0a919a2ae4fa3e,8e0078b0ab15697ac5fdfcb7,2024-04-08T02:54:35+00:00,2024-05-28T02:50:03+00:00,Rental Income from Cowan and Sons,Income,7644000,8e0078b0ab15697ac5fdfcb7,Rental Income,,
+12eef87311f0cf9adcf33aba,90c14e44af57434ebac94540,2024-01-20T10:40:50+00:00,2024-06-04T19:51:20+00:00,Freelance Work from Arellano Ltd,Income,4796000,90c14e44af57434ebac94540,Freelance Work,,
+84a08e09eddce68f49d13467,135091d66a8fba6ceac7a22e,2024-04-18T03:33:56+00:00,2024-06-07T07:36:49+00:00,Business Profits from Joshua Cole,Income,7640000,135091d66a8fba6ceac7a22e,Business Profits,,
+56b48c456066a1371619f1b0,b4e75527ed56810c1bf65825,2024-03-18T15:59:30+00:00,2024-06-04T06:03:43+00:00,Utilities to Valenzuela LLC,Expense,2464000,b4e75527ed56810c1bf65825,Utilities,,
+bf5686827984b03e566990f6,3a6201ba00694c75e96dac04,2024-03-08T13:42:39+00:00,2024-04-22T05:44:25+00:00,Entertainment to Tammy Clements,Expense,2910000,3a6201ba00694c75e96dac04,Entertainment,,
+6019f2ef1716a08d7af7dd82,724d78f1564223798be803d4,2024-01-03T23:04:41+00:00,2024-06-10T02:50:40+00:00,"Salary from Murphy, Brown and Ray",Income,7853000,724d78f1564223798be803d4,Salary,,
+c86c978efc2a888ff60de69c,0c6de89a3af134a6e9649c3a,2024-06-03T10:12:13+00:00,2024-06-05T12:12:25+00:00,Rent/Mortgage to Daniel Miller,Expense,4124000,0c6de89a3af134a6e9649c3a,Rent/Mortgage,,
+f43cb9b0d99ab87c0e70b6b3,73de57a79228d5b9480a379a,2024-06-04T16:08:59+00:00,2024-06-09T10:36:11+00:00,Rent/Mortgage to Barry Barrett,Expense,3869000,73de57a79228d5b9480a379a,Rent/Mortgage,,
+3b438660170309ec36e37e6a,9452e3f221deae30d679dc0f,2024-03-26T05:21:23+00:00,2024-06-10T09:15:23+00:00,"Salary from Gray, Collins and Kemp",Income,7477000,9452e3f221deae30d679dc0f,Salary,,
+949ee4326bef82e8aaa2a507,924110c57621edac102dff73,2024-02-08T19:09:00+00:00,2024-05-23T04:03:37+00:00,"Rental Income from Stokes, Weeks and Hanson",Income,4287000,924110c57621edac102dff73,Rental Income,,
+fbd285ac5c86dfcbc01c7544,41f643acdc99ac7969ce2a80,2024-06-02T07:50:05+00:00,2024-06-06T10:00:32+00:00,Utilities to Brett Faulkner,Expense,8660000,41f643acdc99ac7969ce2a80,Utilities,,
+667259ac95e27403b0b119e5,26280c7006fe0b91b215d2c5,2024-05-16T04:20:09+00:00,2024-06-07T21:36:57+00:00,Rent/Mortgage to David Miller,Expense,6913000,26280c7006fe0b91b215d2c5,Rent/Mortgage,,
+76abb12851cf1a81d302bcc8,aa2d35db79171da4ea032b14,2024-02-20T16:35:36+00:00,2024-03-15T16:40:41+00:00,Transportation to Patricia Daniels,Expense,9745000,aa2d35db79171da4ea032b14,Transportation,,
+62c12e64e313ab335b22fe60,0cc5034b4578ae93b348fe91,2024-01-31T19:12:10+00:00,2024-05-03T22:08:12+00:00,"Business Profits from Young, Frank and White",Income,5875000,0cc5034b4578ae93b348fe91,Business Profits,,
+bc0ec738e94f212bac013f21,40bb1a42d023776e9d27b9ac,2024-04-05T08:08:13+00:00,2024-04-07T22:49:21+00:00,Rental Income from Gonzales Group,Income,2579000,40bb1a42d023776e9d27b9ac,Rental Income,,
+568384ee39781503301a2e71,8e0078b0ab15697ac5fdfcb7,2024-03-09T17:09:23+00:00,2024-06-10T08:09:09+00:00,"Investment Income from Mack, Cowan and Kim",Income,4660000,8e0078b0ab15697ac5fdfcb7,Investment Income,,
+3b85840327ba1e46f102bf57,90c14e44af57434ebac94540,2024-06-02T19:05:00+00:00,2024-06-04T01:31:20+00:00,Transportation to Garcia-Herrera,Expense,5226000,90c14e44af57434ebac94540,Transportation,,
+e8bacdd07a22c3bc717f7698,135091d66a8fba6ceac7a22e,2024-06-02T21:16:58+00:00,2024-06-04T14:07:30+00:00,Rent/Mortgage to Julie Sheppard,Expense,9353000,135091d66a8fba6ceac7a22e,Rent/Mortgage,,
+3dd80a8865d71946b0fd1c37,b4e75527ed56810c1bf65825,2024-01-05T03:03:07+00:00,2024-02-11T22:39:46+00:00,Transportation to Steven Thornton,Expense,5847000,b4e75527ed56810c1bf65825,Transportation,,
+a2c0beea0603dc36a6f001ae,3a6201ba00694c75e96dac04,2024-04-02T00:17:33+00:00,2024-04-17T04:22:18+00:00,"Utilities to Harris, Perry and Martinez",Expense,6363000,3a6201ba00694c75e96dac04,Utilities,,
+012c187dae4eb19669910db0,724d78f1564223798be803d4,2024-04-30T06:31:47+00:00,2024-06-08T12:56:35+00:00,Entertainment to Shirley Smith,Expense,9932000,724d78f1564223798be803d4,Entertainment,,
+6949b41faabb0f28d2853552,0c6de89a3af134a6e9649c3a,2024-04-30T21:25:18+00:00,2024-06-04T02:18:50+00:00,Freelance Work from Mullins Group,Income,8161000,0c6de89a3af134a6e9649c3a,Freelance Work,,
+1adcd2e252c27d0d8b99b176,73de57a79228d5b9480a379a,2024-01-12T11:25:11+00:00,2024-05-18T07:11:06+00:00,Business Profits from Katie Huang,Income,5270000,73de57a79228d5b9480a379a,Business Profits,,
+900ba6d56e7c80a0ee10f05c,9452e3f221deae30d679dc0f,2024-03-21T16:00:33+00:00,2024-04-03T01:37:44+00:00,Rental Income from Nicole Gross,Income,8997000,9452e3f221deae30d679dc0f,Rental Income,,
+f072be81f7d01850a63c57e7,924110c57621edac102dff73,2024-01-05T15:31:50+00:00,2024-06-06T03:25:35+00:00,Utilities to Melissa Schneider,Expense,1601000,924110c57621edac102dff73,Utilities,,
+9119c6b7e9f4e34f27e4e0f4,41f643acdc99ac7969ce2a80,2024-01-05T11:59:48+00:00,2024-04-08T02:57:16+00:00,Transportation to Stephanie Maldonado,Expense,8132000,41f643acdc99ac7969ce2a80,Transportation,,
+d64da482bf4a4916d14b3f5c,26280c7006fe0b91b215d2c5,2024-01-31T08:28:29+00:00,2024-03-25T06:35:52+00:00,Utilities to Sarah Douglas,Expense,6885000,26280c7006fe0b91b215d2c5,Utilities,,
+2e425d9389e45ec5e62d6488,aa2d35db79171da4ea032b14,2024-06-05T07:37:11+00:00,2024-06-05T22:36:18+00:00,Salary from Kevin Rose,Income,3930000,aa2d35db79171da4ea032b14,Salary,,
+60c5bdc93421e90ad392d516,0cc5034b4578ae93b348fe91,2024-04-19T21:23:53+00:00,2024-06-06T09:19:49+00:00,Groceries to Crystal Hicks,Expense,5927000,0cc5034b4578ae93b348fe91,Groceries,,
+753abdb7352e805477cad356,40bb1a42d023776e9d27b9ac,2024-05-18T11:06:51+00:00,2024-06-01T18:39:37+00:00,"Business Profits from White, Landry and Smith",Income,3009000,40bb1a42d023776e9d27b9ac,Business Profits,,
+02eabbf0a0ab169a9384009e,8e0078b0ab15697ac5fdfcb7,2024-01-12T10:45:56+00:00,2024-06-04T10:09:33+00:00,Utilities to Sabrina Weeks,Expense,5873000,8e0078b0ab15697ac5fdfcb7,Utilities,,
+9b40eb6db8b7b1e06f9ba4e3,90c14e44af57434ebac94540,2024-03-22T08:12:53+00:00,2024-04-22T18:29:23+00:00,Groceries to Desiree Reeves,Expense,1489000,90c14e44af57434ebac94540,Groceries,,
+8adf65e8f48ac43a99542421,135091d66a8fba6ceac7a22e,2024-01-09T07:46:07+00:00,2024-05-03T20:10:20+00:00,"Rental Income from Mercado, Willis and Walters",Income,4906000,135091d66a8fba6ceac7a22e,Rental Income,,
+b2b6a6ebcc211098eb6cb2ca,b4e75527ed56810c1bf65825,2024-05-18T21:05:01+00:00,2024-06-06T06:51:50+00:00,Rental Income from Le Ltd,Income,3149000,b4e75527ed56810c1bf65825,Rental Income,,
+de95d6863275018c062ca79c,3a6201ba00694c75e96dac04,2024-02-17T19:20:19+00:00,2024-05-01T23:35:55+00:00,Investment Income from Murray-Todd,Income,8988000,3a6201ba00694c75e96dac04,Investment Income,,
+afbd56be25e1b103b5997c82,724d78f1564223798be803d4,2024-04-04T10:13:59+00:00,2024-06-07T10:51:56+00:00,"Investment Income from Howell, Hernandez and Taylor",Income,5427000,724d78f1564223798be803d4,Investment Income,,
+a3b6b55f98e9863167616dc3,0c6de89a3af134a6e9649c3a,2024-03-07T14:16:02+00:00,2024-06-10T05:05:14+00:00,Rent/Mortgage to Mary Estrada,Expense,5007000,0c6de89a3af134a6e9649c3a,Rent/Mortgage,,
+ae562713f01f909667205e36,73de57a79228d5b9480a379a,2024-01-23T09:20:00+00:00,2024-03-22T08:10:29+00:00,Transportation to Sarah Mathews,Expense,7375000,73de57a79228d5b9480a379a,Transportation,,
+edf2270df0a5adca8ac6eb67,9452e3f221deae30d679dc0f,2024-05-13T05:22:53+00:00,2024-06-02T16:21:39+00:00,Investment Income from Ian King,Income,4050000,9452e3f221deae30d679dc0f,Investment Income,,
+622791af9f52669cb940510f,924110c57621edac102dff73,2024-04-29T04:58:55+00:00,2024-06-01T11:56:24+00:00,Business Profits from Joe Zuniga,Income,3989000,924110c57621edac102dff73,Business Profits,,
+8cfe165b1e94a65a41070ae9,41f643acdc99ac7969ce2a80,2024-01-06T05:14:31+00:00,2024-04-08T17:56:18+00:00,Utilities to Michael Sutton,Expense,9215000,41f643acdc99ac7969ce2a80,Utilities,,
+a600a0526c47810f4d454e8c,26280c7006fe0b91b215d2c5,2024-06-05T14:03:37+00:00,2024-06-06T05:11:20+00:00,Entertainment to David Smith,Expense,8337000,26280c7006fe0b91b215d2c5,Entertainment,,
+edcf3690ee275222a525a323,aa2d35db79171da4ea032b14,2024-01-05T14:32:25+00:00,2024-03-27T18:52:49+00:00,"Entertainment to Rosario, Edwards and Farley",Expense,8614000,aa2d35db79171da4ea032b14,Entertainment,,
+968c017e0d597ba95c9948ce,0cc5034b4578ae93b348fe91,2024-03-20T22:52:45+00:00,2024-04-16T15:42:53+00:00,Utilities to Brian Wells,Expense,8581000,0cc5034b4578ae93b348fe91,Utilities,,
+c2505a76f4b466eb1c5400ca,40bb1a42d023776e9d27b9ac,2024-01-08T13:48:41+00:00,2024-05-22T16:30:50+00:00,Business Profits from Edward Lee,Income,8184000,40bb1a42d023776e9d27b9ac,Business Profits,,
+e13a8521df1a9a2af3528a64,8e0078b0ab15697ac5fdfcb7,2024-06-01T14:49:56+00:00,2024-06-09T13:40:37+00:00,Investment Income from Ward-Zuniga,Income,7209000,8e0078b0ab15697ac5fdfcb7,Investment Income,,
+866875fd719036c7e71c0e83,90c14e44af57434ebac94540,2024-06-04T03:04:16+00:00,2024-06-04T21:59:33+00:00,Rental Income from Jon Ingram,Income,5555000,90c14e44af57434ebac94540,Rental Income,,
+37b2249c7b7bc5fb7c1e3460,135091d66a8fba6ceac7a22e,2024-01-05T18:42:26+00:00,2024-01-15T20:10:10+00:00,"Business Profits from Rodriguez, Martin and Price",Income,5604000,135091d66a8fba6ceac7a22e,Business Profits,,
+5e9d29b1c19bfc46843de36d,b4e75527ed56810c1bf65825,2024-02-04T01:52:34+00:00,2024-04-05T15:29:06+00:00,"Business Profits from Brown, Hansen and Hall",Income,4063000,b4e75527ed56810c1bf65825,Business Profits,,
+cb0f1a5a824930e351eeb2a7,3a6201ba00694c75e96dac04,2024-06-02T08:07:28+00:00,2024-06-06T03:50:35+00:00,Rent/Mortgage to Scott Inc,Expense,8603000,3a6201ba00694c75e96dac04,Rent/Mortgage,,
+a5ac3d687adfef5a3a7e92e3,724d78f1564223798be803d4,2024-02-28T05:15:58+00:00,2024-03-21T10:28:29+00:00,Salary from Allison-Burch,Income,187000,724d78f1564223798be803d4,Salary,,
+f2425ce90eb1db222dc4a0ed,0c6de89a3af134a6e9649c3a,2024-02-08T08:45:21+00:00,2024-06-10T05:35:18+00:00,Freelance Work from Diaz-Curry,Income,8064000,0c6de89a3af134a6e9649c3a,Freelance Work,,
+39fa71206957f50a772e2994,73de57a79228d5b9480a379a,2024-02-29T09:24:15+00:00,2024-03-02T06:40:16+00:00,"Freelance Work from Fernandez, Ramos and Holloway",Income,3265000,73de57a79228d5b9480a379a,Freelance Work,,
+869b6181cc462ebdf3d02ded,9452e3f221deae30d679dc0f,2024-02-27T04:21:26+00:00,2024-06-03T03:05:40+00:00,Rent/Mortgage to Davis-Miller,Expense,6961000,9452e3f221deae30d679dc0f,Rent/Mortgage,,
+6b87d12c2da2b9dd2195360d,924110c57621edac102dff73,2024-02-15T21:06:56+00:00,2024-03-15T04:24:52+00:00,Salary from Lauren Duran,Income,4477000,924110c57621edac102dff73,Salary,,
+2b541efd3bcb15bf51aa744d,41f643acdc99ac7969ce2a80,2024-05-14T07:59:38+00:00,2024-05-16T16:12:50+00:00,Investment Income from Terry Watson,Income,6912000,41f643acdc99ac7969ce2a80,Investment Income,,
+1ad7ae8b839b3c536423a122,26280c7006fe0b91b215d2c5,2024-05-01T08:00:19+00:00,2024-06-02T04:42:55+00:00,Salary from Baker-King,Income,6037000,26280c7006fe0b91b215d2c5,Salary,,
+cedfd442fc2b0bf39f464dac,aa2d35db79171da4ea032b14,2024-04-01T12:58:45+00:00,2024-06-02T01:18:20+00:00,Rent/Mortgage to Daniels Group,Expense,623000,aa2d35db79171da4ea032b14,Rent/Mortgage,,
+2b46ea1ea9424c0c893cb8e0,0cc5034b4578ae93b348fe91,2024-05-09T21:36:44+00:00,2024-06-08T19:25:18+00:00,Freelance Work from Chung Ltd,Income,1363000,0cc5034b4578ae93b348fe91,Freelance Work,,
+621a65ef49467c936cec6b46,40bb1a42d023776e9d27b9ac,2024-01-11T17:09:08+00:00,2024-04-09T11:31:07+00:00,Rent/Mortgage to Christine Carney,Expense,8180000,40bb1a42d023776e9d27b9ac,Rent/Mortgage,,
+22e2f693f8c73ef67fd0e257,8e0078b0ab15697ac5fdfcb7,2024-05-03T11:18:53+00:00,2024-06-09T18:55:25+00:00,Transportation to Clark LLC,Expense,6011000,8e0078b0ab15697ac5fdfcb7,Transportation,,
+a254b03586fd4c99fcb52cff,90c14e44af57434ebac94540,2024-02-24T02:44:58+00:00,2024-05-02T10:01:30+00:00,Freelance Work from Richard Zhang,Income,7131000,90c14e44af57434ebac94540,Freelance Work,,
+9352db44d6006d476f0aa170,135091d66a8fba6ceac7a22e,2024-01-09T12:54:07+00:00,2024-01-19T03:56:45+00:00,"Transportation to Trevino, Petty and Patterson",Expense,8010000,135091d66a8fba6ceac7a22e,Transportation,,
+11ca44c71240012cb5b1bf8b,b4e75527ed56810c1bf65825,2024-02-18T13:42:36+00:00,2024-02-24T03:50:17+00:00,Transportation to Henry Montgomery,Expense,7966000,b4e75527ed56810c1bf65825,Transportation,,
+6847e671a86b3525a68bc65a,3a6201ba00694c75e96dac04,2024-02-22T03:10:37+00:00,2024-04-24T23:09:15+00:00,Business Profits from Aaron Wilcox,Income,5296000,3a6201ba00694c75e96dac04,Business Profits,,
+a90bbd4752d80d971c9c02a3,724d78f1564223798be803d4,2024-02-17T05:40:51+00:00,2024-06-02T14:08:10+00:00,Freelance Work from Jose Watson,Income,8587000,724d78f1564223798be803d4,Freelance Work,,
+6169e5b67b99c1ab8188dd9b,0c6de89a3af134a6e9649c3a,2024-03-24T20:55:55+00:00,2024-04-28T11:30:28+00:00,Groceries to Christopher Warren,Expense,3625000,0c6de89a3af134a6e9649c3a,Groceries,,
+15aff000327da16836991cc6,73de57a79228d5b9480a379a,2024-02-29T01:16:55+00:00,2024-06-04T10:57:01+00:00,Transportation to Conrad-Collins,Expense,9919000,73de57a79228d5b9480a379a,Transportation,,
+8fa860b312fe708bdcb9d02b,9452e3f221deae30d679dc0f,2024-02-16T16:43:33+00:00,2024-04-16T22:56:11+00:00,Investment Income from Timothy Maddox,Income,3476000,9452e3f221deae30d679dc0f,Investment Income,,
+af88102862216448f905ed08,924110c57621edac102dff73,2024-03-08T08:05:24+00:00,2024-03-14T05:11:12+00:00,"Salary from Preston, Bennett and Phillips",Income,9029000,924110c57621edac102dff73,Salary,,
+5fc92204071457a80feae39e,41f643acdc99ac7969ce2a80,2024-02-01T06:34:00+00:00,2024-03-18T18:43:55+00:00,Freelance Work from Chen-Johnson,Income,2407000,41f643acdc99ac7969ce2a80,Freelance Work,,
+c5f5cd0df85db70df85be1fc,26280c7006fe0b91b215d2c5,2024-06-02T17:47:58+00:00,2024-06-07T18:55:41+00:00,Rental Income from Michelle Taylor,Income,7765000,26280c7006fe0b91b215d2c5,Rental Income,,
+4cd81bddfdcef11c362f3c49,aa2d35db79171da4ea032b14,2024-01-29T23:57:22+00:00,2024-06-07T05:24:40+00:00,"Rental Income from Hunter, Burnett and Walker",Income,6193000,aa2d35db79171da4ea032b14,Rental Income,,
+4faa61cbe76c5eb0eabb8a34,0cc5034b4578ae93b348fe91,2024-01-14T00:43:48+00:00,2024-02-25T20:06:43+00:00,Entertainment to Villanueva PLC,Expense,3066000,0cc5034b4578ae93b348fe91,Entertainment,,
+da349f24c7b4b6ed944fa1cd,40bb1a42d023776e9d27b9ac,2024-03-24T16:19:48+00:00,2024-06-08T07:52:17+00:00,Entertainment to Julie Page,Expense,3027000,40bb1a42d023776e9d27b9ac,Entertainment,,
+1c71ea8a2f65e840c54406b3,8e0078b0ab15697ac5fdfcb7,2024-06-03T12:21:23+00:00,2024-06-04T13:56:38+00:00,Groceries to Misty Chang MD,Expense,3343000,8e0078b0ab15697ac5fdfcb7,Groceries,,
+4d1d14b0244c75bce66f3325,90c14e44af57434ebac94540,2024-02-29T13:14:50+00:00,2024-05-17T06:33:08+00:00,Groceries to Lisa Wallace,Expense,3848000,90c14e44af57434ebac94540,Groceries,,
+347245577f2e86fbcc12901e,135091d66a8fba6ceac7a22e,2024-04-09T20:40:21+00:00,2024-06-07T17:36:24+00:00,Utilities to Gina Rodriguez,Expense,5908000,135091d66a8fba6ceac7a22e,Utilities,,
+a794e040aeb3924ebfd6861d,b4e75527ed56810c1bf65825,2024-05-14T11:47:31+00:00,2024-05-28T23:19:44+00:00,"Utilities to Dean, Kelly and Nguyen",Expense,8821000,b4e75527ed56810c1bf65825,Utilities,,
+fea08398934528fdb1ab6224,3a6201ba00694c75e96dac04,2024-02-13T00:09:44+00:00,2024-05-12T00:42:52+00:00,Business Profits from Christopher Knapp,Income,2173000,3a6201ba00694c75e96dac04,Business Profits,,
+46638d929685dd7ac8f54fb9,724d78f1564223798be803d4,2024-01-14T11:01:13+00:00,2024-05-15T14:33:11+00:00,"Investment Income from Kim, Mayer and Henry",Income,3185000,724d78f1564223798be803d4,Investment Income,,
+4dcbfb700545ec312d78a63c,0c6de89a3af134a6e9649c3a,2024-02-15T22:39:10+00:00,2024-06-07T00:54:33+00:00,Salary from Edwards Ltd,Income,6004000,0c6de89a3af134a6e9649c3a,Salary,,
+18181e81d8fc2f9134a8a261,73de57a79228d5b9480a379a,2024-02-29T13:25:16+00:00,2024-06-02T10:25:44+00:00,Freelance Work from Denise Parker,Income,9863000,73de57a79228d5b9480a379a,Freelance Work,,
+50e2142cb63c0a7a9e1f91ff,9452e3f221deae30d679dc0f,2024-02-10T01:26:53+00:00,2024-03-28T18:46:38+00:00,Rent/Mortgage to Ashley Washington,Expense,6139000,9452e3f221deae30d679dc0f,Rent/Mortgage,,
+0977b4983962f134142ec367,924110c57621edac102dff73,2024-04-18T12:35:46+00:00,2024-04-22T00:22:08+00:00,Salary from Rebecca Eaton,Income,3108000,924110c57621edac102dff73,Salary,,
+85867d9fe233364fb8ba510b,41f643acdc99ac7969ce2a80,2024-03-05T15:24:55+00:00,2024-06-03T02:45:10+00:00,Rent/Mortgage to Powell-Parks,Expense,2118000,41f643acdc99ac7969ce2a80,Rent/Mortgage,,
+d89f405a76967fb9cd117f8e,26280c7006fe0b91b215d2c5,2024-03-04T21:08:02+00:00,2024-06-05T17:26:07+00:00,"Business Profits from Martinez, Doyle and Rivera",Income,8802000,26280c7006fe0b91b215d2c5,Business Profits,,
+55cfb67d7073ce7a61e45813,aa2d35db79171da4ea032b14,2024-02-23T12:29:21+00:00,2024-06-06T01:36:51+00:00,Rental Income from Anthony Jones,Income,6928000,aa2d35db79171da4ea032b14,Rental Income,,
+19f6810a9aec0a3261b54e53,0cc5034b4578ae93b348fe91,2024-04-10T05:54:06+00:00,2024-05-08T04:21:59+00:00,Freelance Work from Dillon Group,Income,7045000,0cc5034b4578ae93b348fe91,Freelance Work,,
+b844fc5283e1cb33c8b66d15,40bb1a42d023776e9d27b9ac,2024-03-19T17:15:09+00:00,2024-06-05T15:19:22+00:00,Utilities to Guerra and Sons,Expense,6383000,40bb1a42d023776e9d27b9ac,Utilities,,
+71ecae4ed85999e254f38f19,8e0078b0ab15697ac5fdfcb7,2024-06-02T04:12:19+00:00,2024-06-09T14:12:18+00:00,Rent/Mortgage to Charles Lopez,Expense,7865000,8e0078b0ab15697ac5fdfcb7,Rent/Mortgage,,
+3a0d2e6c1453f11e4d2421ff,90c14e44af57434ebac94540,2024-05-14T12:45:18+00:00,2024-05-27T10:18:09+00:00,"Rent/Mortgage to Wilson, Beasley and Cole",Expense,9733000,90c14e44af57434ebac94540,Rent/Mortgage,,
+38e5b7e24f542f66cb143c68,135091d66a8fba6ceac7a22e,2024-01-17T03:36:55+00:00,2024-04-11T01:06:51+00:00,Salary from Tommy Patel,Income,4293000,135091d66a8fba6ceac7a22e,Salary,,
+928446d2ab2f8db56bf46361,b4e75527ed56810c1bf65825,2024-02-21T05:51:49+00:00,2024-06-02T06:08:45+00:00,Utilities to Richard Group,Expense,3006000,b4e75527ed56810c1bf65825,Utilities,,
+ac85ffacdc2781df50579eb9,3a6201ba00694c75e96dac04,2024-04-04T10:51:05+00:00,2024-06-06T15:10:39+00:00,Business Profits from Fitzgerald Inc,Income,2083000,3a6201ba00694c75e96dac04,Business Profits,,
+572ebe9102432341825f61b1,724d78f1564223798be803d4,2024-01-08T03:04:45+00:00,2024-06-09T11:56:39+00:00,Entertainment to James Odonnell,Expense,2725000,724d78f1564223798be803d4,Entertainment,,
+742506e346e446c56bfea2c5,0c6de89a3af134a6e9649c3a,2024-01-12T10:40:00+00:00,2024-04-27T06:45:30+00:00,Groceries to Brewer Ltd,Expense,5220000,0c6de89a3af134a6e9649c3a,Groceries,,
+3512596b3bc4dd40480c061c,73de57a79228d5b9480a379a,2024-01-23T20:34:28+00:00,2024-06-08T01:33:00+00:00,Salary from Campbell-Pearson,Income,924000,73de57a79228d5b9480a379a,Salary,,
+0914c13d9ee60fca1569f813,9452e3f221deae30d679dc0f,2024-02-27T11:11:37+00:00,2024-06-07T14:25:00+00:00,Business Profits from Hanson-Brown,Income,2519000,9452e3f221deae30d679dc0f,Business Profits,,
+0a4a4a7d52d480a886813f13,924110c57621edac102dff73,2024-06-08T12:38:03+00:00,2024-06-08T13:36:28+00:00,Rent/Mortgage to Caitlin Estrada,Expense,9240000,924110c57621edac102dff73,Rent/Mortgage,,
+e30da8f386ac6cbc9bd2305d,41f643acdc99ac7969ce2a80,2024-02-15T05:29:10+00:00,2024-03-01T12:25:04+00:00,Groceries to Kelly-Jensen,Expense,5496000,41f643acdc99ac7969ce2a80,Groceries,,
+74c052f3c65c27012c1f3fec,26280c7006fe0b91b215d2c5,2024-02-10T06:52:09+00:00,2024-06-07T01:05:49+00:00,Groceries to Tyler Group,Expense,8439000,26280c7006fe0b91b215d2c5,Groceries,,
+9ee359483e1f489247fdf458,aa2d35db79171da4ea032b14,2024-03-27T19:42:44+00:00,2024-06-01T11:44:24+00:00,"Groceries to Douglas, Thompson and Brown",Expense,3395000,aa2d35db79171da4ea032b14,Groceries,,
+b5091f7c3308d941cbeb4cbd,0cc5034b4578ae93b348fe91,2024-06-09T12:12:39+00:00,2024-06-09T14:18:07+00:00,Entertainment to William Villarreal,Expense,2029000,0cc5034b4578ae93b348fe91,Entertainment,,
+3b909d1b0d9b6968acf63daf,40bb1a42d023776e9d27b9ac,2024-01-23T00:49:20+00:00,2024-06-01T20:18:46+00:00,"Freelance Work from Lam, Nelson and Brown",Income,2701000,40bb1a42d023776e9d27b9ac,Freelance Work,,
+951e2a4accaa90289df83add,8e0078b0ab15697ac5fdfcb7,2024-03-22T03:36:53+00:00,2024-06-09T05:25:47+00:00,Utilities to Lindsey Ross,Expense,4268000,8e0078b0ab15697ac5fdfcb7,Utilities,,
+ca4d58ab2210e0096889da88,90c14e44af57434ebac94540,2024-01-25T00:48:07+00:00,2024-02-21T23:58:19+00:00,Transportation to Barnes-Fry,Expense,842000,90c14e44af57434ebac94540,Transportation,,
+a8f308cff65e63ba040facfc,135091d66a8fba6ceac7a22e,2024-01-08T11:25:16+00:00,2024-01-25T00:22:02+00:00,Utilities to Daniel Hill,Expense,1154000,135091d66a8fba6ceac7a22e,Utilities,,
+98284b1a7bf40ae76c12b9d7,b4e75527ed56810c1bf65825,2024-06-02T15:33:02+00:00,2024-06-08T07:07:07+00:00,Transportation to Lisa Mcdonald,Expense,9459000,b4e75527ed56810c1bf65825,Transportation,,
+92da4dd6884c4be4658409f9,3a6201ba00694c75e96dac04,2024-05-05T22:57:04+00:00,2024-06-05T02:03:29+00:00,Groceries to Lynn Matthews,Expense,2650000,3a6201ba00694c75e96dac04,Groceries,,
+4e0ccc935fd19b3648eeba2c,724d78f1564223798be803d4,2024-05-04T23:54:30+00:00,2024-05-06T11:15:50+00:00,Groceries to Torres-Martinez,Expense,3843000,724d78f1564223798be803d4,Groceries,,
+0ab64b6704622f1a61d830d5,0c6de89a3af134a6e9649c3a,2024-03-02T22:55:46+00:00,2024-04-25T12:27:13+00:00,Utilities to Montes Ltd,Expense,5861000,0c6de89a3af134a6e9649c3a,Utilities,,
+231e2b50645e71e93b8af4f8,73de57a79228d5b9480a379a,2024-03-25T00:03:09+00:00,2024-06-01T19:14:13+00:00,Freelance Work from Charles Lin,Income,9787000,73de57a79228d5b9480a379a,Freelance Work,,
+0a1ce11ae302ffdca4c7cf25,9452e3f221deae30d679dc0f,2024-01-18T13:24:47+00:00,2024-06-09T07:48:36+00:00,"Business Profits from Caldwell, Burton and Smith",Income,742000,9452e3f221deae30d679dc0f,Business Profits,,
+541637e0593adf96ccc292cd,924110c57621edac102dff73,2024-05-28T02:45:18+00:00,2024-05-29T04:36:14+00:00,Groceries to Ryan Mays,Expense,8220000,924110c57621edac102dff73,Groceries,,
+0672f589dfb5f99926317d31,41f643acdc99ac7969ce2a80,2024-05-01T10:17:20+00:00,2024-06-09T05:30:41+00:00,Rent/Mortgage to Whitney Price,Expense,4586000,41f643acdc99ac7969ce2a80,Rent/Mortgage,,
+386e7b6f68763d6b9af2ed8a,26280c7006fe0b91b215d2c5,2024-02-28T04:07:03+00:00,2024-03-26T13:48:48+00:00,Freelance Work from Rebekah Watts,Income,7670000,26280c7006fe0b91b215d2c5,Freelance Work,,
+c89b424e4915fc11a413ea18,aa2d35db79171da4ea032b14,2024-03-08T21:47:36+00:00,2024-05-21T14:59:21+00:00,Freelance Work from Laura Smith,Income,5282000,aa2d35db79171da4ea032b14,Freelance Work,,
+fa3bea378e754cfb15973b9e,0cc5034b4578ae93b348fe91,2024-04-30T07:20:19+00:00,2024-06-01T22:26:24+00:00,Utilities to Elliott Ltd,Expense,9391000,0cc5034b4578ae93b348fe91,Utilities,,
+c6d074a21839bded96be7b6d,40bb1a42d023776e9d27b9ac,2024-01-08T10:26:27+00:00,2024-06-04T16:27:14+00:00,Transportation to Rhonda Brooks,Expense,8518000,40bb1a42d023776e9d27b9ac,Transportation,,
+721b53619ac4af21c549e313,8e0078b0ab15697ac5fdfcb7,2024-03-18T06:55:07+00:00,2024-03-20T19:19:20+00:00,Investment Income from Martin-Matthews,Income,734000,8e0078b0ab15697ac5fdfcb7,Investment Income,,
+1d8e23a0db8022cefff5a920,90c14e44af57434ebac94540,2024-03-27T05:30:10+00:00,2024-04-08T11:47:41+00:00,Utilities to Williams Group,Expense,9717000,90c14e44af57434ebac94540,Utilities,,
+5aa7ed7d1b45c0c4b415c79b,135091d66a8fba6ceac7a22e,2024-04-24T08:11:19+00:00,2024-04-27T21:16:54+00:00,Transportation to Edwards and Sons,Expense,8485000,135091d66a8fba6ceac7a22e,Transportation,,
+c5cc66c0790a0c9c993dc1fb,b4e75527ed56810c1bf65825,2024-05-07T19:43:43+00:00,2024-05-10T20:05:18+00:00,Freelance Work from Ashley Reyes,Income,7129000,b4e75527ed56810c1bf65825,Freelance Work,,
+d13932008eca5b8053bfd78d,3a6201ba00694c75e96dac04,2024-01-12T08:31:48+00:00,2024-03-06T14:33:41+00:00,Rental Income from William Wright,Income,8585000,3a6201ba00694c75e96dac04,Rental Income,,
+6211e84a6b4043564db3bb22,724d78f1564223798be803d4,2024-03-28T22:25:20+00:00,2024-05-09T08:20:07+00:00,Groceries to David Lambert,Expense,6524000,724d78f1564223798be803d4,Groceries,,
+2db8f3f25a388fd6931fd57a,0c6de89a3af134a6e9649c3a,2024-01-04T14:26:49+00:00,2024-06-09T13:47:10+00:00,Utilities to Carpenter-Powell,Expense,4558000,0c6de89a3af134a6e9649c3a,Utilities,,
+a270d6eae661f66167304744,73de57a79228d5b9480a379a,2024-01-11T02:17:52+00:00,2024-04-13T01:12:35+00:00,Rental Income from Mueller-Fisher,Income,1101000,73de57a79228d5b9480a379a,Rental Income,,
+1078bb865060a9e614e72933,9452e3f221deae30d679dc0f,2024-02-27T05:38:37+00:00,2024-04-24T14:06:44+00:00,Groceries to Cooley and Sons,Expense,1753000,9452e3f221deae30d679dc0f,Groceries,,
+7cb6d2e085dfcfe8d960427e,924110c57621edac102dff73,2024-02-04T15:24:06+00:00,2024-05-08T21:01:26+00:00,Rental Income from Kelly Clark,Income,4395000,924110c57621edac102dff73,Rental Income,,
+a1449fa2b38e9c3db60d03e7,41f643acdc99ac7969ce2a80,2024-03-10T00:08:47+00:00,2024-06-04T13:43:27+00:00,Freelance Work from Jeffrey Mitchell,Income,4435000,41f643acdc99ac7969ce2a80,Freelance Work,,
+5c72840e20dbd00258679797,26280c7006fe0b91b215d2c5,2024-01-01T15:46:11+00:00,2024-02-03T13:06:18+00:00,Investment Income from Rebecca Melton,Income,8441000,26280c7006fe0b91b215d2c5,Investment Income,,
+cf954dcedb97820f24df496f,aa2d35db79171da4ea032b14,2024-01-15T03:12:24+00:00,2024-06-10T05:44:32+00:00,"Transportation to Hernandez, Foster and Brooks",Expense,6268000,aa2d35db79171da4ea032b14,Transportation,,
+05755385dd6a02b0f0609160,0cc5034b4578ae93b348fe91,2024-03-30T07:53:40+00:00,2024-05-20T15:13:56+00:00,"Salary from Ramirez, Dickerson and Taylor",Income,3998000,0cc5034b4578ae93b348fe91,Salary,,
+59fb6ac38de463b122eaa87d,40bb1a42d023776e9d27b9ac,2024-02-12T05:16:27+00:00,2024-06-01T13:01:21+00:00,Freelance Work from Wood-Williams,Income,36000,40bb1a42d023776e9d27b9ac,Freelance Work,,
+7dfbcdee436f0c0f97a44441,8e0078b0ab15697ac5fdfcb7,2024-02-24T02:28:18+00:00,2024-06-06T09:00:50+00:00,Utilities to Johnson-Hopkins,Expense,675000,8e0078b0ab15697ac5fdfcb7,Utilities,,
+f331b749c9cadfbad9fd41b4,90c14e44af57434ebac94540,2024-04-12T06:04:55+00:00,2024-05-27T15:51:25+00:00,"Rental Income from Dean, Oliver and Tran",Income,3895000,90c14e44af57434ebac94540,Rental Income,,
+e6ac338c2de35ea756acd572,135091d66a8fba6ceac7a22e,2024-02-04T15:26:30+00:00,2024-05-14T03:22:35+00:00,Freelance Work from Thomas Reyes,Income,8362000,135091d66a8fba6ceac7a22e,Freelance Work,,
+d3dd69d8ddc6c0bd1c6d9e48,b4e75527ed56810c1bf65825,2024-05-25T19:47:18+00:00,2024-06-04T09:04:31+00:00,Rent/Mortgage to Edward Taylor,Expense,4850000,b4e75527ed56810c1bf65825,Rent/Mortgage,,
+9ba1a4ea2a12eb010a62c4f8,3a6201ba00694c75e96dac04,2024-01-03T23:08:25+00:00,2024-06-02T02:52:08+00:00,"Investment Income from Rivera, Thomas and Hart",Income,5295000,3a6201ba00694c75e96dac04,Investment Income,,
+68508b7cfade708e85a7b5f0,724d78f1564223798be803d4,2024-03-21T15:52:00+00:00,2024-06-02T23:11:04+00:00,Utilities to Gary Ochoa,Expense,5145000,724d78f1564223798be803d4,Utilities,,
+fef312025ce7b31cab82cb66,0c6de89a3af134a6e9649c3a,2024-03-09T04:39:50+00:00,2024-03-20T09:04:33+00:00,Groceries to Taylor-Rollins,Expense,7641000,0c6de89a3af134a6e9649c3a,Groceries,,
+e7e3a7ca884f81e8ecf218e7,73de57a79228d5b9480a379a,2024-06-04T23:26:38+00:00,2024-06-06T05:40:13+00:00,Utilities to Christopher Benson,Expense,1380000,73de57a79228d5b9480a379a,Utilities,,
+414995aa54ba931c7569613c,9452e3f221deae30d679dc0f,2024-06-01T07:35:26+00:00,2024-06-01T13:34:48+00:00,Entertainment to Bryant-Payne,Expense,3291000,9452e3f221deae30d679dc0f,Entertainment,,
+505f79644330970a82f83faf,924110c57621edac102dff73,2024-02-11T15:10:30+00:00,2024-06-02T09:35:50+00:00,Investment Income from Beth Mcmahon,Income,4423000,924110c57621edac102dff73,Investment Income,,
+399eb54c92b05d02a65f6c0d,41f643acdc99ac7969ce2a80,2024-02-21T21:26:21+00:00,2024-06-01T05:15:20+00:00,"Salary from Rogers, Ashley and Harrison",Income,5494000,41f643acdc99ac7969ce2a80,Salary,,
+b2474cef63dc7acc45edf991,26280c7006fe0b91b215d2c5,2024-06-01T04:57:41+00:00,2024-06-04T16:10:55+00:00,Groceries to Perez Group,Expense,7782000,26280c7006fe0b91b215d2c5,Groceries,,
+0402eca5982baffb57f7846a,aa2d35db79171da4ea032b14,2024-02-01T00:09:38+00:00,2024-04-25T03:37:17+00:00,"Groceries to Neal, Kelly and Martinez",Expense,6736000,aa2d35db79171da4ea032b14,Groceries,,
+14c6ce469d78c498578655ad,0cc5034b4578ae93b348fe91,2024-02-27T23:48:33+00:00,2024-06-03T07:08:54+00:00,Rent/Mortgage to Cook-Hurley,Expense,3703000,0cc5034b4578ae93b348fe91,Rent/Mortgage,,
+fd297e7622c7cc5a857f1725,40bb1a42d023776e9d27b9ac,2024-01-06T18:16:41+00:00,2024-06-07T17:05:08+00:00,Business Profits from Mcknight Inc,Income,9704000,40bb1a42d023776e9d27b9ac,Business Profits,,
+ea71f344c03098bb22549daf,8e0078b0ab15697ac5fdfcb7,2024-04-27T21:00:34+00:00,2024-05-11T16:26:32+00:00,Entertainment to Miller Ltd,Expense,6660000,8e0078b0ab15697ac5fdfcb7,Entertainment,,
+754943c751f905ff917c1290,90c14e44af57434ebac94540,2024-04-18T12:32:48+00:00,2024-06-10T00:43:30+00:00,Rental Income from Lynn Miller,Income,6998000,90c14e44af57434ebac94540,Rental Income,,
+102b6a85b02304783b631447,135091d66a8fba6ceac7a22e,2024-04-24T22:01:30+00:00,2024-06-02T01:35:37+00:00,Business Profits from Gallagher-Vargas,Income,452000,135091d66a8fba6ceac7a22e,Business Profits,,
+19aead5f368c310c881f11cd,b4e75527ed56810c1bf65825,2024-01-05T23:16:23+00:00,2024-04-23T12:27:20+00:00,Entertainment to Patrick Ayala,Expense,8511000,b4e75527ed56810c1bf65825,Entertainment,,
+8461c6e3daf6dd027225d813,3a6201ba00694c75e96dac04,2024-01-20T19:55:21+00:00,2024-06-01T12:16:48+00:00,Rent/Mortgage to Diaz-Russo,Expense,5314000,3a6201ba00694c75e96dac04,Rent/Mortgage,,
+3f685f851d70eb8f57f53dcc,724d78f1564223798be803d4,2024-03-10T09:55:40+00:00,2024-06-02T11:55:10+00:00,"Entertainment to Smith, Robertson and Garcia",Expense,9415000,724d78f1564223798be803d4,Entertainment,,
+face769006f0e210d8765102,0c6de89a3af134a6e9649c3a,2024-01-26T12:47:32+00:00,2024-04-19T23:53:34+00:00,Entertainment to Kimberly Hammond,Expense,5255000,0c6de89a3af134a6e9649c3a,Entertainment,,
+2662b20438d30e90c5b8fd7d,73de57a79228d5b9480a379a,2024-02-18T03:17:39+00:00,2024-06-04T22:48:20+00:00,"Business Profits from Smith, Cowan and Rivers",Income,751000,73de57a79228d5b9480a379a,Business Profits,,
+5627f02716dc6cdb7fb40149,9452e3f221deae30d679dc0f,2024-02-06T04:41:25+00:00,2024-06-09T07:08:33+00:00,Freelance Work from Peter Schultz,Income,9449000,9452e3f221deae30d679dc0f,Freelance Work,,
+83cf758db27f6712c044e623,924110c57621edac102dff73,2024-03-06T09:49:04+00:00,2024-06-06T04:14:34+00:00,Salary from Ashley Chen,Income,9252000,924110c57621edac102dff73,Salary,,
+8031b2832db1dcaa9d7ddf3f,41f643acdc99ac7969ce2a80,2024-04-16T00:56:08+00:00,2024-06-08T08:06:24+00:00,Utilities to Anthony Howell,Expense,5581000,41f643acdc99ac7969ce2a80,Utilities,,
+24b56d3c69c5d628b47edcb0,26280c7006fe0b91b215d2c5,2024-03-03T15:23:26+00:00,2024-05-13T07:36:38+00:00,Groceries to John Smith,Expense,3246000,26280c7006fe0b91b215d2c5,Groceries,,
+23820ee823e998150c87757f,aa2d35db79171da4ea032b14,2024-06-01T09:59:42+00:00,2024-06-01T23:54:09+00:00,Freelance Work from Margaret Nichols,Income,9367000,aa2d35db79171da4ea032b14,Freelance Work,,
+591d0d6b14a7396db6b4c728,0cc5034b4578ae93b348fe91,2024-03-30T18:29:54+00:00,2024-06-03T07:56:25+00:00,Salary from Harris-Hall,Income,3748000,0cc5034b4578ae93b348fe91,Salary,,
+769e3063bd4a019121b6970c,40bb1a42d023776e9d27b9ac,2024-02-13T01:56:33+00:00,2024-05-02T00:14:32+00:00,Investment Income from Alexander Williams,Income,4982000,40bb1a42d023776e9d27b9ac,Investment Income,,
+072ea7f257c15098edaf9c55,8e0078b0ab15697ac5fdfcb7,2024-01-10T00:10:49+00:00,2024-05-05T05:27:43+00:00,Business Profits from Scott-Bryant,Income,1537000,8e0078b0ab15697ac5fdfcb7,Business Profits,,
+a2d24960ecca7fa3578a0354,90c14e44af57434ebac94540,2024-06-06T23:26:13+00:00,2024-06-08T22:44:37+00:00,Transportation to Doyle-Hernandez,Expense,9560000,90c14e44af57434ebac94540,Transportation,,
+a79f799e5ac781b94bc5f5fe,135091d66a8fba6ceac7a22e,2024-02-18T10:51:53+00:00,2024-05-31T17:32:05+00:00,Rental Income from Jesse Price,Income,4089000,135091d66a8fba6ceac7a22e,Rental Income,,
+969bf7a6f51567ae6aac1a44,b4e75527ed56810c1bf65825,2024-05-30T20:10:30+00:00,2024-06-03T03:38:24+00:00,Transportation to Hernandez-Smith,Expense,6666000,b4e75527ed56810c1bf65825,Transportation,,
+83aa204c6a9d6426960bb725,3a6201ba00694c75e96dac04,2024-01-19T15:50:07+00:00,2024-06-07T23:47:28+00:00,Groceries to Orr-Hardy,Expense,761000,3a6201ba00694c75e96dac04,Groceries,,
+5773904655f81b132d655757,724d78f1564223798be803d4,2024-01-31T00:39:41+00:00,2024-03-22T06:24:14+00:00,"Rental Income from Thompson, Clark and Alexander",Income,3926000,724d78f1564223798be803d4,Rental Income,,
+8a7f92b3e50f0053b5fe38d8,0c6de89a3af134a6e9649c3a,2024-06-03T19:40:55+00:00,2024-06-04T02:36:07+00:00,"Entertainment to Coffey, Scott and Brown",Expense,3614000,0c6de89a3af134a6e9649c3a,Entertainment,,
+4476e5e441abf2b4cd02915c,73de57a79228d5b9480a379a,2024-03-19T19:51:40+00:00,2024-04-23T15:46:00+00:00,Entertainment to Carter Group,Expense,1914000,73de57a79228d5b9480a379a,Entertainment,,
+987c98b23affccd61b09bb37,9452e3f221deae30d679dc0f,2024-03-01T18:24:23+00:00,2024-06-05T22:01:38+00:00,Freelance Work from Steven Chavez,Income,5204000,9452e3f221deae30d679dc0f,Freelance Work,,
+c726be76d7e9a1bacd92ab7a,924110c57621edac102dff73,2024-01-17T09:57:52+00:00,2024-06-07T20:23:03+00:00,Entertainment to Oconnor and Sons,Expense,8280000,924110c57621edac102dff73,Entertainment,,
