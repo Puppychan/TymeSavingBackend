@@ -20,11 +20,11 @@
                 },
                 {
                     "key": "Access-Control-Allow-Methods",
-                    "value": "GET, OPTIONS, POST, PUT, DELETE, PATCH"
+                    "value": "*"
                 },
                 {
                     "key": "Access-Control-Allow-Headers",
-                    "value": "X-CSRF-Token, X-Requested-With, Accept, Content-Length, Content-Type, Date, Authorization"
+                    "value": "*"
                 }
             ]
         }
