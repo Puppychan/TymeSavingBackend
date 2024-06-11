@@ -21,10 +21,9 @@
         "name": "next"
       }
     ],
-    "baseUrl": "",
     "paths": {
-      "src/*": [
-        "./src/*"
+      "*": [
+        "./*"
       ]
     },
     "strict": false
@@ -34,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/lib/readCSV.ts"
+    "lib/readCSV.ts"
   ],
   "exclude": [
     "node_modules"

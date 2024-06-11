@@ -9,13 +9,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "data:transaction": "tsx src/data/addTransactions.ts",
-    "data:user": "tsx src/data/addUsers.ts",
+    "data:transaction": "tsx data/addTransactions.ts",
+    "data:user": "tsx data/addUsers.ts",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:watch:user": "jest --watch ./src/tests/user/user.test.ts",
-    "test:watch:user-detail": "jest --watch ./src/tests/user/user-detail.test.ts",
-    "test:watch:mongodb": "jest --watch ./src/tests/config-test/connectMongoDB.test.ts"
+    "test:watch:user": "jest --watch ./tests/user/user.test.ts",
+    "test:watch:user-detail": "jest --watch ./tests/user/user-detail.test.ts",
+    "test:watch:mongodb": "jest --watch ./tests/config-test/connectMongoDB.test.ts"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^6.4.5",
