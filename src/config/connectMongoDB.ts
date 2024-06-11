@@ -8,7 +8,7 @@ let isConnected = false;
 export const connectMongoDB = async () => {
   const MONGODB_URI: string = process.env.MONGODB_URI || '';
   mongoose.set("strictQuery", true);
-  console.log("URI:  " + MONGODB_URI);
+  // console.log("URI:  " + MONGODB_URI);
   if (mongoose.connection.readyState === 1 || isConnected) {
     console.log("MongoDB already connected")
     return;
