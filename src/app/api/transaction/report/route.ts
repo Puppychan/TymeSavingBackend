@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";

@@ -1,4 +1,4 @@
-// 'use client'
+export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
 
 import { NextRequest, NextResponse } from "next/server";
 // import { useSearchParams } from 'next/navigation';
