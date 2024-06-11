@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 // import { useSearchParams } from 'next/navigation';
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
-import { csvToDB } from "src/lib/readCSV";
 
 /* This is the admin page. It will do the following:
   - Show the current user's information
