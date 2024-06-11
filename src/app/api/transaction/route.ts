@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
-import { csvToDB } from "src/lib/readCSV";
 /*
     POST: Create a transaction
     GET: For admins to view all transaction details - may change this route
@@ -55,16 +54,5 @@ export const POST = async (req:NextRequest) => {
     }
     catch (error: any) {
         return NextResponse.json({ response: error.message}, { status: 500 });
-    }
-}
-
-export const PUT = async () => {
-    try{
-        let filePath = 'data/NI Data - Transaction.csv';
-        const result = await csvToDB(filePath, "Transaction");
-        return NextResponse.json({response: result}, {status: 200});
-    }
-    catch (error){
-        return NextResponse.json({response: error}, {status: 500});
     }
 }

@@ -19,6 +19,8 @@ import { currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories, 
 //      params: transactionType: "Income" or "Expense"
 //              userId
 //      return: [{ category, total amount, percentage }]
+// 5) netSpend: total income - total expense for this month
+//      params: userId
 // req format: {transactionType: Income | Expense, userId}
 export const GET = async (req: NextRequest) => {
     try {

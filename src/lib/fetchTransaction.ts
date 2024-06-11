@@ -23,6 +23,9 @@ import { PipelineStage } from 'mongoose';
 //              userId
 //      return: [{ category, total amount, percentage }]
 // req format: {transactionType: Income | Expense, userId}
+// 5) netSpend: total income - total expense for this month
+//      params: userId
+
 
 // total expense/income of current month: From the 1st to the current date
 // return amount + month
@@ -371,7 +374,10 @@ export const topCategories = async(transactionType: String, currentUserId: Strin
         }
 
         // Calculate the total amount for the "Other" category
-        const otherTotal = totalExpense - top3Total;
+        var otherTotal = totalExpense - top3Total;
+        if (otherTotal < 0){
+            otherTotal = 0;
+        }
 
         // Create summary for "Other" category
         const otherSummary = {
@@ -380,7 +386,7 @@ export const topCategories = async(transactionType: String, currentUserId: Strin
             percentage: otherPercentage
         };
 
-        // Merge top 3 and Other summaries into a single object
+        // Merge top 3 and Other summaries into a single array
         top3Summary.push(otherSummary);
 
         console.log(top3Summary);
@@ -477,7 +483,7 @@ export const netSpend = async (currentUserId: String) =>{
             }
         };
     } catch (error){
-        console.error('Error fetching transactions:', error);
+        console.error('netspend: Error fetching transactions:', error);
         return {
             status: 500,
             response: error
