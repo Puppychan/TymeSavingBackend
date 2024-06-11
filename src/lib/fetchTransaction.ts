@@ -59,16 +59,18 @@ export const currentMonthTotal = async(type: String, currentUserId: string): Pro
                 $project: {
                     _id: 0, // Exclude _id
                     totalAmount: 1,
-                    currentMonth: { $literal: currentMonth } // Add the currentMonth field
                 }
             }
         ];
-
-        // Fetch the transactions
         const result = await Transaction.aggregate(pipeline);
 
+        const response = {
+            totalAmount: result.length > 0 ? result[0].totalAmount : 0,
+            currentMonth: currentMonth
+        };
+
         if (result.length > 0) {
-            console.log(`Total amount for type ${type}:`, result[0].totalAmount);
+            console.log(`Total amount for type ${type}:`, response.totalAmount);
         } else {
             console.log(`No transactions found for type ${type} in the current month.`);
         }
@@ -76,7 +78,7 @@ export const currentMonthTotal = async(type: String, currentUserId: string): Pro
         // Return the result
         return {
             status: 200,
-            response: result.length > 0 ? result[0] : { totalAmount: 0 }
+            response: response
         };
     } catch (error) {
         console.error('currentMonthTotal: Error fetching transactions:', error);
