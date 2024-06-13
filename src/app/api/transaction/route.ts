@@ -5,18 +5,6 @@ import {TransactionType} from "src/models/transaction/interface"
 
 /*
     POST: Create a transaction
-    GET: For admins to view all transaction details - may change this route
-        Sort transactions: tentative list
-            sortDateCreated
-            sortDateUpdated
-            sortUserCreated
-            sortAmount
-        Filter transactions: tentative list
-            filterDateCreatedBefore
-            filterDateCreatedAfter
-            filterAmountBelow
-            filterAmountAbove
-    PUT: read csv file into DB
 */
 
 export const POST = async (req:NextRequest) => {

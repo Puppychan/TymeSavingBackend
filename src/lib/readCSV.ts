@@ -17,6 +17,7 @@ async function readCSV(filePath: string): Promise<any[]> {
     records.push(record);
   }
   return records;
+  return records;
 }
 
 export const csvToDB = async (filePath: string, collection: string) => {

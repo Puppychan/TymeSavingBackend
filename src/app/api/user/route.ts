@@ -1,7 +1,6 @@
-export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
+// export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
 
 import { NextRequest, NextResponse } from "next/server";
-// import { useSearchParams } from 'next/navigation';
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
 
@@ -27,7 +26,6 @@ export const GET = async (req: NextRequest) => {
         urlSearchParams.forEach((value, key) => {
             vnpParams[key] = value;
         });
-        console.log(vnpParams);
         try {
             await connectMongoDB();
             // User found. Display their information and all users' information.
