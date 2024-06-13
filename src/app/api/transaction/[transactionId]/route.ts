@@ -3,7 +3,7 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { ITransaction } from "src/models/transaction/interface";
 import Transaction from "src/models/transaction/model";
 
-// IMPORTANT: mongoId here is the transaction's assigned MongoDB ID
+// IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
 /*
     GET: Read one transaction details
@@ -12,10 +12,10 @@ import Transaction from "src/models/transaction/model";
 */
 
 // READ the transaction details
-export const GET = async(req: NextRequest, { params }: { params: { mongoId: string } }) => {
+export const GET = async(req: NextRequest, { params }: { params: { transactionId: string } }) => {
     try{
         await connectMongoDB();
-        const transaction = await Transaction.findOne({ _id: params.mongoId });
+        const transaction = await Transaction.findById({ _id: params.transactionId });
         if (!transaction) {
             return NextResponse.json({ response: "Transaction not found" }, { status: 404 });
         }
@@ -28,12 +28,12 @@ export const GET = async(req: NextRequest, { params }: { params: { mongoId: stri
 }
 
 // UPDATE transaction details
-export const PUT = async(req: NextRequest, { params }: { params: {mongoId: string} }) => {
+export const PUT = async(req: NextRequest, { params }: { params: {transactionId: string} }) => {
     try {
         await connectMongoDB();
   
         const payload = await req.json() as Partial<ITransaction> //payload = newUser
-        const transaction = await Transaction.findOne({ _id: params.mongoId });
+        const transaction = await Transaction.findOne({ _id: params.transactionId });
         if (!transaction) {
           return NextResponse.json({ response: 'Transaction not found' }, { status: 404 });
         }
@@ -44,7 +44,7 @@ export const PUT = async(req: NextRequest, { params }: { params: {mongoId: strin
         });
   
         const updatedTransaction = await Transaction.findOneAndUpdate(
-            { _id: params.mongoId },
+            { _id: params.transactionId },
             { $set: updateQuery },
             {
                 new: true,
@@ -57,13 +57,13 @@ export const PUT = async(req: NextRequest, { params }: { params: {mongoId: strin
         return NextResponse.json({ response: updatedTransaction }, { status: 200 });
     } catch (error: any) {
         console.log('Error updating user:', error);
-        return NextResponse.json({ response: 'Cannot update transaction with id ' + params.mongoId }, { status: 500 });
+        return NextResponse.json({ response: 'Cannot update transaction with id ' + params.transactionId }, { status: 500 });
     }
 }
 
 // DELETE transaction
-export const DELETE = async(req: NextRequest, { params }: { params: { mongoId: string } }) => {
-    const transactionId = params.mongoId;
+export const DELETE = async(req: NextRequest, { params }: { params: { transactionId: string } }) => {
+    const transactionId = params.transactionId;
     try {
         await connectMongoDB();
 

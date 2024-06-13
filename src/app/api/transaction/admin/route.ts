@@ -44,7 +44,7 @@ export const GET = async (req: NextRequest) => {
             // Filter by amount below a certain value
             if (vnpParams.hasOwnProperty('getAmountBelow')) {
                 console.log(vnpParams["getAmountBelow"]);
-                const amount = Number(vnpParams['filterAmountBelow']);
+                const amount = Number(vnpParams['getAmountBelow']);
                 console.log(amount);
                 aggregate.match({ amount: { $lt: amount } });
             }
@@ -52,7 +52,7 @@ export const GET = async (req: NextRequest) => {
             // Filter by amount above a certain value
             if (vnpParams.hasOwnProperty('getAmountAbove')) {
                 console.log(vnpParams["getAmountAbove"]);
-                const amount = Number(vnpParams['filterAmountAbove']);
+                const amount = Number(vnpParams['getAmountAbove']);
                 console.log(amount);
                 aggregate.match({ amount: { $gte: amount } });
             }

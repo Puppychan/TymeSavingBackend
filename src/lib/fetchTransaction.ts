@@ -300,8 +300,8 @@ export const compareToLastMonth = async(currentUserId: string): Promise<{status:
 
         return {
             status: 200,
-            response: { "Income": { "currentIncome": summary.currentMonthIncome, "incomePercentage": incomePercentage}, 
-                        "Expense": { "currentExpense": summary.currentMonthExpense, "expensePercentage": expensePercentage} }
+            response: { "currentIncome": summary.currentMonthIncome, "incomePercentage": incomePercentage, 
+                        "currentExpense": summary.currentMonthExpense, "expensePercentage": expensePercentage }
         };
     } catch (error) {
         console.error('compareToLastMonths: Error fetching transactions:', error);

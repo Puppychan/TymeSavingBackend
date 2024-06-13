@@ -25,7 +25,6 @@ export const GET = async (req: NextRequest) => {
         urlSearchParams.forEach((value, key) => {
             vnpParams[key] = value;
         });
-        console.log(vnpParams);
         try {
             await connectMongoDB();
             // User found. Display their information and all users' information.
