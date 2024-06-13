@@ -300,8 +300,8 @@ export const compareToLastMonth = async(currentUserId: string): Promise<{status:
 
         return {
             status: 200,
-            response: { "currentIncome": summary.currentMonthIncome, "incomePercentage": incomePercentage, 
-                        "currentExpense": summary.currentMonthExpense, "expensePercentage": expensePercentage }
+            response: { "currentIncome": summary.currentMonthIncome, "incomePercentage": incomePercentage.toFixed(2), 
+                        "currentExpense": summary.currentMonthExpense, "expensePercentage": expensePercentage.toFixed(2) }
         };
     } catch (error) {
         console.error('compareToLastMonths: Error fetching transactions:', error);
@@ -361,12 +361,12 @@ export const topCategories = async(transactionType: String, currentUserId: strin
         const top3Summary = top3Categories.map(item => ({
             category: item._id,
             totalAmount: item.totalAmount,
-            percentage: totalExpense ? (item.totalAmount / totalExpense) * 100 : 0
+            percentage: totalExpense ? (item.totalAmount / totalExpense * 100).toFixed(2) : '0.00'
         }));
 
-        // Calculate the percentage for the "Other" category.
-        const top3Percentage = top3Summary.reduce((acc, category) => acc + category.percentage, 0);
-        const otherPercentage = 100 - top3Percentage;
+        // Calculate the percentage for the "Other" category
+        const top3Percentage = top3Summary.reduce((acc, category) => acc + parseFloat(category.percentage), 0);
+        const otherPercentage = (100 - top3Percentage).toFixed(2);
 
         // If there are no transactions so far, return empty object immediately
         if (top3Percentage == 0){
@@ -377,7 +377,7 @@ export const topCategories = async(transactionType: String, currentUserId: strin
         }
 
         // Calculate the total amount for the "Other" category
-        var otherTotal = totalExpense - top3Total;
+        let otherTotal = totalExpense - top3Total;
         if (otherTotal < 0){
             otherTotal = 0;
         }
