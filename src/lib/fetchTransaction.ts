@@ -70,9 +70,9 @@ export const currentMonthTotal = async(type: String, currentUserId: string): Pro
         };
 
         if (result.length > 0) {
-            console.log(`Total amount for type ${type}:`, response.totalAmount);
+            console.log(`currentMonthTotal: Total amount for type ${type}:`, response.totalAmount);
         } else {
-            console.log(`No transactions found for type ${type} in the current month.`);
+            console.log(`currentMonthTotal: No transactions found for type ${type} in the current month.`);
         }
 
         // Return the result
@@ -139,7 +139,7 @@ export const pastMonthsTotal = async (transactionType: String, currentUserId: st
 
         const summary = result.reduce((acc, item) => ({ ...acc, ...item }), {});
 
-        console.log(summary);
+        // console.log(summary);
 
         return {
             status: 200,
@@ -392,7 +392,7 @@ export const topCategories = async(transactionType: String, currentUserId: strin
         // Merge top 3 and Other summaries into a single array
         top3Summary.push(otherSummary);
 
-        console.log(top3Summary);
+        // console.log(top3Summary);
         return {
             status: 200,
             response: top3Summary
@@ -472,11 +472,11 @@ export const netSpend = async (currentUserId: string) =>{
 
         const netSpend = income - expense;
 
-        console.log({
-            currentMonthIncome: income,
-            currentMonthExpense: expense,
-            netSpend: netSpend
-        });
+        // console.log({
+        //     currentMonthIncome: income,
+        //     currentMonthExpense: expense,
+        //     netSpend: netSpend
+        // });
 
         return {
             status: 200,
