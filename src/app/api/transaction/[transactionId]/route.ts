@@ -45,13 +45,15 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
   
         const updatedTransaction = await Transaction.findOneAndUpdate(
             { _id: params.transactionId },
-            { $set: updateQuery },
+            { 
+                $set: updateQuery,
+                editedDate: Date.now()
+            },
             {
                 new: true,
                 runValidators: true,
             }
         );
-        updatedTransaction.editedDate = Date.now();
         console.log('updatedTransaction:', updatedTransaction);
         console.log('updated fields: ', updateQuery);
         return NextResponse.json({ response: updatedTransaction }, { status: 200 });

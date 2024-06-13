@@ -10,7 +10,6 @@ import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } fro
 //     getTransactionType: Income | Expense
 //     getCategory: category name
 //     getDateCreated
-//     getUserId
 // transactions with values in a range
 //     filterDateCreatedBefore: date in iso format
 //     filterDateCreatedAfter: date in iso format
@@ -21,8 +20,9 @@ import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } fro
 //     sortDateUpdated
 //     sortAmount
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req: NextRequest, { params }: { params: { userId: string } }) => {
     try {
+        const userId = params.userId;
         let urlSearchParams = req.nextUrl.searchParams;
         let vnpParams: { [key: string]: string } = {};
         urlSearchParams.forEach((value, key) => {
@@ -32,10 +32,9 @@ export const GET = async (req: NextRequest) => {
         try {
             await connectMongoDB();
             let aggregate = Transaction.aggregate();
-            console.log(urlSearchParams.size);
-            if (urlSearchParams.size == 0){
-                aggregate.sort({ createdDate: 1}); // add a default option
-            }
+            // get matching userId
+            const queryUserId = new mongoose.Types.ObjectId(userId);
+            aggregate.match({ userId: queryUserId });
 // Filter: match properties = value
             // Filter by transaction type
             if (vnpParams.hasOwnProperty('getTransactionType')) {
@@ -61,11 +60,6 @@ export const GET = async (req: NextRequest) => {
                             $lt: endDate
                         }
                     });
-            }
-
-            if (vnpParams.hasOwnProperty("getUserId")){
-                const userId = vnpParams["getUserId"];
-                aggregate.match({ userId: new mongoose.Types.ObjectId(userId)});
             }
 
 // Filter fields: filter fields in range
@@ -94,7 +88,7 @@ export const GET = async (req: NextRequest) => {
             }
 // sort
             let sortField: string = "createdDate";
-            let sortOrder: -1 | 1 = 1;
+            let sortOrder: -1 | 1;
 
             if (vnpParams.hasOwnProperty('sortDateUpdated')) {
                 sortField = "updatedDate";
