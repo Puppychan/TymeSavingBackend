@@ -9,12 +9,12 @@ export const POST = async (req: NextRequest) => {
   try {
     await connectMongoDB();
     const payload = await req.json()
-    const {username, password, email, fullname, phone } = payload
+    const {username, password, email, fullname, phone } = payload;
     const existingUsername = await User.findOne({'username': username }).select("-password");
+    const existingMail = await User.findOne({'email': email }).select("-password");
     if (existingUsername) {
       return NextResponse.json({response: 'This username is already used'}, { status: 400 });
     }
-    const existingMail = await User.findOne({'email': email });
     if (existingMail) {
       return NextResponse.json({response: 'This email is already used'}, { status: 400 });
     }

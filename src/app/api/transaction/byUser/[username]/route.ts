@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
+import User from 'src/models/user/model';
 import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } from 'date-fns';
 
 // GET: For the user to view all their transaction details
@@ -10,7 +11,6 @@ import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } fro
 //     getTransactionType: Income | Expense
 //     getCategory: category name
 //     getDateCreated
-//     getUserId
 // transactions with values in a range
 //     filterDateCreatedBefore: date in iso format
 //     filterDateCreatedAfter: date in iso format
@@ -21,8 +21,9 @@ import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } fro
 //     sortDateUpdated
 //     sortAmount
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req: NextRequest, { params }: { params: { username: string } }) => {
     try {
+        const username = params.username;
         let urlSearchParams = req.nextUrl.searchParams;
         let vnpParams: { [key: string]: string } = {};
         urlSearchParams.forEach((value, key) => {
@@ -31,11 +32,18 @@ export const GET = async (req: NextRequest) => {
         
         try {
             await connectMongoDB();
-            let aggregate = Transaction.aggregate();
-            console.log(urlSearchParams.size);
-            if (urlSearchParams.size == 0){
-                aggregate.sort({ createdDate: 1}); // add a default option
+            // from the username, fetch the user's id
+            // Lookup userId from username
+            const user = await User.findOne({ username: username }).exec();
+            if (!user) {
+                return NextResponse.json({ response: 'User not found' }, { status: 404 });
             }
+            const userId = user._id;
+
+            let aggregate = Transaction.aggregate();
+            // get matching userId
+            const queryUserId = new mongoose.Types.ObjectId(userId);
+            aggregate.match({ userId: queryUserId });
 // Filter: match properties = value
             // Filter by transaction type
             if (vnpParams.hasOwnProperty('getTransactionType')) {
@@ -61,11 +69,6 @@ export const GET = async (req: NextRequest) => {
                             $lt: endDate
                         }
                     });
-            }
-
-            if (vnpParams.hasOwnProperty("getUserId")){
-                const userId = vnpParams["getUserId"];
-                aggregate.match({ userId: new mongoose.Types.ObjectId(userId)});
             }
 
 // Filter fields: filter fields in range
@@ -94,7 +97,7 @@ export const GET = async (req: NextRequest) => {
             }
 // sort
             let sortField: string = "createdDate";
-            let sortOrder: -1 | 1 = 1;
+            let sortOrder: -1 | 1;
 
             if (vnpParams.hasOwnProperty('sortDateUpdated')) {
                 sortField = "updatedDate";
@@ -111,7 +114,6 @@ export const GET = async (req: NextRequest) => {
             }
 
 // Execute the aggregation pipeline
-            // console.log(aggregate);
             let result = await aggregate.exec();
             console.log(result);
 // Format the response
@@ -127,6 +129,7 @@ export const GET = async (req: NextRequest) => {
                 response[monthLabel].transactions.push({
                     // Customize the fields, add more if needed
                     _id: transaction._id,
+                    username: username,
                     type: transaction.type,
                     category: transaction.category,
                     amount: transaction.amount,

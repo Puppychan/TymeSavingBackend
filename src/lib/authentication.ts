@@ -8,7 +8,7 @@ import User from 'src/models/user/model'
 // }
 const JWT = {
   jwt: process.env.JWT_SECRET || '12345-67890-09876-54321',
-  jwtExp: '3d', //3 days
+  jwtExp: '5d', //5 days
 }
 
 export const checkPassword = (passwordInput, passwordHash) => {

@@ -17,15 +17,16 @@ const transactionSchema: Schema = new Schema({
         default: TransactionType.Expense
       },
     amount: {type: Number, default: 0},
-    transactionImages: {type: [String], default: []},
-    payBy: {type: mongoose.Types.ObjectId}, // MongoDB ID of the paying user
+    transactionImages: {type: [String], default: []}, // ORIGINALLY: STRING SEPARATED BY SEMICOLON ;
+    payBy: {type: String}, // payment methods e.g. cash
 
-    // TODO: Enum list of categories. Let users manually input categories for now. Dropdown list later
-    category: {type: String},
+    // Let users manually input categories for now. Dropdown list later
 
     // To be added
-    // savingId: {type: mongoose.Types.ObjectId, default: ''}, // MongoDB ID of the saving group that this transaction is in
-    // budgetId: {type: mongoose.Types.ObjectId, default: ''} // MongoDB ID of the budget group that this transaction is in
+    savingGroupId: {type: mongoose.Types.ObjectId}, // MongoDB ID of the saving group that this transaction is in
+    budgetGroupId: {type: mongoose.Types.ObjectId}, // MongoDB ID of the budget group that this transaction is in
+
+    category: {type: String}
 });
 
 const Transaction = mongoose.models.Transaction || mongoose.model<ITransaction>('Transaction', transactionSchema);
