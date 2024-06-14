@@ -52,10 +52,10 @@ export const GET = async (req: NextRequest) => {
             // 5) By creation date. Since MongoDB id embeds creation time, we can sort by id.
             if (vnpParams.hasOwnProperty('sortCreation') && vnpParams['sortCreation'] === 'ascending' || vnpParams['sortCreation'] === 'descending') {
                 const sortCreationParam = vnpParams['sortCreation'] === 'ascending'? 1:-1;
-                aggregate.sort({ "users._id": sortCreationParam});
+                aggregate.sort({ creationDate: sortCreationParam});
             }
             // Output
-            aggregate.append({ $project: {password: 0}});
+            aggregate.project({ password: 0 });
             let result = await aggregate.exec();
 
             return NextResponse.json({ response: result }, { status: 200 });
