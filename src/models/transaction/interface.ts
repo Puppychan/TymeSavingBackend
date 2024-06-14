@@ -5,6 +5,11 @@ export enum TransactionType{
     Expense = 'Expense'
 }
 
+// TODO: Fixed list of categories here
+export enum Categories {
+
+}
+
 // Interface for transaction document
 export interface ITransaction extends Document {
     // MongoDB IDs
