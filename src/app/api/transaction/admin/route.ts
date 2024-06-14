@@ -111,6 +111,7 @@ export const GET = async (req: NextRequest) => {
             }
 
 // Execute the aggregation pipeline
+            // console.log(aggregate);
             let result = await aggregate.exec();
             console.log(result);
 // Format the response
