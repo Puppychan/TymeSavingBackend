@@ -11,6 +11,7 @@
     "lint": "next lint",
     "data:user": "tsx src/data/addUsers.ts",
     "data:transaction": "tsx src/data/addTransactions.ts",
+    "data:invitation": "tsx src/data/addInvitations.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:watch:user": "jest --watch ./src/tests/user/user.test.ts",
