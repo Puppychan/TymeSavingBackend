@@ -20,13 +20,11 @@ export interface ITransaction extends Document {
     description: string;
     type: TransactionType;
     amount: number;
-    transactionImages: string[];
-    payBy: mongoose.Types.ObjectId; // MongoDB ID of the paying user
+    transactionImages: string[]; // ORIGINALLY: STRING SEPARATED BY SEMICOLON ;
+    payBy: string; // payment methods: cash, Momo, etc.
 
-    // TODO: Enum list of categories
+    savingGroupId: mongoose.Types.ObjectId; // MongoDB ID of the saving group that this transaction is in
+    budgetGroupId: mongoose.Types.ObjectId; // MongoDB ID of the budget group that this transaction is in
+
     category: string;
-
-    // To be added
-    // savingId: mongoose.Types.ObjectId; // MongoDB ID of the saving group that this transaction is in
-    // budgetId: mongoose.Types.ObjectId; // MongoDB ID of the budget group that this transaction is in
 }
