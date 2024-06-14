@@ -105,7 +105,7 @@ export const pastMonthsTotal = async (transactionType: String, currentUserId: st
                 monthStart,
                 monthEnd
             };
-        });
+        }).reverse();
 
         const result = await Promise.all(months.map(async ({ monthLabel, monthStart, monthEnd }) => {
             const [{ totalAmount } = { totalAmount: 0 }] = await Transaction.aggregate([
