@@ -15,9 +15,9 @@ export const POST = async (req:NextRequest) => {
         var {userId, createdDate, editedDate,description, type,amount,
             transactionImages,payBy, category, savingId, budgetId} = payload;
         let newType = TransactionType.Expense;
-            if (type == 'Income'){
-                newType = TransactionType.Income;
-            }
+        if (type == 'Income'){
+            newType = TransactionType.Income;
+        }
         if(!createdDate){
             createdDate = Date.now();
         }
