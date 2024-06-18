@@ -15,6 +15,6 @@ const userInvitationSchema: Schema = new Schema({
     }
 });
 
-const UserInvitation = mongoose.models.Invitation || mongoose.model<IUserInvitation>('UserInvitation', userInvitationSchema);
+const UserInvitation = mongoose.models.UserInvitation || mongoose.model<IUserInvitation>('UserInvitation', userInvitationSchema);
 
 export default UserInvitation;

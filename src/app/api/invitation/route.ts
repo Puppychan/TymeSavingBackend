@@ -26,6 +26,7 @@ export const POST = async(req: NextRequest) => {
         const length = 6; // Adjust length as needed
         let uniqueCodeFound = false;
         let generatedCode = '';
+        // Export all the codes in the document
         const existingInvitations = await Invitation.find({}, 'code').exec();
         const existingCodes = existingInvitations.map(invitation => invitation.code);
         while (!uniqueCodeFound) {
