@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories, netSpend } from "src/lib/fetchTransaction";
