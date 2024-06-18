@@ -1,5 +1,4 @@
-export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
-
+// 'use client'
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
@@ -42,7 +41,7 @@ export const GET = async (req: NextRequest) => {
                 aggregate.sort({ username: sortUsernameParam }) ;
             }
             // 3) Group and sort by role
-            if (vnpParams.hasOwnProperty('sortRole') && vnpParams['sortRole'] === 'ascending') {
+            if (vnpParams.hasOwnProperty('sortRole') && (vnpParams['sortRole'] === 'ascending' || vnpParams['sortRole'] === 'descending')) {
                 aggregate.group({ _id: "$role", users: { $push: "$$ROOT" } });
                 aggregate.unwind("$users");
 

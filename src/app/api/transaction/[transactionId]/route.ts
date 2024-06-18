@@ -77,7 +77,7 @@ export const DELETE = async(req: NextRequest, { params }: { params: { transactio
                 { status: 200 }
             );
         } else {
-            return NextResponse.json({ response: "No such user." }, { status: 400 });
+            return NextResponse.json({ response: "No such transaction." }, { status: 400 });
         }
     } catch (error) {
         console.log(error);

@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories, netSpend } from "src/lib/fetchTransaction";

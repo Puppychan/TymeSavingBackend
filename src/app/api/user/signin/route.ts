@@ -21,11 +21,11 @@ export const POST = async (req: NextRequest) => {
       return NextResponse.json({ response: 'Login credentials invalid. Wrong password' }, { status: 401 });
     }
 
-    let token = newToken(user)
+    let token = newToken(user);
     // Convert the user document to a plain JavaScript object and remove the password field
     let returnUser = user.toObject();
     delete returnUser.password;
-    return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
+    return NextResponse.json({ response: {token: token, user: returnUser} }, { status: 200 });
   } catch (error: any) {
     console.log(error)
     return NextResponse.json({ response: error.message}, { status: 500 });

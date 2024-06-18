@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
-
 /*
     POST: Create a transaction
 */
@@ -16,9 +15,9 @@ export const POST = async (req:NextRequest) => {
         var {userId, createdDate, editedDate,description, type,amount,
             transactionImages,payBy, category, savingId, budgetId} = payload;
         let newType = TransactionType.Expense;
-            if (type == 'Income'){
-                newType = TransactionType.Income;
-            }
+        if (type == 'Income'){
+            newType = TransactionType.Income;
+        }
         if(!createdDate){
             createdDate = Date.now();
         }
