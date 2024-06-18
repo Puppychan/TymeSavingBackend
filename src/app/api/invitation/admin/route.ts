@@ -1,3 +1,7 @@
+import Invitation from "src/models/invitation/model";
+import UserInvitation from "src/models/userInvitation/model";
+
+export const dynamic = 'force-dynamic';
 
 
 /* See all invitations, with the following Sorts/Filters:

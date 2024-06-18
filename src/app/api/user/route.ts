@@ -17,6 +17,7 @@ import User from "src/models/user/model";
     "filterRole": "admin"
 }
 */
+export const dynamic = 'force-dynamic';
 
 export const GET = async (req: NextRequest) => {
     try {
