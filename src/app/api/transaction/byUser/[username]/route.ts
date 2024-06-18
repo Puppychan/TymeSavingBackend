@@ -1,7 +1,9 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
+import User from 'src/models/user/model';
 import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } from 'date-fns';
 
 // GET: For the user to view all their transaction details
@@ -20,9 +22,9 @@ import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } fro
 //     sortDateUpdated
 //     sortAmount
 
-export const GET = async (req: NextRequest, { params }: { params: { userId: string } }) => {
+export const GET = async (req: NextRequest, { params }: { params: { username: string } }) => {
     try {
-        const userId = params.userId;
+        const username = params.username;
         let urlSearchParams = req.nextUrl.searchParams;
         let vnpParams: { [key: string]: string } = {};
         urlSearchParams.forEach((value, key) => {
@@ -31,6 +33,14 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
         
         try {
             await connectMongoDB();
+            // from the username, fetch the user's id
+            // Lookup userId from username
+            const user = await User.findOne({ username: username }).exec();
+            if (!user) {
+                return NextResponse.json({ response: 'User not found' }, { status: 404 });
+            }
+            const userId = user._id;
+
             let aggregate = Transaction.aggregate();
             // get matching userId
             const queryUserId = new mongoose.Types.ObjectId(userId);
@@ -120,6 +130,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 response[monthLabel].transactions.push({
                     // Customize the fields, add more if needed
                     _id: transaction._id,
+                    username: username,
                     type: transaction.type,
                     category: transaction.category,
                     amount: transaction.amount,

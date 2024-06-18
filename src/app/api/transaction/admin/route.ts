@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
@@ -111,6 +112,7 @@ export const GET = async (req: NextRequest) => {
             }
 
 // Execute the aggregation pipeline
+            // console.log(aggregate);
             let result = await aggregate.exec();
             console.log(result);
 // Format the response
