@@ -1,4 +1,4 @@
-import {Document} from 'mongoose';
+import mongoose, {Document} from 'mongoose';
 
 export enum UserRole {
   Admin = 'Admin',
@@ -17,5 +17,11 @@ export interface IUser extends Document {
     // user financial information
     bankAccounts: any[]; //list of bank accounts - specify format later
     userPoints:  any[]; // list of points in different groups - specify format later
+
+    // joined
+    joinedShareBudget: mongoose.Types.ObjectId[]
+    joinedGroupSaving: mongoose.Types.ObjectId[]
+    joinedChallenge: mongoose.Types.ObjectId[]
+
 }
   
