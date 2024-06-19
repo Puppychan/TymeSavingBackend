@@ -7,7 +7,7 @@ export enum UserInvitationStatus{
 }
 
 export interface IUserInvitation extends Document{
-    userId: mongoose.Types.ObjectId, // user ID 
+    userId: mongoose.Types.ObjectId,
     invitationId:  mongoose.Types.ObjectId,
     status: UserInvitationStatus
 }

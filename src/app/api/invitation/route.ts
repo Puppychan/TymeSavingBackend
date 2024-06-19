@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Invitation from "src/models/invitation/model";
 import {InvitationType} from "src/models/invitation/interface"
+import UserInvitation from "src/models/userInvitation/model";
 
 /*
     POST: CREATE a new invitation
@@ -43,24 +44,37 @@ export const POST = async(req: NextRequest) => {
             newType = InvitationType.SharedBudget;
         }
         // Parse users and cancelledUsers: from u1;u2;u3 to [u1, u2, u3]
-        let usersList = [];
-        let cancelledUsersList = [];
-        if(users){
-            usersList = users.split(';').map(link => link.trim());
-        }
-        if(cancelledUsers){
-            cancelledUsersList = cancelledUsers.split(';').map(link => link.trim());
-        }
+        // let usersList = [];
+        // let cancelledUsersList = [];
+        // if(users){
+        //     usersList = users.split(';').map(link => link.trim());
+        // }
+        // if(cancelledUsers){
+        //     cancelledUsersList = cancelledUsers.split(';').map(link => link.trim());
+        // }
         const newInvitation = new Invitation({
             code: generatedCode,
             description: description,
             type: newType,
             groupId: groupId,
-            users: usersList,
-            cancelledUsers: cancelledUsersList
+            users: users ? users : [],
+            cancelledUsers: cancelledUsers ? cancelledUsers : []
         });
         await newInvitation.save();
-        return NextResponse.json({response: newInvitation, status: 200});
+        const newInvitationId = newInvitation._id;
+        if(users){
+            const newUserInvitations = users.map(user => ({
+                userId: user,
+                invitationId: newInvitationId,
+                status: "Pending"
+            }));
+            await UserInvitation.insertMany(newUserInvitations);
+        }
+
+        const insertedUserInvitations = users ? await UserInvitation.find({invitationId: newInvitationId}) : [];
+        return NextResponse.json({response: 
+            [newInvitation, insertedUserInvitations]
+            , status: 200});
     }
     catch (error: any) {
         return NextResponse.json({ response: error.message}, { status: 500 });

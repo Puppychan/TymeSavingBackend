@@ -9,8 +9,8 @@ const invitationSchema: Schema = new Schema({
       enum: Object.values(InvitationType)
     }, // is this invitation for SharedBudget or GroupSaving?
   groupId: mongoose.Types.ObjectId, // object ID for the group that this invitation is in
-  users: [String], // users that have yet to accept the invitation
-  cancelledUsers: [String] // users that have cancelled the invitation
+  users: {type: [String], default: []}, // users that have yet to accept the invitation
+  cancelledUsers: {type: [String], default: []} // users that have cancelled the invitation
 });
 
 const Invitation = mongoose.models.Invitation || mongoose.model<IInvitation>('Invitation', invitationSchema);

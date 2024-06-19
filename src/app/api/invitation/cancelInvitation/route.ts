@@ -8,9 +8,9 @@ import User from "src/models/user/model";
 Param: userId, invitationId  
 Pre-requisite: The user must have been invited i.e. must be in the invitation's 'users' array
 Outcome: 
-- Set UserInvitation.status = Accepted
+- Set UserInvitation.status = Cancelled
 - Remove userId from Invitation.users
-- TODO: SharedBudget/GroupSaving must add this user to its 'users' array
+- Add userId to Invitation.cancelledUsers
 */
 export const POST = async (req: NextRequest) => {
     const payload = await req.json();
@@ -33,24 +33,28 @@ export const POST = async (req: NextRequest) => {
         // User accepts: Deletes from Invitation.users and add to user array of Invitation.groupId
         // Remove the user from the invitation's users array
         invitation.users = pendingUsers.filter((id) => id !== userId);
-
-        // Set UserInvitation.status = Accepted
+        // Add the user to the invitation's cancelledUsers array
+        if(!invitation.cancelledUsers.includes(userId)){
+            invitation.cancelledUsers.push(userId);
+        }
+        // Set UserInvitation.status = Cancelled
         const userInvitation = await UserInvitation.findOne({ userId: userId, invitationId: invitationId });
         if (userInvitation) {
-            userInvitation.status = UserInvitationStatus.Accepted;
+            userInvitation.status = UserInvitationStatus.Cancelled;
             await userInvitation.save();
         } else {
             // Create a new UserInvitation if it doesn't exist
             await UserInvitation.create({
                 userId: userId,
                 invitationId: invitationId,
-                status: UserInvitationStatus.Accepted,
+                status: UserInvitationStatus.Cancelled,
             });
         }
         // Save the updated invitation
         await invitation.save();
-        return NextResponse.json({ response: `User ${userId} accepted invitation ${invitationId}` }, { status: 200 });
+        return NextResponse.json({ response: `User ${userId} cancelled invitation ${invitationId}` }, { status: 200 });
     } catch (error){
         return NextResponse.json({ response: `Error: ${error}` }, { status: 500 });
     }
+    
 }
