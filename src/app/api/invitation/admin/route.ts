@@ -14,5 +14,5 @@ export const dynamic = 'force-dynamic';
     Match:
         getCode
         getGroupType
-        getDescription
+        descriptionContains: when users can only remember parts of the invitation description
 */

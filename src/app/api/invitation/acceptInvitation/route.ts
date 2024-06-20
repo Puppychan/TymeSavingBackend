@@ -10,7 +10,7 @@ Pre-requisite: The user must have been invited i.e. must be in the invitation's 
 Outcome: 
 - Set UserInvitation.status = Accepted
 - Remove userId from Invitation.users
-- TODO: SharedBudget/GroupSaving must add this user to its 'users' array
+- TODO: SharedBudget/GroupSaving add this user to its 'users' array
 */
 export const POST = async (req: NextRequest) => {
     const payload = await req.json();
