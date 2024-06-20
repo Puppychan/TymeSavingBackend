@@ -98,7 +98,7 @@ export const pastMonthsTotal = async (transactionType: String, currentUserId: st
         // length: number of months to show
         const months = Array.from({ length: 12 }, (_, i) => {
             const monthStart = startOfMonth(subMonths(currentDate, i));
-            const monthEnd = i === 0 ? currentDate : endOfMonth(subMonths(currentDate, i)).setHours(23);
+            const monthEnd = i === 0 ? currentDate : endOfMonth(subMonths(currentDate, i));
             const monthLabel = format(monthStart, 'MMM').toUpperCase();; // Format month for labeling
             return {
                 monthLabel,
