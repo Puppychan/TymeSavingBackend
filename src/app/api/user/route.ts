@@ -13,10 +13,10 @@ import User from "src/models/user/model";
       + sortCreation (ascending/descending): order the users by creation date
       + filterRole (customer/admin): only show customer/admin users
   {
-    "sortUsername": "ascending",
-    "sortRole": "true",
-    "sortCreation": "ascending",
-    "filterRole": "admin"
+    sortUsername=ascending
+    &sortRole=ascending
+    &sortCreation=ascending
+    &filterRole=Admin
 }
 */
 

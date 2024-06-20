@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
 import User from 'src/models/user/model';
-import { format, endOfDay } from 'date-fns';
+import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay } from 'date-fns';
 
 // GET: For the user to view all their transaction details
 // Filter transactions: 
@@ -22,9 +22,9 @@ import { format, endOfDay } from 'date-fns';
 //     sortDateUpdated
 //     sortAmount
 
-export const GET = async (req: NextRequest, { params }: { params: { username: string } }) => {
+export const GET = async (req: NextRequest, { params }: { params: { userId: string } }) => {
     try {
-        const username = params.username;
+        const userId = params.userId;
         let urlSearchParams = req.nextUrl.searchParams;
         let vnpParams: { [key: string]: string } = {};
         urlSearchParams.forEach((value, key) => {
@@ -33,14 +33,6 @@ export const GET = async (req: NextRequest, { params }: { params: { username: st
         
         try {
             await connectMongoDB();
-            // from the username, fetch the user's id
-            // Lookup userId from username
-            const user = await User.findOne({ username: username }).exec();
-            if (!user) {
-                return NextResponse.json({ response: 'User not found' }, { status: 404 });
-            }
-            const userId = user._id;
-
             let aggregate = Transaction.aggregate();
             // get matching userId
             const queryUserId = new mongoose.Types.ObjectId(userId);
@@ -60,9 +52,29 @@ export const GET = async (req: NextRequest, { params }: { params: { username: st
 
             // get all transactions within a date
             if (vnpParams.hasOwnProperty('getDateCreated')) {
-                const dateCreated = new Date(vnpParams['getDateCreated']);
-                const startDate = new Date(dateCreated.setUTCHours(0));
-                const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
+                // get all transactions within a specific date
+                const getDate = vnpParams['getDateCreated'];
+                const dateParts = getDate.split('-');
+                let startDate: Date, endDate: Date;
+
+                if (dateParts.length === 1) {
+                    // Year
+                    const year = parseInt(dateParts[0]);
+                    startDate = startOfYear(new Date(year, 0));
+                    endDate = endOfYear(new Date(year, 0));
+                } else if (dateParts.length === 2) {
+                    // Year and Month
+                    const year = parseInt(dateParts[0]);
+                    const month = parseInt(dateParts[1]) - 1;
+                    startDate = startOfMonth(new Date(year, month));
+                    endDate = endOfMonth(new Date(year, month));
+                } else if (dateParts.length === 3) {
+                    // Year, Month and Day
+                    startDate = new Date(new Date(getDate).setUTCHours(0));
+                    endDate = new Date(new Date(endOfDay(getDate)).setUTCHours(23));
+                }
+                // const startDate = new Date(dateCreated.setUTCHours(0));
+                // const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
                 aggregate.match(
                     { createdDate: 
                         {
@@ -130,7 +142,7 @@ export const GET = async (req: NextRequest, { params }: { params: { username: st
                 response[monthLabel].transactions.push({
                     // Customize the fields, add more if needed
                     _id: transaction._id,
-                    username: username,
+                    userId: userId,
                     type: transaction.type,
                     category: transaction.category,
                     amount: transaction.amount,
