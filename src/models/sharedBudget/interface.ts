@@ -11,5 +11,4 @@ export interface ISharedBudget extends Document {
     concurrentAmount: number;
     createdDate: Date;
     endDate: Date;
-    participants: IUser[];
 }
