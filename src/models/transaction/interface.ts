@@ -5,9 +5,30 @@ export enum TransactionType{
     Expense = 'Expense'
 }
 
-// TODO: Fixed list of categories here
-export enum Categories {
-
+// Fixed list of categories
+export enum TransactionCategory {
+    DineOut = "Dine out",
+    Shopping = "Shopping",
+    Travel = "Travel",
+    Entertainment = "Entertainment",
+    Personal = "Personal",
+    Transportation = "Transportation",
+    RentMortgage = "Rent/Mortgage",
+    Utilities = "Utilities",
+    BillsFees = "Bills & Fees",
+    Health = "Health",
+    Education = "Education",
+    Groceries = "Groceries",
+    Gifts = "Gifts",
+    Work = "Work",
+    OtherExpenses = "Other expenses",
+    FreelanceWork = "Freelance Work",
+    Salary = "Salary",
+    Interest = "Interest",
+    InvestmentIncome = "Investment Income",
+    BusinessProfits = "Business Profits",
+    Incomingtransfer = "Incoming transfer",
+    OtherIncomes = "Other incomes"
 }
 
 // Interface for transaction document

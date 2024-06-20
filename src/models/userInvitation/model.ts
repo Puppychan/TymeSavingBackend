@@ -8,9 +8,13 @@ import { IUserInvitation, UserInvitationStatus } from './interface';
 const userInvitationSchema: Schema = new Schema({
     userId: mongoose.Types.ObjectId, // user ID 
     invitationId:  mongoose.Types.ObjectId,
-    status: UserInvitationStatus
+    status: {
+        type: String,
+        enum: Object.values(UserInvitationStatus),
+        required: true
+    }
 });
 
-const UserInvitation = mongoose.models.Invitation || mongoose.model<IUserInvitation>('UserInvitation', userInvitationSchema);
+const UserInvitation = mongoose.models.UserInvitation || mongoose.model<IUserInvitation>('UserInvitation', userInvitationSchema);
 
 export default UserInvitation;

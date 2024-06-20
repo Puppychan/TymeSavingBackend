@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { ITransaction, TransactionType } from './interface';
+import { ITransaction, TransactionType, TransactionCategory } from './interface';
 
 // Define the schema for the user
 const transactionSchema: Schema = new Schema({
@@ -26,7 +26,11 @@ const transactionSchema: Schema = new Schema({
     savingGroupId: {type: mongoose.Types.ObjectId}, // MongoDB ID of the saving group that this transaction is in
     budgetGroupId: {type: mongoose.Types.ObjectId}, // MongoDB ID of the budget group that this transaction is in
 
-    category: {type: String}
+    category: {
+      type: String,
+      enum: Object.values(TransactionCategory),
+      required: true
+  }
 });
 
 const Transaction = mongoose.models.Transaction || mongoose.model<ITransaction>('Transaction', transactionSchema);
