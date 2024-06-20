@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
-import { format, endOfDay } from 'date-fns';
+import { format, endOfDay, startOfYear, endOfYear, startOfMonth, endOfMonth } from 'date-fns';
 export const dynamic = 'force-dynamic';
 
 // GET: For the user to view all their transaction details
@@ -52,9 +52,29 @@ export const GET = async (req: NextRequest) => {
 
             // get all transactions within a date
             if (vnpParams.hasOwnProperty('getDateCreated')) {
-                const dateCreated = new Date(vnpParams['getDateCreated']);
-                const startDate = new Date(dateCreated.setUTCHours(0));
-                const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
+                // get all transactions within a specific date
+                const getDate = vnpParams['getDateCreated'];
+                const dateParts = getDate.split('-');
+                let startDate: Date, endDate: Date;
+
+                if (dateParts.length === 1) {
+                    // Year
+                    const year = parseInt(dateParts[0]);
+                    startDate = startOfYear(new Date(year, 0));
+                    endDate = endOfYear(new Date(year, 0));
+                } else if (dateParts.length === 2) {
+                    // Year and Month
+                    const year = parseInt(dateParts[0]);
+                    const month = parseInt(dateParts[1]) - 1;
+                    startDate = startOfMonth(new Date(year, month));
+                    endDate = endOfMonth(new Date(year, month));
+                } else if (dateParts.length === 3) {
+                    // Year, Month and Day
+                    startDate = new Date(new Date(getDate).setUTCHours(0));
+                    endDate = new Date(new Date(endOfDay(getDate)).setUTCHours(23));
+                }
+                // const startDate = new Date(dateCreated.setUTCHours(0));
+                // const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
                 aggregate.match(
                     { createdDate: 
                         {
