@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
 import User from 'src/models/user/model';
-import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay } from 'date-fns';
+import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay, formatISO } from 'date-fns';
 export const dynamic = 'force-dynamic';
 
 // GET: For the user to view all their transaction details
@@ -60,18 +60,18 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 if (dateParts.length === 1) {
                     // Year
                     const year = parseInt(dateParts[0]);
-                    startDate = startOfYear(new Date(year, 0));
-                    endDate = endOfYear(new Date(year, 0));
+                    startDate = new Date(formatISO(startOfYear(new Date(year, 0))));
+                    endDate = new Date(formatISO(endOfYear(new Date(year, 0))));
                 } else if (dateParts.length === 2) {
                     // Year and Month
                     const year = parseInt(dateParts[0]);
                     const month = parseInt(dateParts[1]) - 1;
-                    startDate = startOfMonth(new Date(year, month));
-                    endDate = endOfMonth(new Date(year, month));
+                    startDate = new Date(formatISO(startOfMonth(new Date(year, month))));
+                    endDate = new Date(formatISO(endOfMonth(new Date(year, month))));
                 } else if (dateParts.length === 3) {
                     // Year, Month and Day
-                    startDate = new Date(new Date(getDate).setUTCHours(0));
-                    endDate = new Date(new Date(endOfDay(getDate)).setUTCHours(23));
+                    startDate = new Date(formatISO(startOfDay(getDate)));
+                    endDate = new Date(formatISO((endOfDay(getDate))));
                 }
                 // const startDate = new Date(dateCreated.setUTCHours(0));
                 // const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
@@ -79,7 +79,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                     { createdDate: 
                         {
                             $gte: startDate,
-                            $lt: endDate
+                            $lte: endDate
                         }
                     });
             }

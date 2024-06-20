@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
+import { formatISO } from "date-fns";
 /*
     POST: Create a transaction
 */
@@ -19,10 +20,10 @@ export const POST = async (req:NextRequest) => {
             newType = TransactionType.Income;
         }
         if(!createdDate){
-            createdDate = Date.now();
+            createdDate = new Date(formatISO(Date.now()));
         }
         if(!editedDate){
-            editedDate = Date.now();
+            editedDate = new Date(formatISO(Date.now()));
         }
         const newTransaction = new Transaction({
             userId: userId,
