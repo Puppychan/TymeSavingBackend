@@ -30,7 +30,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
 
       return NextResponse.json({ response: "Removed member successfully" }, { status: 200 });
   } catch (error: any) {
-    console.log('Error updating user:', error);
+    console.log('Error removing member:', error);
     return NextResponse.json({ response: 'Failed to remove member'}, { status: 500 });
   }
 };

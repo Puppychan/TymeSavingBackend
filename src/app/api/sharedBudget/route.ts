@@ -1,6 +1,5 @@
 'use client'
 export const dynamic = 'force-dynamic';
-import { useSearchParams } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import SharedBudget from "src/models/sharedBudget/model";
@@ -41,30 +40,5 @@ export const POST = async (req: NextRequest) => {
   } catch (error: any) {
     console.log(error)
     return NextResponse.json({ response: 'Failed to create shared budget'}, { status: 500 });
-  }
-};
-
-
-// GET: get shared budget information
-export const GET = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
-  try {
-      const searchParams = useSearchParams()
-      const userId = searchParams.get('userId')
-
-      await connectMongoDB();
-      
-      const sharedBudget = await SharedBudget.findById(params.sharedBudgetId)
-      if (!sharedBudget) {
-        return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
-      }
-
-      const joinedShareBudget = await SharedBudgetParticipation.find({ user: userId })
-                                      .select('-user')
-                                      .populate('sharedBudget')
-
-      return NextResponse.json({ response: joinedShareBudget }, { status: 200 });
-  } catch (error: any) {
-    console.log('Error updating user:', error);
-    return NextResponse.json({ response: 'Failed to get shared budget'}, { status: 500 });
   }
 };
