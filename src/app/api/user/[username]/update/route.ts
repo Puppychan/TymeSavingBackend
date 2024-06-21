@@ -48,9 +48,9 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       );
       console.log('updatedUser:', updatedUser);
 
-      let token = newToken(user)
+      let token = newToken(updatedUser);
       // Convert the user document to a plain JavaScript object and remove the password field
-      let returnUser = user.toObject();
+      let returnUser = updatedUser.toObject();
       delete returnUser.password;
       // return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
       return NextResponse.json({ response: returnUser }, { status: 200 });

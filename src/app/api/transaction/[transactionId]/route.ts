@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { ITransaction } from "src/models/transaction/interface";
 import Transaction from "src/models/transaction/model";
+import { addHours } from 'date-fns'
 
 // IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
@@ -47,7 +48,7 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
             { _id: params.transactionId },
             { 
                 $set: updateQuery,
-                editedDate: Date.now()
+                editedDate: addHours(Date.now(), 7)
             },
             {
                 new: true,
@@ -77,7 +78,7 @@ export const DELETE = async(req: NextRequest, { params }: { params: { transactio
                 { status: 200 }
             );
         } else {
-            return NextResponse.json({ response: "No such user." }, { status: 400 });
+            return NextResponse.json({ response: "No such transaction." }, { status: 400 });
         }
     } catch (error) {
         console.log(error);

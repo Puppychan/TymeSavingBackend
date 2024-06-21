@@ -1,9 +1,10 @@
-export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
-import { startOfMonth, format, subMonths, endOfMonth, startOfDay, endOfDay } from 'date-fns';
+import User from 'src/models/user/model';
+import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay, formatISO } from 'date-fns';
+export const dynamic = 'force-dynamic';
 
 // GET: For the user to view all their transaction details
 // Filter transactions: 
@@ -51,14 +52,34 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
             // get all transactions within a date
             if (vnpParams.hasOwnProperty('getDateCreated')) {
-                const dateCreated = new Date(vnpParams['getDateCreated']);
-                const startDate = new Date(dateCreated.setUTCHours(0));
-                const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
+                // get all transactions within a specific date
+                const getDate = vnpParams['getDateCreated'];
+                const dateParts = getDate.split('-');
+                let startDate: Date, endDate: Date;
+
+                if (dateParts.length === 1) {
+                    // Year
+                    const year = parseInt(dateParts[0]);
+                    startDate = new Date(formatISO(startOfYear(new Date(year, 0))));
+                    endDate = new Date(formatISO(endOfYear(new Date(year, 0))));
+                } else if (dateParts.length === 2) {
+                    // Year and Month
+                    const year = parseInt(dateParts[0]);
+                    const month = parseInt(dateParts[1]) - 1;
+                    startDate = new Date(formatISO(startOfMonth(new Date(year, month))));
+                    endDate = new Date(formatISO(endOfMonth(new Date(year, month))));
+                } else if (dateParts.length === 3) {
+                    // Year, Month and Day
+                    startDate = new Date(formatISO(startOfDay(getDate)));
+                    endDate = new Date(formatISO((endOfDay(getDate))));
+                }
+                // const startDate = new Date(dateCreated.setUTCHours(0));
+                // const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
                 aggregate.match(
                     { createdDate: 
                         {
                             $gte: startDate,
-                            $lt: endDate
+                            $lte: endDate
                         }
                     });
             }
@@ -66,13 +87,13 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 // Filter fields: filter fields in range
             // Filter by createdDate before a certain date
             if (vnpParams.hasOwnProperty('filterDateCreatedBefore')) {
-                const date = new Date(vnpParams['filterDateCreatedBefore']);
+                const date = new Date(formatISO((vnpParams['filterDateCreatedBefore'])));
                 aggregate.match({ createdDate: { $lt: date } });
             }
 
             // Filter by createdDate after a certain date
             if (vnpParams.hasOwnProperty('filterDateCreatedAfter')) {
-                const date = new Date(vnpParams['filterDateCreatedAfter']);
+                const date = new Date(formatISO(vnpParams['filterDateCreatedAfter']));
                 aggregate.match({ createdDate: { $gte: date } });
             }
 
@@ -87,7 +108,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 const amount = Number(vnpParams['getAmountAbove']);
                 aggregate.match({ amount: { $gte: amount } });
             }
-// sort
+// Sort
             let sortField: string = "createdDate";
             let sortOrder: -1 | 1;
 
@@ -112,7 +133,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
             let response: { [key: string]: any } = {};
 
             result.forEach((transaction: any) => {
-                const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
+                // Handle cases on the first of each month
+                const monthLabel = format(new Date(formatISO((transaction.createdDate))), 'MMM').toUpperCase();
                 if (!response[monthLabel]) {
                     response[monthLabel] = {
                         transactions: []
@@ -121,6 +143,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 response[monthLabel].transactions.push({
                     // Customize the fields, add more if needed
                     _id: transaction._id,
+                    userId: userId,
                     type: transaction.type,
                     category: transaction.category,
                     amount: transaction.amount,
@@ -133,12 +156,12 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 response[monthLabel].transactions.sort((a: any, b: any) => {
                     var aValue: number, bValue: number;
                     if(sortField == "createdDate"){
-                        aValue = new Date(a.createdDate).getTime();
-                        bValue = new Date(b.createdDate).getTime();
+                        aValue = new Date(formatISO(a.createdDate)).getTime();
+                        bValue = new Date(formatISO(b.createdDate)).getTime();
                     }
                     else if (sortField == "updatedDate"){
-                        aValue = new Date(a.updatedDate).getTime();
-                        bValue = new Date(b.updatedDate).getTime();
+                        aValue = new Date(formatISO(a.updatedDate)).getTime();
+                        bValue = new Date(formatISO(b.updatedDate)).getTime();
                     }
                     else if (sortField == "amount"){
                         aValue = a.amount;

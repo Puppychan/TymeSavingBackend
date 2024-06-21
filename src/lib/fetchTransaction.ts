@@ -1,6 +1,7 @@
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
-import { startOfMonth, endOfMonth, subMonths, format } from 'date-fns';
+import { startOfMonth, endOfMonth, subMonths, format, formatISO } from 'date-fns';
+import { localDate } from './datetime';
 import { PipelineStage } from 'mongoose';
 import mongoose from 'mongoose';
 
@@ -28,12 +29,14 @@ import mongoose from 'mongoose';
 //      params: userId
 
 
+
 // total expense/income of current month: From the 1st to the current date
 // return amount + month
 export const currentMonthTotal = async(type: String, currentUserId: string): Promise<{status: number, response: any}> =>{
     try {    
-        const currentDate = new Date();
-        const firstDayOfMonth = startOfMonth(currentDate);
+        const currentDate = formatISO(new Date());
+        const firstDayOfMonth = localDate(startOfMonth(currentDate));
+        const lastDayOfMonth = localDate(endOfMonth(currentDate));
         const currentMonth = format(currentDate, 'MMM').toUpperCase(); // get JUN instead of Jun
         await connectMongoDB();
         const userId = new mongoose.Types.ObjectId(currentUserId);
@@ -43,7 +46,7 @@ export const currentMonthTotal = async(type: String, currentUserId: string): Pro
                 $match: {
                     createdDate: {
                         $gte: firstDayOfMonth,
-                        $lt: currentDate
+                        $lte: lastDayOfMonth
                     },
                     type: type, 
                     userId: userId
@@ -94,18 +97,18 @@ export const pastMonthsTotal = async (transactionType: String, currentUserId: st
     try {
         await connectMongoDB();
         const userId = new mongoose.Types.ObjectId(currentUserId);
-        const currentDate = new Date();
+        const currentDate = localDate(new Date()); //string
         // length: number of months to show
         const months = Array.from({ length: 12 }, (_, i) => {
-            const monthStart = startOfMonth(subMonths(currentDate, i));
-            const monthEnd = i === 0 ? currentDate : endOfMonth(subMonths(currentDate, i));
+            const monthStart = localDate(startOfMonth(subMonths(currentDate, i)));
+            const monthEnd = i === 0 ? currentDate : localDate(endOfMonth(subMonths(currentDate, i)));
             const monthLabel = format(monthStart, 'MMM').toUpperCase();; // Format month for labeling
             return {
                 monthLabel,
                 monthStart,
                 monthEnd
             };
-        });
+        }).reverse();
 
         const result = await Promise.all(months.map(async ({ monthLabel, monthStart, monthEnd }) => {
             const [{ totalAmount } = { totalAmount: 0 }] = await Transaction.aggregate([
@@ -113,7 +116,7 @@ export const pastMonthsTotal = async (transactionType: String, currentUserId: st
                     $match: {
                         createdDate: {
                             $gte: monthStart,
-                            $lt: monthEnd
+                            $lte: monthEnd
                         },
                         type: transactionType, 
                         userId: userId
@@ -161,10 +164,11 @@ export const compareToLastMonth = async(currentUserId: string): Promise<{status:
     try {
         await connectMongoDB();
         const userId = new mongoose.Types.ObjectId(currentUserId);
-        const currentDate = new Date();
-        const firstDayOfThisMonth = startOfMonth(currentDate);
-        const firstDayOfLastMonth = startOfMonth(subMonths(currentDate, 1));
-        const endOfLastMonth = endOfMonth(subMonths(currentDate, 1));
+        const currentDate = localDate(new Date());
+        const firstDayOfThisMonth = localDate(startOfMonth(currentDate));
+        const firstDayOfLastMonth = localDate(startOfMonth(subMonths(currentDate, 1)));
+        const endOfThisMonth = localDate(endOfMonth(currentDate));
+        const endOfLastMonth = localDate(endOfMonth(subMonths(currentDate, 1)));
         const pipeline = [
             {
                 $facet: {
@@ -174,7 +178,7 @@ export const compareToLastMonth = async(currentUserId: string): Promise<{status:
                                 type: 'Income',
                                 createdDate: {
                                     $gte: firstDayOfThisMonth,
-                                    $lt: currentDate
+                                    $lt: endOfThisMonth
                                 }, 
                                 userId: userId
                             }
@@ -222,7 +226,7 @@ export const compareToLastMonth = async(currentUserId: string): Promise<{status:
                                 type: 'Expense',
                                 createdDate: {
                                     $gte: firstDayOfThisMonth,
-                                    $lt: currentDate
+                                    $lt: endOfThisMonth
                                 }
                                 , userId: userId
                             }
@@ -319,8 +323,11 @@ export const topCategories = async(transactionType: String, currentUserId: strin
     try {
         await connectMongoDB();
         const userId = new mongoose.Types.ObjectId(currentUserId);
-        const currentDate = new Date();
-        const firstDayOfMonth = startOfMonth(currentDate);
+        const currentDate = localDate(new Date());
+        const firstDayOfMonth = localDate(startOfMonth(currentDate));
+        const lastDayOfMonth = localDate((endOfMonth(currentDate)));
+        // console.log(firstDayOfMonth, lastDayOfMonth);
+        // console.log(formatISO(firstDayOfMonth), formatISO(lastDayOfMonth));
         // First aggregation to get all categories with their total amounts
         const categoriesPipeline: PipelineStage[] = [
             {
@@ -329,7 +336,7 @@ export const topCategories = async(transactionType: String, currentUserId: strin
                     userId: userId,
                     createdDate: {
                         $gte: firstDayOfMonth,
-                        $lt: currentDate
+                        $lt: lastDayOfMonth
                     }
                 }
             },
@@ -409,8 +416,9 @@ export const topCategories = async(transactionType: String, currentUserId: strin
 export const netSpend = async (currentUserId: string) =>{
     try {
         await connectMongoDB();
-        const currentDate = new Date();
-        const firstDayOfThisMonth = startOfMonth(currentDate);
+        const currentDate = localDate(new Date());
+        const firstDayOfThisMonth = localDate(startOfMonth(currentDate));
+        const lastDayOfThisMonth = localDate(endOfMonth(currentDate));
         const userId = new mongoose.Types.ObjectId(currentUserId);
         const pipeline = [
             {
@@ -421,7 +429,7 @@ export const netSpend = async (currentUserId: string) =>{
                                 type: 'Income',
                                 createdDate: {
                                     $gte: firstDayOfThisMonth,
-                                    $lt: currentDate
+                                    $lte: lastDayOfThisMonth
                                 }, 
                                 userId: userId
                             }
@@ -445,7 +453,7 @@ export const netSpend = async (currentUserId: string) =>{
                                 type: 'Expense',
                                 createdDate: {
                                     $gte: firstDayOfThisMonth,
-                                    $lt: currentDate
+                                    $lte: lastDayOfThisMonth
                                 }, 
                                 userId: userId
                             }
@@ -471,12 +479,6 @@ export const netSpend = async (currentUserId: string) =>{
         const expense = result[0].currentMonthExpense.length > 0 ? result[0].currentMonthExpense[0].totalAmount : 0;
 
         const netSpend = income - expense;
-
-        // console.log({
-        //     currentMonthIncome: income,
-        //     currentMonthExpense: expense,
-        //     netSpend: netSpend
-        // });
 
         return {
             status: 200,

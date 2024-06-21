@@ -13,9 +13,9 @@ export interface IUser extends Document {
     fullname: string;
     phone: string;
     role: UserRole;
-    
+    creationDate: Date;
     // user financial information
-    bankAccounts: any[]; //list of bank accounts - specify format later
-    userPoints:  any[]; // list of points in different groups - specify format later
+    // bankAccounts: any[]; //list of bank accounts - specify format later
+    // userPoints:  any[]; // list of points in different groups - specify format later
 }
   

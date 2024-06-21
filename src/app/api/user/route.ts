@@ -1,5 +1,4 @@
-export const dynamic = 'force-dynamic'; // <- add this to force dynamic render
-
+// 'use client'
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
@@ -12,12 +11,13 @@ import User from "src/models/user/model";
       + sortCreation (ascending/descending): order the users by creation date
       + filterRole (customer/admin): only show customer/admin users
   {
-    "sortUsername": "ascending",
-    "sortRole": "true",
-    "sortCreation": "ascending",
-    "filterRole": "admin"
+    sortUsername=ascending
+    &sortRole=ascending
+    &sortCreation=ascending
+    &filterRole=Admin
 }
 */
+export const dynamic = 'force-dynamic';
 
 export const GET = async (req: NextRequest) => {
     try {
@@ -42,7 +42,7 @@ export const GET = async (req: NextRequest) => {
                 aggregate.sort({ username: sortUsernameParam }) ;
             }
             // 3) Group and sort by role
-            if (vnpParams.hasOwnProperty('sortRole') && vnpParams['sortRole'] === 'ascending') {
+            if (vnpParams.hasOwnProperty('sortRole') && (vnpParams['sortRole'] === 'ascending' || vnpParams['sortRole'] === 'descending')) {
                 aggregate.group({ _id: "$role", users: { $push: "$$ROOT" } });
                 aggregate.unwind("$users");
 
@@ -53,10 +53,10 @@ export const GET = async (req: NextRequest) => {
             // 5) By creation date. Since MongoDB id embeds creation time, we can sort by id.
             if (vnpParams.hasOwnProperty('sortCreation') && vnpParams['sortCreation'] === 'ascending' || vnpParams['sortCreation'] === 'descending') {
                 const sortCreationParam = vnpParams['sortCreation'] === 'ascending'? 1:-1;
-                aggregate.sort({ "users._id": sortCreationParam});
+                aggregate.sort({ creationDate: sortCreationParam});
             }
             // Output
-            aggregate.append({ $project: {password: 0}});
+            aggregate.project({ password: 0 });
             let result = await aggregate.exec();
 
             return NextResponse.json({ response: result }, { status: 200 });
