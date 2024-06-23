@@ -1,5 +1,23 @@
 import SharedBudget from "src/models/sharedBudget/model"
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model"
+import Transaction from "src/models/transaction/model"
+
+export async function checkDeletableSharedBudget(sharedBudgetId) : Promise<boolean> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const associated = await Transaction.aggregate([
+        { $match: { budgetGroupId: sharedBudgetId } },
+      ])
+      
+      if (associated.length >= 0) resolve(false)
+      resolve(true)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
+}
 
 export async function verifyMember(userId, sharedBudgetId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
