@@ -1,8 +1,7 @@
-'use client'
-export const dynamic = 'force-dynamic';
 import { startSession } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyAuth } from "src/lib/authentication";
 import { checkDeletableSharedBudget } from "src/lib/sharedBudgetUtils";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
@@ -14,17 +13,21 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
   dbSession.startTransaction();
 
   try {
-      const searchParams = req.nextUrl.searchParams
-      const userId = searchParams.get('userId')
-
       await connectMongoDB();
+
+      const verification = await verifyAuth(req.headers)
+      if (verification.status !== 200) {
+        return NextResponse.json({ response: verification.response }, { status: verification.status });
+      }
+
+      const authUser = verification.response;
 
       const sharedBudget = await SharedBudget.findById(params.sharedBudgetId)
       if (!sharedBudget) {
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      if (sharedBudget.hostBy !== userId) {
+      if (authUser._id !== sharedBudget.hostBy) {
         return NextResponse.json({ response: 'Only the Host can delete this shared budget' }, { status: 401 });
       }
 

@@ -1,6 +1,4 @@
 import mongoose, {Document} from 'mongoose';
-import { IUser } from '../user/interface';
-
 
 // Interface for Shared Budget document
 export interface ISharedBudget extends Document {

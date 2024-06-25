@@ -1,7 +1,6 @@
-'use client'
-export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyAuth } from "src/lib/authentication";
 import { verifyMember } from "src/lib/sharedBudgetUtils";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
@@ -11,18 +10,17 @@ import User from "src/models/user/model";
 // GET: get the member list of a shared budget (including host and members)
 export const GET = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
   try {
-      const searchParams = req.nextUrl.searchParams
-      const userId = searchParams.get('userId')
-
       await connectMongoDB();
 
-      const user = await User.findOne({ _id: userId });
-      if (!user) {
-        return NextResponse.json({ response: 'User not found' }, { status: 404 });
+      const verification = await verifyAuth(req.headers)
+      if (verification.status !== 200) {
+        return NextResponse.json({ response: verification.response }, { status: verification.status });
       }
 
-      if (user.role !== UserRole.Admin) {
-        const isMember = await verifyMember(userId, params.sharedBudgetId)
+      const authUser = verification.response;
+
+      if (authUser.role !== UserRole.Admin) {
+        const isMember = await verifyMember(authUser._id, params.sharedBudgetId)
         if (!isMember)
           return NextResponse.json({ response: 'This user is neither an admin nor a member of the shared budget' }, { status: 401 });
       }

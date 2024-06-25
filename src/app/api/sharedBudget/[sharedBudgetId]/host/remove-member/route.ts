@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyAuth } from "src/lib/authentication";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 import User from "src/models/user/model";
@@ -8,19 +9,27 @@ import User from "src/models/user/model";
 export const DELETE = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
   try {
       await connectMongoDB();
+
+      const verification = await verifyAuth(req.headers)
+      if (verification.status !== 200) {
+        return NextResponse.json({ response: verification.response }, { status: verification.status });
+      }
+
+      const authUser = verification.response;
+
       const payload = await req.json()
-      const { hostId, memberId } = payload
+      const { memberId } = payload
 
       const sharedBudget = await SharedBudget.findById(params.sharedBudgetId)
       if (!sharedBudget) {
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      if (sharedBudget.hostBy !== hostId) {
+      if (authUser._id !== sharedBudget.hostBy) {
         return NextResponse.json({ response: 'Only the Host can remove a member' }, { status: 401 });
       }
 
-      if (hostId === memberId) {
+      if (memberId === sharedBudget.hostBy) {
         return NextResponse.json({ response: 'Host cannot be removed' }, { status: 400 });
       }
 

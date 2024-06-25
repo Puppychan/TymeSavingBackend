@@ -24,6 +24,6 @@ const sharedBudgetParticipationSchema: Schema = new Schema({
     }
 });
 
-const SharedBudgetParticipation = mongoose.models.SharedBudget || mongoose.model<ISharedBudgetParticipation>('SharedBudgetParticipation', sharedBudgetParticipationSchema);
+const SharedBudgetParticipation = mongoose.models.SharedBudgetParticipation || mongoose.model<ISharedBudgetParticipation>('SharedBudgetParticipation', sharedBudgetParticipationSchema);
 
 export default SharedBudgetParticipation;

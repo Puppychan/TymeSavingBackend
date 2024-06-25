@@ -1,44 +1,54 @@
-'use client'
-export const dynamic = 'force-dynamic';
+import { startSession } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyAuth } from "src/lib/authentication";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
-import User from "src/models/user/model";
 
 export const POST = async (req: NextRequest) => {
+  const dbSession = await startSession();
+  dbSession.startTransaction();
+
   try {
     await connectMongoDB();
-    const payload = await req.json()
-    const { hostedBy, name, description, amount , endDate } = payload
-    const user = await User.findOne({ _id: hostedBy });
-    if (!user) {
-      return NextResponse.json({ response: "Host User not found" }, { status: 404 });
-    }
     
+    const verification = await verifyAuth(req.headers)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
+    const user = verification.response;
+
+    const payload = await req.json()
+    const { name, description, amount , endDate } = payload
+
     // Create a new shared budget document
-    const newSharedBudget = new SharedBudget({
-      hostedBy: hostedBy,
+    const newSharedBudget = await SharedBudget.create([{
+      hostedBy: user._id,
       name: name,
       description: description,
       amount: amount,
       concurrentAmount: 0,  
       endDate: endDate
-    });
+    }], {session: dbSession});
 
-    await newSharedBudget.save(); // Save the new shared budget to the database
+    // await newSharedBudget.save(); // Save the new shared budget to the database
 
-    const newParticipation = new SharedBudgetParticipation({
+    const newParticipation = await SharedBudgetParticipation.create([{
       user: user._id,
-      sharedBudget: newSharedBudget._id,
+      sharedBudget: newSharedBudget[0]._id,
       isHost: true
-    })
+    }], {session: dbSession});
 
-    await newParticipation.save()
+    await dbSession.commitTransaction();  // Commit the transaction
+    dbSession.endSession();  // End the session
 
     return  NextResponse.json({ response: newSharedBudget }, { status: 200 });
   } catch (error: any) {
-    console.log(error)
+    await dbSession.abortTransaction();  // Commit the transaction
+    dbSession.endSession();  // End the session
+
+    console.log("Error creating shared budget: ", error);
     return NextResponse.json({ response: 'Failed to create shared budget'}, { status: 500 });
   }
 };

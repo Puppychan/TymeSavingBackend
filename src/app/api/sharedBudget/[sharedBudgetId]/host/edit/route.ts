@@ -1,7 +1,6 @@
-'use client'
-export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyAuth } from "src/lib/authentication";
 import { ISharedBudget } from "src/models/sharedBudget/interface";
 import SharedBudget from "src/models/sharedBudget/model";
 import User from "src/models/user/model";
@@ -9,10 +8,15 @@ import User from "src/models/user/model";
 // PUT: edit shared budget information (available only for the Host of the shared budget)
 export const PUT = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
   try {
-      const searchParams = req.nextUrl.searchParams
-      const userId = searchParams.get('userId')
-
       await connectMongoDB();
+
+      const verification = await verifyAuth(req.headers)
+      if (verification.status !== 200) {
+        return NextResponse.json({ response: verification.response }, { status: verification.status });
+      }
+
+      const authUser = verification.response;
+
       const payload = await req.json() as Partial<ISharedBudget>
 
       const sharedBudget = await SharedBudget.findById(params.sharedBudgetId)
@@ -20,13 +24,8 @@ export const PUT = async (req: NextRequest, { params }: { params: { sharedBudget
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      if (sharedBudget.hostBy !== userId) {
+      if (authUser._id !== sharedBudget.hostBy) {
         return NextResponse.json({ response: 'Only the Host can edit this shared budget' }, { status: 401 });
-      }
-
-      const user = await User.findOne({ _id: userId });
-      if (!user) {
-        return NextResponse.json({ response: 'User not found' }, { status: 404 });
       }
 
       const updateQuery: any = {};
