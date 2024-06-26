@@ -25,11 +25,11 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      if (authUser._id !== sharedBudget.hostBy) {
+      if (authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
         return NextResponse.json({ response: 'Only the Host can remove a member' }, { status: 401 });
       }
 
-      if (memberId === sharedBudget.hostBy) {
+      if (memberId === sharedBudget.hostedBy.toString()) {
         return NextResponse.json({ response: 'Host cannot be removed' }, { status: 400 });
       }
 

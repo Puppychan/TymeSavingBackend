@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import SharedBudget from "src/models/sharedBudget/model";
+import { GroupRole } from "src/models/sharedBudgetParticipation/interface";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 
 export const POST = async (req: NextRequest) => {
@@ -29,15 +30,15 @@ export const POST = async (req: NextRequest) => {
       description: description,
       amount: amount,
       concurrentAmount: 0,  
-      endDate: endDate
+      endDate: endDate ? new Date(endDate) : null,
+      createdDate: Date.now()
     }], {session: dbSession});
-
-    // await newSharedBudget.save(); // Save the new shared budget to the database
 
     const newParticipation = await SharedBudgetParticipation.create([{
       user: user._id,
       sharedBudget: newSharedBudget[0]._id,
-      isHost: true
+      joinedDate: Date.now(),
+      role: GroupRole.Host
     }], {session: dbSession});
 
     await dbSession.commitTransaction();  // Commit the transaction

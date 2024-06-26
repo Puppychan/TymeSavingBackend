@@ -27,7 +27,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      if (authUser._id !== sharedBudget.hostBy) {
+      if (authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
         return NextResponse.json({ response: 'Only the Host can delete this shared budget' }, { status: 401 });
       }
 

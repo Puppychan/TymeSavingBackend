@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { ISharedBudgetParticipation } from './interface';
+import { GroupRole, ISharedBudgetParticipation } from './interface';
 
 // Define the schema for the user
 const sharedBudgetParticipationSchema: Schema = new Schema({
@@ -17,10 +17,10 @@ const sharedBudgetParticipationSchema: Schema = new Schema({
       type: Date,
       default: Date.now()
     },
-    isHost: {
-      type: Boolean,
-      required: true,
-      default: false
+    role: {
+      type: String,
+      enum: Object.values(GroupRole),
+      default: GroupRole.Member
     }
 });
 

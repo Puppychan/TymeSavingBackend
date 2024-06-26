@@ -23,14 +23,17 @@ export const PUT = async (req: NextRequest, { params }: { params: { sharedBudget
       if (!sharedBudget) {
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
-
-      if (authUser._id !== sharedBudget.hostBy) {
+      
+      if (authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
         return NextResponse.json({ response: 'Only the Host can edit this shared budget' }, { status: 401 });
       }
 
       const updateQuery: any = {};
       Object.keys(payload).forEach(key => {
-          updateQuery[`${key}`] = payload[key as keyof ISharedBudget];
+          if (key === 'endDate') {
+            updateQuery[`${key}`] = new Date(payload[key as keyof ISharedBudget]);
+          }
+          else updateQuery[`${key}`] = payload[key as keyof ISharedBudget];
       });
 
       const updatedSharedBudget = await SharedBudget.findOneAndUpdate(

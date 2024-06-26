@@ -1,4 +1,5 @@
 import SharedBudget from "src/models/sharedBudget/model"
+import { GroupRole } from "src/models/sharedBudgetParticipation/interface"
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model"
 import Transaction from "src/models/transaction/model"
 
@@ -50,7 +51,7 @@ export async function joinSharedBudget(userId, sharedBudgetId) {
       const newParticipation = new SharedBudgetParticipation({
         user: userId,
         sharedBudget: sharedBudgetId,
-        isHost: false
+        role: GroupRole.Member,
       })
   
       await newParticipation.save()

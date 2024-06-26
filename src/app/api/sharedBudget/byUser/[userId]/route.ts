@@ -9,9 +9,9 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
   try {
       const searchParams = req.nextUrl.searchParams
       const name = searchParams.get('name')
-      const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
+      const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
 
       await connectMongoDB();
 
@@ -42,7 +42,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $unwind : "$sharedBudget" },
           { $match: query },
           { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
-          { $project: { _id: 0, sharedBudget: 1, isHost: 1 } }
+          { $replaceRoot: { newRoot: "$sharedBudget" } }
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });

@@ -11,9 +11,9 @@ export const GET = async (req: NextRequest) => {
   try {
       const searchParams = req.nextUrl.searchParams
       const name = searchParams.get('name')
-      const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
+      const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
 
       await connectMongoDB();
 
