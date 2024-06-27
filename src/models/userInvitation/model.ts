@@ -10,7 +10,7 @@ const userInvitationSchema: Schema = new Schema({
     invitationId:  mongoose.Types.ObjectId,
     status: {
         type: String,
-        enum: Object.values(UserInvitationStatus),
+        enum: Object.values(UserInvitationStatus), // Accept/Declined/Pending
         required: true
     }
 });
