@@ -1,9 +1,9 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
 import { format, startOfDay, endOfDay, startOfYear, endOfYear, startOfMonth, endOfMonth, formatISO } from 'date-fns';
-export const dynamic = 'force-dynamic';
 
 // GET: For the user to view all their transaction details
 // Filter transactions: 

@@ -1,7 +1,7 @@
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories, netSpend } from "src/lib/fetchTransaction";
-export const dynamic = 'force-dynamic';
 
 // Call functions based on the parameters. Functions are: (May add more)
 // 1) currentMonthTotal: total expense/income of current month i.e. From the 1st to the current date. 
