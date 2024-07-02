@@ -92,7 +92,7 @@ export const verifyAuth = async (headers: Headers, userId?: string) => {
       return { response: "Unauthorized: User not found", status: 401 };
   
     if (userId)
-      if (authuser.role !== UserRole.Admin && authuser._id !== userId) {
+      if (authuser.role !== UserRole.Admin && authuser._id.toString() !== userId) {
         return { response: "Forbidden action", status: 403 };
       }
   
