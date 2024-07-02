@@ -7,20 +7,32 @@ import User from 'src/models/user/model';
 import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay, formatISO } from 'date-fns';
 
 // GET: For the user to view all their transaction details
-// Filter transactions: 
-// transactions with value equals something
-//     getTransactionType: Income | Expense
-//     getCategory: category name
-//     getDateCreated
-// transactions with values in a range
-//     filterDateCreatedBefore: date in iso format
-//     filterDateCreatedAfter: date in iso format
-//     getAmountBelow: number
-//     getAmountAbove: number
-// Sort transactions: ascending/descending
-//     sortDateCreated
-//     sortDateUpdated
-//     sortAmount
+/* Filter transactions: 
+Transactions with value equals something
+    getTransactionType: Income | Expense
+    getCategory: category name
+    getDateCreated
+Transactions with values in a range
+    filterDateCreatedBefore: date in iso format
+    filterDateCreatedAfter: date in iso format
+    getAmountBelow: number
+    getAmountAbove: number
+Sort transactions: ascending/descending
+    sortDateCreated
+    sortDateUpdated
+    sortAmount
+TransactionType + Amount/Date
+    IncomeAmountAscending: true
+    IncomeAmountDescending: true
+    IncomeDateAscending: true
+    IncomeDateDescending: true
+
+    ExpenseAmountAscending: true
+    ExpenseAmountDescending: true
+    ExpenseDateAscending: true
+    ExpenseDateDescending: true
+    
+*/
 
 export const GET = async (req: NextRequest, { params }: { params: { userId: string } }) => {
     try {
@@ -124,6 +136,50 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
             if (vnpParams.hasOwnProperty('sortAmount')) {
                 sortOrder = vnpParams['sortAmount'] === 'ascending' ? 1 : -1;
                 sortField = "amount";
+            }
+// Sort AND match: IncomeAmountAscending, etc.
+            // Income
+            if (vnpParams.hasOwnProperty('IncomeAmountAscending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "amount";
+                sortOrder = vnpParams['IncomeAmountAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('IncomeAmountDescending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "amount";
+                sortOrder = vnpParams['IncomeAmountDescending'] === 'true' ? -1 : 1;
+            }
+            if (vnpParams.hasOwnProperty('IncomeDateAscending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['IncomeDateAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('IncomeDateDescending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['IncomeDateDescending'] === 'true' ? -1 : 1;
+            }
+
+            // Expense
+            if (vnpParams.hasOwnProperty('ExpenseAmountAscending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "amount";
+                sortOrder = vnpParams['ExpenseAmountAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('ExpenseAmountDescending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "amount";
+                sortOrder = vnpParams['ExpenseAmountDescending'] === 'true' ? -1 : 1;
+            }
+            if (vnpParams.hasOwnProperty('ExpenseDateAscending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['ExpenseDateAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('ExpenseDateDescending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['ExpenseDateDescending'] === 'true' ? -1 : 1;
             }
 
 // Execute the aggregation pipeline
