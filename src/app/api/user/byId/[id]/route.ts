@@ -16,7 +16,7 @@ export const GET = async (
       return NextResponse.json({ response: verification.response }, { status: verification.status });
     }
 
-    const user = await User.findOne({ id: params.id });
+    const user = await User.findOne({ _id: params.id });
     if (!user) {
       return NextResponse.json({ response: "User not found" }, { status: 404 });
     }
