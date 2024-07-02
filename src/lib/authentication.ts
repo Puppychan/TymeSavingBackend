@@ -71,7 +71,7 @@ export const verifyUser = async (headers: Headers, username?: string) => {
         return { response: "Forbidden action", status: 403 };
       }
   
-    return { response: {...authuser, password: undefined}, status: 200 };  
+    return { response: authuser, status: 200 };  
   }
   catch (err) {
     console.log(err)
@@ -99,6 +99,31 @@ export const verifyUserById = async (headers: Headers, id?: string) => {
   }
   catch (err) {
     console.log(err)
+    return { response: `Unauthorized: ${err.message}`, status: 401 };
+  }
+}
+
+export const verifyAuth = async (headers: Headers, userId?: string) => {
+  try {
+    const auth = headers.get('Authorization');
+    const token = auth?.split(" ")[1];
+    if(!auth || !token) 
+      return { response: "Unauthorized: Token is required in request header", status: 401 };
+  
+    const decoded = await verifyToken(token)
+    const authuser = await User.findOne({ _id: decoded.id })
+    if (!authuser)
+      return { response: "Unauthorized: User not found", status: 401 };
+  
+    if (userId)
+      if (authuser.role !== UserRole.Admin && authuser._id.toString() !== userId) {
+        return { response: "Forbidden action", status: 403 };
+      }
+  
+    return { response: authuser, status: 200 };  
+  }
+  catch (err) {
+    console.log("authentication.ts line 102 - verifyAuth error:", err)
     return { response: `Unauthorized: ${err.message}`, status: 401 };
   }
 }

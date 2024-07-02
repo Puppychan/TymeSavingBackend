@@ -17,25 +17,8 @@ const userSchema: Schema = new Schema({
     creationDate: { type: Date, default: Date.now()},
     
     // user financial information
-    bankAccounts: { type: [Schema.Types.Mixed], default: []}, // list of bank accounts - specify format later
-    userPoints:  { type: [Schema.Types.Mixed], default: []}, // list of points in different groups - specify format later
-
-    // joined
-    joinedShareBudget: {
-      type: [Schema.Types.ObjectId],
-      ref: 'SharedBudget',
-      default: []
-    },
-    // joinedGroupSaving: {
-    //   type: [Schema.Types.ObjectId],
-    //   ref: 'GroupSaving',
-    //   default: []
-    // },
-    // joinedChallenge: {
-    //   type: [Schema.Types.ObjectId],
-    //   ref: 'FinancialChallenge',
-    //   default: []
-    // }
+    // bankAccounts: { type: [Schema.Types.Mixed], default: []}, // list of bank accounts - specify format later
+    // userPoints:  { type: [Schema.Types.Mixed], default: []}, // list of points in different groups - specify format later
 });
 
 const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);

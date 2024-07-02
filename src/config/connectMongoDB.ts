@@ -7,8 +7,10 @@ let isConnected = false;
 
 export const connectMongoDB = async () => {
   const MONGODB_URI: string = process.env.MONGODB_URI || '';
+  const MONGODB_DBNAME: string = process.env.MONGODB_DBNAME;
+  console.log(MONGODB_DBNAME)
   mongoose.set("strictQuery", true);
-  // console.log("URI:  " + MONGODB_URI);
+
   if (mongoose.connection.readyState === 1 || isConnected) {
     console.log("MongoDB already connected")
     return;
@@ -17,9 +19,7 @@ export const connectMongoDB = async () => {
     await mongoose.connect(
       MONGODB_URI, 
       {
-        // dbName: "tymedata",
-        // if testing e.g. entering csv data
-        dbName: "tymetest",
+        dbName: MONGODB_DBNAME,
         // useNewUrlParser: true,    //default is true -> remove
         // useUnifiedTopology: true, //default is true -> remove
       }

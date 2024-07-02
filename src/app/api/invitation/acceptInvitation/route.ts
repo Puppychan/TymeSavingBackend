@@ -4,13 +4,15 @@ import Invitation from "src/models/invitation/model"
 import UserInvitation from "src/models/userInvitation/model";
 import {UserInvitationStatus} from "src/models/userInvitation/interface";
 import User from "src/models/user/model";
+import { InvitationType } from "src/models/invitation/interface";
+import { joinSharedBudget } from "src/lib/sharedBudgetUtils";
 /*
 Param: userId, invitationId  
 Pre-requisite: The user must have been invited i.e. must be in the invitation's 'users' array
 Outcome: 
 - Set UserInvitation.status = Accepted
 - Remove userId from Invitation.users
-- TODO: SharedBudget/GroupSaving must add this user to its 'users' array
+- TODO: SharedBudget/GroupSaving add this user to its 'users' array
 */
 export const POST = async (req: NextRequest) => {
     const payload = await req.json();
@@ -49,6 +51,12 @@ export const POST = async (req: NextRequest) => {
         }
         // Save the updated invitation
         await invitation.save();
+
+        // ADD USER TO SHARED BUDGET GROUP
+        if (invitation.type === InvitationType.SharedBudget) {
+            await joinSharedBudget(userId, invitation.groupId)
+        }
+
         return NextResponse.json({ response: `User ${userId} accepted invitation ${invitationId}` }, { status: 200 });
     } catch (error){
         return NextResponse.json({ response: `Error: ${error}` }, { status: 500 });

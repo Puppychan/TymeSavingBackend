@@ -44,8 +44,8 @@ export const GET = async (req: NextRequest) => {
             (await compareToLastMonth(vnpParams["userId"])).response;
         response.topCategories = 
             (await topCategories(vnpParams["transactionType"], vnpParams["userId"])).response;
-        console.log(response);
         response.netSpend = (await netSpend(vnpParams["userId"])).response;
+        console.log(response);
         return NextResponse.json({response: response}, {status: 200});
     } catch (error){
         return NextResponse.json({response: error}, {status: 500});

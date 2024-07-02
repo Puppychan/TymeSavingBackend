@@ -1,15 +1,15 @@
-export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import UserInvitation from "src/models/userInvitation/model";
+import Invitation from "src/models/invitation/model";
 import User from "src/models/user/model"
 import mongoose from "mongoose";
 import { connectMongoDB } from "src/config/connectMongoDB";
+import { invitationData } from "src/lib/fetchInvitation";
 
 // Params: userId
 // Return the list of invitations that the user has accepted and cancelled
 // Use UserInvitation instead of Invitations
-/* Sort: 
-*/
+
 export const GET = async (req: NextRequest,{ params }: { params: { userId: string } }) => {
     try {
         await connectMongoDB();
@@ -19,14 +19,10 @@ export const GET = async (req: NextRequest,{ params }: { params: { userId: strin
         urlSearchParams.forEach((value, key) => {
             vnpParams[key] = value;
         });
-        try{
-            // 
-        } catch (error) {
-            console.log("Inner try: " + error);
-            return NextResponse.json({ response: "Inner try: " + error }, { status: 500 });
-        }
+        const result = await invitationData(userId, vnpParams);
+        return NextResponse.json({ response: result.response }, { status: result.status });
     } catch (error) {
-        console.log("Outer try: " +error);
-        return NextResponse.json({ response: "Outer try: " + error }, { status: 500 });
+        console.log(error);
+        return NextResponse.json({ response: error }, { status: 500 });
     }
 }

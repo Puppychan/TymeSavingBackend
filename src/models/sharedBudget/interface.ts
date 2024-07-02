@@ -1,6 +1,4 @@
 import mongoose, {Document} from 'mongoose';
-import { IUser } from '../user/interface';
-
 
 // Interface for Shared Budget document
 export interface ISharedBudget extends Document {
@@ -11,5 +9,4 @@ export interface ISharedBudget extends Document {
     concurrentAmount: number;
     createdDate: Date;
     endDate: Date;
-    participants: IUser[];
 }

@@ -12,7 +12,7 @@ const sharedBudgetSchema: Schema = new Schema({
     description: {type: String},
     amount: {type: Number, default: 0},
     concurrentAmount: {type: Number, default: 0},
-    createdDate: {type: Date, default: Date.now},
+    createdDate: {type: Date, default: Date.now()},
     endDate: {type: Date},
 });
 

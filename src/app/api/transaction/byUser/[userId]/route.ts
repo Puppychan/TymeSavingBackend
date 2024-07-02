@@ -4,23 +4,35 @@ import mongoose from 'mongoose';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
 import User from 'src/models/user/model';
-import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay } from 'date-fns';
+import { format, startOfYear, endOfYear, startOfMonth, endOfMonth, startOfDay, endOfDay, formatISO } from 'date-fns';
 
 // GET: For the user to view all their transaction details
-// Filter transactions: 
-// transactions with value equals something
-//     getTransactionType: Income | Expense
-//     getCategory: category name
-//     getDateCreated
-// transactions with values in a range
-//     filterDateCreatedBefore: date in iso format
-//     filterDateCreatedAfter: date in iso format
-//     getAmountBelow: number
-//     getAmountAbove: number
-// Sort transactions: ascending/descending
-//     sortDateCreated
-//     sortDateUpdated
-//     sortAmount
+/* Filter transactions: 
+Transactions with value equals something
+    getTransactionType: Income | Expense
+    getCategory: category name
+    getDateCreated
+Transactions with values in a range
+    filterDateCreatedBefore: date in iso format
+    filterDateCreatedAfter: date in iso format
+    getAmountBelow: number
+    getAmountAbove: number
+Sort transactions: ascending/descending
+    sortDateCreated
+    sortDateUpdated
+    sortAmount
+TransactionType + Amount/Date
+    IncomeAmountAscending: true
+    IncomeAmountDescending: true
+    IncomeDateAscending: true
+    IncomeDateDescending: true
+
+    ExpenseAmountAscending: true
+    ExpenseAmountDescending: true
+    ExpenseDateAscending: true
+    ExpenseDateDescending: true
+    
+*/
 
 export const GET = async (req: NextRequest, { params }: { params: { userId: string } }) => {
     try {
@@ -60,18 +72,18 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 if (dateParts.length === 1) {
                     // Year
                     const year = parseInt(dateParts[0]);
-                    startDate = startOfYear(new Date(year, 0));
-                    endDate = endOfYear(new Date(year, 0));
+                    startDate = new Date(formatISO(startOfYear(new Date(year, 0))));
+                    endDate = new Date(formatISO(endOfYear(new Date(year, 0))));
                 } else if (dateParts.length === 2) {
                     // Year and Month
                     const year = parseInt(dateParts[0]);
                     const month = parseInt(dateParts[1]) - 1;
-                    startDate = startOfMonth(new Date(year, month));
-                    endDate = endOfMonth(new Date(year, month));
+                    startDate = new Date(formatISO(startOfMonth(new Date(year, month))));
+                    endDate = new Date(formatISO(endOfMonth(new Date(year, month))));
                 } else if (dateParts.length === 3) {
                     // Year, Month and Day
-                    startDate = new Date(new Date(getDate).setUTCHours(0));
-                    endDate = new Date(new Date(endOfDay(getDate)).setUTCHours(23));
+                    startDate = new Date(formatISO(startOfDay(getDate)));
+                    endDate = new Date(formatISO((endOfDay(getDate))));
                 }
                 // const startDate = new Date(dateCreated.setUTCHours(0));
                 // const endDate = new Date(endOfDay(dateCreated).setUTCHours(23));
@@ -79,7 +91,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                     { createdDate: 
                         {
                             $gte: startDate,
-                            $lt: endDate
+                            $lte: endDate
                         }
                     });
             }
@@ -87,13 +99,13 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 // Filter fields: filter fields in range
             // Filter by createdDate before a certain date
             if (vnpParams.hasOwnProperty('filterDateCreatedBefore')) {
-                const date = new Date(vnpParams['filterDateCreatedBefore']);
+                const date = new Date(formatISO((vnpParams['filterDateCreatedBefore'])));
                 aggregate.match({ createdDate: { $lt: date } });
             }
 
             // Filter by createdDate after a certain date
             if (vnpParams.hasOwnProperty('filterDateCreatedAfter')) {
-                const date = new Date(vnpParams['filterDateCreatedAfter']);
+                const date = new Date(formatISO(vnpParams['filterDateCreatedAfter']));
                 aggregate.match({ createdDate: { $gte: date } });
             }
 
@@ -108,7 +120,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 const amount = Number(vnpParams['getAmountAbove']);
                 aggregate.match({ amount: { $gte: amount } });
             }
-// sort
+// Sort
             let sortField: string = "createdDate";
             let sortOrder: -1 | 1;
 
@@ -125,6 +137,50 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 sortOrder = vnpParams['sortAmount'] === 'ascending' ? 1 : -1;
                 sortField = "amount";
             }
+// Sort AND match: IncomeAmountAscending, etc.
+            // Income
+            if (vnpParams.hasOwnProperty('IncomeAmountAscending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "amount";
+                sortOrder = vnpParams['IncomeAmountAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('IncomeAmountDescending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "amount";
+                sortOrder = vnpParams['IncomeAmountDescending'] === 'true' ? -1 : 1;
+            }
+            if (vnpParams.hasOwnProperty('IncomeDateAscending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['IncomeDateAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('IncomeDateDescending')) {
+                aggregate.match({ type: 'Income' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['IncomeDateDescending'] === 'true' ? -1 : 1;
+            }
+
+            // Expense
+            if (vnpParams.hasOwnProperty('ExpenseAmountAscending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "amount";
+                sortOrder = vnpParams['ExpenseAmountAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('ExpenseAmountDescending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "amount";
+                sortOrder = vnpParams['ExpenseAmountDescending'] === 'true' ? -1 : 1;
+            }
+            if (vnpParams.hasOwnProperty('ExpenseDateAscending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['ExpenseDateAscending'] === 'true' ? 1 : -1;
+            }
+            if (vnpParams.hasOwnProperty('ExpenseDateDescending')) {
+                aggregate.match({ type: 'Expense' });
+                sortField = "dateCreated";
+                sortOrder = vnpParams['ExpenseDateDescending'] === 'true' ? -1 : 1;
+            }
 
 // Execute the aggregation pipeline
             let result = await aggregate.exec();
@@ -133,7 +189,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
             let response: { [key: string]: any } = {};
 
             result.forEach((transaction: any) => {
-                const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
+                // Handle cases on the first of each month
+                const monthLabel = format(new Date(formatISO((transaction.createdDate))), 'MMM').toUpperCase();
                 if (!response[monthLabel]) {
                     response[monthLabel] = {
                         transactions: []
@@ -155,12 +212,12 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                 response[monthLabel].transactions.sort((a: any, b: any) => {
                     var aValue: number, bValue: number;
                     if(sortField == "createdDate"){
-                        aValue = new Date(a.createdDate).getTime();
-                        bValue = new Date(b.createdDate).getTime();
+                        aValue = new Date(formatISO(a.createdDate)).getTime();
+                        bValue = new Date(formatISO(b.createdDate)).getTime();
                     }
                     else if (sortField == "updatedDate"){
-                        aValue = new Date(a.updatedDate).getTime();
-                        bValue = new Date(b.updatedDate).getTime();
+                        aValue = new Date(formatISO(a.updatedDate)).getTime();
+                        bValue = new Date(formatISO(b.updatedDate)).getTime();
                     }
                     else if (sortField == "amount"){
                         aValue = a.amount;
