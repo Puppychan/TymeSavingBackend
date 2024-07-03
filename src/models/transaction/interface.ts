@@ -24,10 +24,9 @@ export enum TransactionCategory {
     OtherExpenses = "Other expenses",
     FreelanceWork = "Freelance Work",
     Salary = "Salary",
-    Interest = "Interest",
     InvestmentIncome = "Investment Income",
     BusinessProfits = "Business Profits",
-    Incomingtransfer = "Incoming transfer",
+    RentalIncome = "Rental Income",
     OtherIncomes = "Other incomes"
 }
 
