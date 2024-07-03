@@ -41,16 +41,25 @@ export const GET = async (
       }
       // if sharedBudget: show the totalAmount that this user has made in this group; number of transactions
       // Find transactions for the user in the shared budget
-      const transactions = await Transaction.find({ 
+      const incomeTransactions = await Transaction.find({ 
         budgetGroupId: new ObjectId(vnpParams["sharedBudgetId"]), 
-        userId: new ObjectId(userId)
+        userId: new ObjectId(userId),
+        type: 'Income'
+      })
+      .populate('userId', '_id username fullname')
+      .sort({ createdDate: -1 });
+      const expenseTransactions = await Transaction.find({ 
+        budgetGroupId: new ObjectId(vnpParams["sharedBudgetId"]), 
+        userId: new ObjectId(userId),
+        type: 'Expense'
       })
       .populate('userId', '_id username fullname')
       .sort({ createdDate: -1 });
 
       // Calculate the total amount and number of transactions
-      returnUser.totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
-      returnUser.transactionCount = transactions.length;
+      returnUser.totalIncome = incomeTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+      returnUser.totalExpense = expenseTransactions.reduce((sum, transaction) => sum + transaction.amount, 0);
+      returnUser.transactionCount = incomeTransactions.length + expenseTransactions.length;
     }
     return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
