@@ -14,7 +14,7 @@ export const POST = async (req:NextRequest) => {
         // Transaction.id will be auto assigned by MongoDB
         // createdDate and editedDate are auto assigned to now
         var {userId, createdDate, editedDate,description, type,amount,
-            transactionImages,payBy, category, savingId, budgetId} = payload;
+            transactionImages,payBy, category, savingGroupId, budgetGroupId} = payload;
         let newType = TransactionType.Expense;
         if (type == 'Income'){
             newType = TransactionType.Income;
@@ -36,8 +36,8 @@ export const POST = async (req:NextRequest) => {
             transactionImages: transactionImages,
             payBy: payBy,
             category: category,
-            savingId: savingId,
-            budgetId: budgetId
+            savingGroupId: savingGroupId,
+            budgetGroupId: budgetGroupId
         });
         await newTransaction.save();
         return NextResponse.json({response: newTransaction, status: 200});

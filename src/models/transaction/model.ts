@@ -4,7 +4,11 @@ import { ITransaction, TransactionType, TransactionCategory } from './interface'
 // Define the schema for the user
 const transactionSchema: Schema = new Schema({
     // MongoDB ID
-    userId: {type: mongoose.Types.ObjectId, required: true},
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
 
     // Transaction.id will be auto assigned by MongoDB
     // createdDate and editedDate will be assigned when the transaction is created
