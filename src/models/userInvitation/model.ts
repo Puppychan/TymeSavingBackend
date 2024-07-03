@@ -6,8 +6,14 @@ import { IUserInvitation, UserInvitationStatus } from './interface';
 // status: Accepted | Declined | Pending
 
 const userInvitationSchema: Schema = new Schema({
-    userId: mongoose.Types.ObjectId, // user ID 
-    invitationId:  mongoose.Types.ObjectId,
+    userId: {
+        type: mongoose.Types.ObjectId, 
+        ref: 'User'
+    }, // user ID 
+    invitationId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Invitation'
+    },
     status: {
         type: String,
         enum: Object.values(UserInvitationStatus), // Accept/Declined/Pending
