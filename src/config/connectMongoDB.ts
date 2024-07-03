@@ -20,6 +20,7 @@ export const connectMongoDB = async () => {
       MONGODB_URI, 
       {
         dbName: MONGODB_DBNAME,
+        // dbName: "tymetest",
         // useNewUrlParser: true,    //default is true -> remove
         // useUnifiedTopology: true, //default is true -> remove
       }

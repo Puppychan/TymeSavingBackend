@@ -36,8 +36,8 @@ export const POST = async (req:NextRequest) => {
             transactionImages: transactionImages,
             payBy: payBy,
             category: category,
-            savingId: savingId,
-            budgetId: budgetId
+            savingGroupId: savingId,
+            budgetGroupId: budgetId
         });
         await newTransaction.save();
         return NextResponse.json({response: newTransaction, status: 200});
