@@ -12,7 +12,7 @@ import mongoose from "mongoose";
         getGroupId
         getGroupType
         getCode
-        getStatus  : accepted, cancelled, pending
+        getStatus  : Accepted, Cancelled, Pending
     Handle user:
         Admin: getUserId to match User Id
         User: fromUser
