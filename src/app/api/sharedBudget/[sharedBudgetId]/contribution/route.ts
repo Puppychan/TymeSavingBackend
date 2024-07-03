@@ -1,12 +1,13 @@
+import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import { verifyMember } from "src/lib/sharedBudgetUtils";
 import SharedBudget from "src/models/sharedBudget/model";
-import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
+import Transaction from "src/models/transaction/model";
 import { UserRole } from "src/models/user/interface";
 
-// GET: get the member list of a shared budget (including host and members)
+// GET: get the contribution of the members in a shared budget
 export const GET = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
   try {
       await connectMongoDB();
@@ -29,13 +30,13 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      const members = await SharedBudgetParticipation
-                            .find(
-                              { sharedBudget: params.sharedBudgetId }, 
-                              {_id: 0, sharedBudget: 0})
-                            .populate('user', '_id username fullname')
+      let contribution = []
+      contribution =  await Transaction
+      .find({ budgetGroupId: new ObjectId(params.sharedBudgetId) })
+      .populate('userId', '_id username fullname')
+      .sort({ createdDate: -1 })
 
-      return NextResponse.json({ response: members }, { status: 200 });
+      return NextResponse.json({ response: contribution }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting member list:', error);
     return NextResponse.json({ response: 'Failed to get member list'}, { status: 500 });
