@@ -13,6 +13,8 @@
     "data:transaction": "tsx src/data/addTransactions.ts",
     "data:invitation": "tsx src/data/addInvitations.ts",
     "data:userInvitation": "tsx src/data/addUserInvitations.ts",
+    "data:sharedBudget": "tsx src/data/addSharedBudgets.ts",
+    "data:sharedBudgetParticipation": "tsx src/data/addSBParticipations.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:watch:user": "jest --watch ./src/tests/user/user.test.ts",
