@@ -29,6 +29,7 @@ export const GET = async (
     // Convert the user document to a plain JavaScript object and remove the password field
     let objectUser = user.toObject();
     let returnUser = {
+      _id: objectUser._id,
       username: objectUser.username,
       email: objectUser.email,
       phone: objectUser.phone,
