@@ -9,17 +9,17 @@ import SharedBudget from "src/models/sharedBudget/model";
 import Transaction from "src/models/transaction/model";
 import { UserRole } from "src/models/user/interface";
 
-// GET: get the contribution of the members in a shared budget
+// GET: get the transactions associated with this shared budget
 export const GET = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
   try {
     const searchParams = req.nextUrl.searchParams
+    let groupByUser = ( searchParams.get('groupByUser') === 'true' ) ? true : false
+    const userId = searchParams.get('userId')
     const type = searchParams.get('type')
     const category = searchParams.get('category')
     const from = searchParams.get('fromDate')
     const to = searchParams.get('toDate')
-    const userId = searchParams.get('userId')
     const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
-    let groupByUser = ( searchParams.get('groupByUser') === 'true' ) ? true : false
     await connectMongoDB();
 
     const verification = await verifyAuth(req.headers)
