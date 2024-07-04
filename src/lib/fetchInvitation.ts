@@ -30,9 +30,10 @@ export const invitationData = async (fromUser: string | null, params) => {
             foreignField: 'invitationId',
             as: 'userInvitations'
         });
-        if(fromUser || params.hasOwnProperty('getUserId') || params.hasOwnProperty('getStatus') || params.hasOwnProperty('sortStatus')){
-            aggregate.unwind('$userInvitations'); // unwind so that the user only sees each invitation once
-        }
+        // if(fromUser || params.hasOwnProperty('getUserId') || params.hasOwnProperty('getStatus') || params.hasOwnProperty('sortStatus')){
+        //     aggregate.unwind('$userInvitations'); // unwind so that the user only sees each invitation once
+        // }
+        aggregate.unwind('$userInvitations');
         //User: Get all the invitations for this user
         if(fromUser){
             aggregate.match({ 'userInvitations.userId': new mongoose.Types.ObjectId(fromUser) });
