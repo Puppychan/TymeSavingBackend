@@ -59,7 +59,6 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
 
     if (userId) {
       filter.push({ "userId": new ObjectId(userId) })
-      groupByUser = true
     }
 
     let query = {}
@@ -70,7 +69,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
       groupBy = [
         { $group :{
             _id: "$user._id",
-            user: { $first: "$user._id"},
+            userId: { $first: "$user._id"},
             transactions: { $push: "$$ROOT" }
           }
         }
