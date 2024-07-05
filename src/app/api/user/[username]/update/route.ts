@@ -20,6 +20,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       if (!user) {
         return NextResponse.json({ response: 'User not found' }, { status: 404 });
       }
+      
       // If username/email is being updated: Check if new username or email already exists
       if (payload.username && payload.username !== user.username) {
         const exist = await exist_username(payload.username)
@@ -48,7 +49,6 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       );
       console.log('updatedUser:', updatedUser);
 
-      let token = newToken(updatedUser);
       // Convert the user document to a plain JavaScript object and remove the password field
       let returnUser = updatedUser.toObject();
       delete returnUser.password;

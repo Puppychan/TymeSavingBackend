@@ -15,7 +15,8 @@ const userSchema: Schema = new Schema({
       default: UserRole.Customer
     },
     creationDate: { type: Date, default: Date.now()},
-    
+    avatar: {type: String},
+
     // user financial information
     // bankAccounts: { type: [Schema.Types.Mixed], default: []}, // list of bank accounts - specify format later
     // userPoints:  { type: [Schema.Types.Mixed], default: []}, // list of points in different groups - specify format later
