@@ -1,5 +1,5 @@
 // 'use client'
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
