@@ -29,7 +29,7 @@ const transactionSchema: Schema = new Schema({
     // To be added
     savingGroupId: {
       type: mongoose.Types.ObjectId,
-      // ref:
+      ref: 'GroupSaving'
     }, // MongoDB ID of the saving goals group that this transaction is in
     budgetGroupId: {
       type: mongoose.Types.ObjectId,
