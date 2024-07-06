@@ -1,3 +1,4 @@
+import { MongoServerError } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyUser, newToken } from "src/lib/authentication";
@@ -56,6 +57,18 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
     console.log('Error updating user:', error);
-    return NextResponse.json({ response: 'Cannot update user ' + params.username }, { status: 500 });
+    if (error instanceof MongoServerError && error.code === 11000) {
+      // Extract the field name causing the duplicate key error
+      const fieldMatch = error.message.match(/index: (\w+)_1/);
+      const fieldName = fieldMatch ? fieldMatch[1] : "field";
+      const errorMessage = `This ${fieldName} is used by another account`;
+  
+      // Return a custom error message and a 400 status code
+      return NextResponse.json({ response: errorMessage }, { status: 400 });
+    } else {
+      // Handle other errors or pass them along
+      console.error('Error updating user:', error);
+      return NextResponse.json({ response: 'Cannot update user ' + params.username }, { status: 500 });
+    }
   }
 };
