@@ -1,6 +1,7 @@
 import SharedBudget from "src/models/sharedBudget/model"
 import { GroupRole } from "src/models/sharedBudgetParticipation/interface"
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model"
+import { TransactionType } from "src/models/transaction/interface"
 import Transaction from "src/models/transaction/model"
 
 export async function checkDeletableSharedBudget(sharedBudgetId) : Promise<boolean> {
@@ -56,6 +57,39 @@ export async function joinSharedBudget(userId, sharedBudgetId) {
   
       await newParticipation.save()
       resolve(newParticipation)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
+}
+
+
+export async function changeBudgetGroupBalance(transactionId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const transaction = await Transaction.findById(transactionId)
+      if (!transaction) {
+        throw ("Transaction not found")
+      }
+
+      if (!transaction.type) {
+        throw ("Transaction must be specified with a type (e.g., Income, Expense)")
+      }
+
+      const group = await SharedBudget.findById(transaction.budgetGroupId)
+      if (!group) {
+        throw ("Shared Budget not found")
+      }
+
+      if (transaction.type === TransactionType.Income) 
+        group.concurrentAmount += transaction.amount
+      else if (transaction.type === TransactionType.Expense) 
+        group.concurrentAmount -= transaction.amount
+
+      group.save()
+      resolve(group)
     }
     catch (error) {
       console.log(error)

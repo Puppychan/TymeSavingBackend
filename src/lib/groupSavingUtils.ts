@@ -2,6 +2,9 @@ import { GroupRole } from "src/models/groupSavingParticipation/interface"
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model"
 import GroupSaving from "src/models/groupSaving/model"
 import Transaction from "src/models/transaction/model"
+import { TransactionType } from "src/models/transaction/interface"
+import e from "express"
+import SharedBudget from "src/models/sharedBudget/model"
 
 export async function checkDeletableGroupSaving(groupSavingId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -56,6 +59,33 @@ export async function joinGroupSaving(userId, groupSavingId) {
   
       await newParticipation.save()
       resolve(newParticipation)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
+}
+
+export async function changeSavingGroupBalance(transactionId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const transaction = await Transaction.findById(transactionId)
+      if (!transaction) {
+        throw ("Transaction not found")
+      }
+
+      if (transaction.type !== TransactionType.Income) {
+        throw ("Transaction to a Group Saving must have type Income")
+      }
+      const group = await GroupSaving.findById(transaction.savingGroupId)
+      if (!group) {
+        throw ("Group Saving not found")
+      }
+
+      group.concurrentAmount += transaction.amount
+      group.save()
+      resolve(group)
     }
     catch (error) {
       console.log(error)
