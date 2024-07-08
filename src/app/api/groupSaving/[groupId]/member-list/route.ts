@@ -33,7 +33,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
                             .find(
                               { groupSaving: params.groupId }, 
                               {_id: 0, group: 0})
-                            .populate('user', '_id username fullname phone email')
+                            .populate('user', '_id username fullname phone email avatar')
 
       return NextResponse.json({ response: members }, { status: 200 });
   } catch (error: any) {
