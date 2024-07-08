@@ -15,7 +15,8 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
     }
     // show name, description, username of hostedBy, createdDate, number of participants
     const memberCount = await SharedBudgetParticipation.countDocuments({ sharedBudget: params.sharedBudgetId, role: 'Member' });
-    const hostedByUser = await User.findById(new ObjectId(sharedBudget.hostedBy));
+    const hostedByUser = await User.findOne({ _id: sharedBudget.hostedBy });
+    // const hostedByUser = await User.findById(new ObjectId(sharedBudget.hostedBy));
     if(!hostedByUser){
         return NextResponse.json({ response: 'Error with Shared Budget: Host not found' }, { status: 500 });
     }
