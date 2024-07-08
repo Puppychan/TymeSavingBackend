@@ -3,6 +3,8 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
 import { localDate } from 'src/lib/datetime';
+import { changeSavingGroupBalance } from "src/lib/groupSavingUtils";
+import { changeBudgetGroupBalance } from "src/lib/sharedBudgetUtils";
 /*
     POST: Create a transaction
 */
@@ -25,7 +27,7 @@ export const POST = async (req:NextRequest) => {
         if(!editedDate){
             editedDate = localDate(new Date());
         }
-        console.log(createdDate, editedDate);
+
         const newTransaction = new Transaction({
             userId: userId,
             createdDate: createdDate,
@@ -40,6 +42,15 @@ export const POST = async (req:NextRequest) => {
             budgetGroupId: budgetGroupId
         });
         await newTransaction.save();
+
+        // Change the group balance (Only if the transaction is associated with a group)
+        if (savingGroupId){
+            await changeSavingGroupBalance(newTransaction._id);
+        }
+        if (budgetGroupId) {
+            await changeBudgetGroupBalance(newTransaction._id);
+        }
+
         return NextResponse.json({response: newTransaction, status: 200});
     }
     catch (error: any) {
