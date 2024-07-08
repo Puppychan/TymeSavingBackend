@@ -56,8 +56,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       // return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
       return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
-    console.log('Error updating user:', error);
-    if (error instanceof MongoServerError && error.code === 11000) {
+    if (error.code === 11000) {
       // Extract the field name causing the duplicate key error
       const fieldMatch = error.message.match(/index: (\w+)_1/);
       const fieldName = fieldMatch ? fieldMatch[1] : "field";
