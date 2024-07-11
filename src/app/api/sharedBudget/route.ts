@@ -29,7 +29,7 @@ export const POST = async (req: NextRequest) => {
       name: name,
       description: description,
       amount: amount,
-      concurrentAmount: 0,  
+      concurrentAmount: amount ?? 0, // initial concurrent amount = amount  
       endDate: endDate ? new Date(endDate) : null,
       createdDate: Date.now()
     }], {session: dbSession});
