@@ -69,6 +69,8 @@ export const GET = async (
         phone: objectUser.phone,
         fullname: objectUser.fullname,
         avatar: objectUser.avatar,
+        userPoints: objectUser.userPoints,
+        tymeReward: objectUser.tymeReward,
       };
     });
 

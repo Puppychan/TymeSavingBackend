@@ -1,4 +1,4 @@
-import { UserRole } from './../../../../models/user/interface';
+import { TymeRewardLevel, UserRole } from './../../../../models/user/interface';
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { hashPassword } from "src/lib/authentication";
@@ -35,7 +35,9 @@ export const POST = async (req: NextRequest) => {
       phone: phone,
       email: email,
       password: hashPw,
-      fullname: fullname
+      fullname: fullname,
+      userPoints: 0,
+      tymeReward: TymeRewardLevel.Classic,
     });
     await newUser.save(); // Save the new user to the database
     return  NextResponse.json({ response: newUser }, { status: 200 });

@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { IUser, UserRole } from './interface';
+import { IUser, TymeRewardLevel, UserRole } from './interface';
 
 // Define the schema for the user
 const userSchema: Schema = new Schema({
@@ -16,10 +16,15 @@ const userSchema: Schema = new Schema({
     },
     creationDate: { type: Date, default: Date.now()},
     avatar: {type: String},
+    userPoints: { type: Number, default: 0},
+    tymeReward: { 
+      type: String, 
+      enum: Object.values(TymeRewardLevel), 
+      default: TymeRewardLevel.Classic 
+    },
 
     // user financial information
     // bankAccounts: { type: [Schema.Types.Mixed], default: []}, // list of bank accounts - specify format later
-    // userPoints:  { type: [Schema.Types.Mixed], default: []}, // list of points in different groups - specify format later
 });
 
 const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);

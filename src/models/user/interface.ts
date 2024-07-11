@@ -4,6 +4,14 @@ export enum UserRole {
   Admin = 'Admin',
   Customer = 'Customer'
 }
+
+export enum TymeRewardLevel {
+  Classic = 'Classic',
+  Silver = 'Silver',
+  Gold = 'Gold',
+  Platinum = 'Platinum'
+}
+
 // Interface for user document
 export interface IUser extends Document {
     username: string;
@@ -15,8 +23,10 @@ export interface IUser extends Document {
     role: UserRole;
     creationDate: Date;
     avatar: string;
+    userPoints:  number;
+    tymeReward: TymeRewardLevel; 
     // user financial information
     // bankAccounts: any[]; //list of bank accounts - specify format later
-    // userPoints:  any[]; // list of points in different groups - specify format later
+
 }
   

@@ -94,7 +94,8 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
                 _id: 1,
                 username: 1,
                 fullname: 1,
-                phone: 1
+                phone: 1,
+                tymeReward: 1
               }
             }
           ], 

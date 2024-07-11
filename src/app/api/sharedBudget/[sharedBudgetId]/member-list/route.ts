@@ -33,7 +33,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
                             .find(
                               { sharedBudget: params.sharedBudgetId }, 
                               {_id: 0, sharedBudget: 0})
-                            .populate('user', '_id username fullname phone email avatar')
+                            .populate('user', '_id username fullname phone email avatar tymeReward')
 
       return NextResponse.json({ response: members }, { status: 200 });
   } catch (error: any) {
