@@ -4,7 +4,7 @@ import Invitation from "src/models/invitation/model";
 import User from "src/models/user/model"
 import mongoose from "mongoose";
 import { connectMongoDB } from "src/config/connectMongoDB";
-import { invitationData } from "src/lib/fetchInvitation";
+import { invitationData } from "src/lib/invitationUtils";
 
 // Params: userId
 // Return the list of invitations that the user has accepted and cancelled

@@ -1,6 +1,4 @@
-// 'use client'
 export const dynamic = 'force-dynamic';
-
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
