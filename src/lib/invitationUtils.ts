@@ -131,3 +131,8 @@ export const invitationData = async (fromUser: string | null, params) => {
         return { response: error.message , status: 500 };
     }
 }
+
+// Check if this user is in the GroupSaving/SharedBudget
+export const checkUserInGroup = async (userId: string, groupId: string, groupType: 'SharedBudget' | ' GroupSaving') => {
+    
+}

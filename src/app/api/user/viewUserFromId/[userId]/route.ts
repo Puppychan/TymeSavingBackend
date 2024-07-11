@@ -34,7 +34,8 @@ export const GET = async (
       username: objectUser.username,
       email: objectUser.email,
       phone: objectUser.phone,
-      fullname: objectUser.fullname
+      fullname: objectUser.fullname,
+      avatar: objectUser.avatar,
     } as any;
     if (vnpParams["sharedBudgetId"]){
       const sharedBudget = await SharedBudget.findById(vnpParams["sharedBudgetId"]);

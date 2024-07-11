@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { invitationData } from "src/lib/fetchInvitation";
+import { invitationData } from "src/lib/invitationUtils";
 import { connectMongoDB } from "src/config/connectMongoDB";
 export const dynamic = 'force-dynamic';
 

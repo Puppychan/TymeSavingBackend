@@ -31,6 +31,7 @@ export const GET = async (
       email: objectUser.email,
       phone: objectUser.phone,
       fullname: objectUser.fullname,
+      avatar: objectUser.avatar,
     } as any;
 
     return NextResponse.json({ response: returnUser }, { status: 200 });
