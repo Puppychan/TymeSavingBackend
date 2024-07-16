@@ -3,6 +3,7 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import { IGroupSaving } from "src/models/groupSaving/interface";
 import GroupSaving from "src/models/groupSaving/model";
+import { UserRole } from "src/models/user/interface";
 
 // PUT: edit group saving information (available only for the Host of the group saving)
 export const PUT = async (req: NextRequest, { params }: { params: { groupId: string }}) => {
@@ -23,8 +24,10 @@ export const PUT = async (req: NextRequest, { params }: { params: { groupId: str
         return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
       }
       
-      if (authUser._id.toString() !== group.hostedBy.toString()) {
-        return NextResponse.json({ response: 'Only the Host can edit this group saving' }, { status: 401 });
+      if (authUser.role !== UserRole.Admin) {
+        if (authUser._id.toString() !== group.hostedBy.toString()) {
+          return NextResponse.json({ response: 'Only the Host and Admin can edit this group saving' }, { status: 401 });
+        }
       }
 
       const updateQuery: any = {};
@@ -35,7 +38,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { groupId: str
           else updateQuery[`${key}`] = payload[key as keyof IGroupSaving];
       });
 
-      const updatedSharedBudget = await GroupSaving.findOneAndUpdate(
+      const updatedgroupSaving = await GroupSaving.findOneAndUpdate(
           { _id: params.groupId },
           { $set: updateQuery },
           {
@@ -44,7 +47,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { groupId: str
           }
       );
 
-      return NextResponse.json({ response: updatedSharedBudget }, { status: 200 });
+      return NextResponse.json({ response: updatedgroupSaving }, { status: 200 });
   } catch (error: any) {
     console.log('Error updating group saving:', error);
     return NextResponse.json({ response: 'Failed to update group saving'}, { status: 500 });

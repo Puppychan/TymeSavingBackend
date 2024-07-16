@@ -3,7 +3,7 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import { verifyMember } from "src/lib/groupSavingUtils";
 import GroupSaving from "src/models/groupSaving/model";
-import GroupSavingParticipation from "src/models/sharedBudgetParticipation/model";
+import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 import { UserRole } from "src/models/user/interface";
 
 // GET: get the member list of a group saving (including host and members)

@@ -2,13 +2,13 @@ import { IUser, TymeRewardLevel } from "src/models/user/interface"
 import User from "src/models/user/model"
 
 export function getTymeRewardLevel(userPoints): TymeRewardLevel  {
-  if (userPoints >= 150) {
+  if (userPoints >= 100) {
     return TymeRewardLevel.Platinum
   }
-  if (userPoints >= 100) {
+  if (userPoints >= 50) {
     return TymeRewardLevel.Gold
   }
-  if (userPoints >= 50) {
+  if (userPoints >= 20) {
     return TymeRewardLevel.Silver
   }  
   return TymeRewardLevel.Classic

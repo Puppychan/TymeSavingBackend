@@ -10,7 +10,7 @@ const groupSavingSchema: Schema = new Schema({
     },
     name: {type: String, required: true},
     description: {type: String},
-    amount: {type: Number, default: 0},
+    amount: {type: Number, default: 0}, //goql amount
     concurrentAmount: {type: Number, default: 0},
     createdDate: {type: Date, default: Date.now()},
     endDate: {type: Date},

@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import GroupSaving from "src/models/groupSaving/model";
-import GroupSavingParticipation from "src/models/sharedBudgetParticipation/model";
+import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 import User from "src/models/user/model";
 
 // GET: Show basic information about this GroupSaving. Used by users before joining.
