@@ -38,11 +38,11 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       let list = []
       list = await GroupSavingParticipation.aggregate([
           { $match: { user: new ObjectId(params.userId) } },
-          // { $lookup: {from: 'groupSavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
-          // { $unwind : "$groupSaving" },
-          // { $match: query },
-          // { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
-          // { $replaceRoot: { newRoot: "$groupSaving" } }
+          { $lookup: {from: 'groupSavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
+          { $unwind : "$groupSaving" },
+          { $match: query },
+          { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          { $replaceRoot: { newRoot: "$groupSaving" } }
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });
