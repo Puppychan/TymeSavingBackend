@@ -4,7 +4,7 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import GroupSaving from "src/models/groupSaving/model";
 import { GroupRole } from "src/models/groupSavingParticipation/interface";
-import GroupSavingParticipation from "src/models/sharedBudgetParticipation/model";
+import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 
 export const POST = async (req: NextRequest) => {
   const dbSession = await startSession();
@@ -21,15 +21,15 @@ export const POST = async (req: NextRequest) => {
     const user = verification.response;
 
     const payload = await req.json()
-    const { name, description, amount , endDate } = payload
+    const { name, description, amount, concurrentAmount, endDate } = payload
 
     // Create a new group saving document
     const newGroup = await GroupSaving.create([{
       hostedBy: user._id,
       name: name,
       description: description,
-      amount: amount,
-      concurrentAmount: 0,  
+      amount: amount ?? 0,
+      concurrentAmount: concurrentAmount ?? 0,  
       endDate: endDate ? new Date(endDate) : null,
       createdDate: Date.now()
     }], {session: dbSession});

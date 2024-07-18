@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
-import GroupSavingParticipation from "src/models/sharedBudgetParticipation/model";
+import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 
 // GET: get group saving list of a user
 export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
@@ -38,11 +38,11 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       let list = []
       list = await GroupSavingParticipation.aggregate([
           { $match: { user: new ObjectId(params.userId) } },
-          { $lookup: {from: 'groupSavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
-          { $unwind : "$groupSaving" },
-          { $match: query },
-          { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
-          { $replaceRoot: { newRoot: "$groupSaving" } }
+          // { $lookup: {from: 'groupSavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
+          // { $unwind : "$groupSaving" },
+          // { $match: query },
+          // { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          // { $replaceRoot: { newRoot: "$groupSaving" } }
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });

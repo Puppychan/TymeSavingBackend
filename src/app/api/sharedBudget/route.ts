@@ -21,15 +21,15 @@ export const POST = async (req: NextRequest) => {
     const user = verification.response;
 
     const payload = await req.json()
-    const { name, description, amount , endDate } = payload
+    const { name, description, amount, concurrentAmount, endDate } = payload
 
     // Create a new shared budget document
     const newSharedBudget = await SharedBudget.create([{
       hostedBy: user._id,
       name: name,
       description: description,
-      amount: amount,
-      concurrentAmount: amount ?? 0, // initial concurrent amount = amount  
+      amount: amount ?? 0, // initial amount
+      concurrentAmount: amount ?? 0, // initial concurrent amount = initial amount  
       endDate: endDate ? new Date(endDate) : null,
       createdDate: Date.now()
     }], {session: dbSession});

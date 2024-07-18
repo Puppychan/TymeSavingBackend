@@ -39,6 +39,9 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
       }
 
       const removedMember = await SharedBudgetParticipation.findOneAndDelete({ user: memberId, sharedBudget: params.sharedBudgetId });
+      if (!removedMember) {
+        return NextResponse.json({ response: 'Member not found in the group saving' }, { status: 404 });
+      }
 
       return NextResponse.json({ response: "Removed member successfully" }, { status: 200 });
   } catch (error: any) {
