@@ -3,20 +3,20 @@ import mongoose, {Document, ObjectId} from 'mongoose';
 export enum BandageValue {
 }
 
-export enum RewardCategory {
+export enum PunishmentCategory {
     Point = 'Point',
     Bandage = 'Bandage'
 }
 
-export interface IRewardPrice {
-    category: RewardCategory;
+export interface IPunishmentPrice {
+    category: PunishmentCategory;
     value: number | BandageValue;
 }
 
-// Interface for IReward document
-export interface IReward extends Document {
+// Interface for IPunishment document
+export interface IPunishment extends Document {
     name: string;
     description: string;
-    price: IRewardPrice[];
+    price: IPunishmentPrice[];
     createdBy: ObjectId;
 }

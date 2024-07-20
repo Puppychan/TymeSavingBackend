@@ -42,8 +42,8 @@ export const GET = async (req: NextRequest) => {
             }
             // 3) Group and sort by role
             if (vnpParams.hasOwnProperty('sortRole') && (vnpParams['sortRole'] === 'ascending' || vnpParams['sortRole'] === 'descending')) {
-                aggregate.group({ _id: "$role", users: { $push: "$$ROOT" } });
-                aggregate.unwind("$users");
+                // aggregate.group({ _id: "$role", users: { $push: "$$ROOT" } });
+                // aggregate.unwind("$users");
 
                 const sortRoleParam = vnpParams['sortRole'] === 'ascending'? 1:-1;
                 aggregate.sort({ role: sortRoleParam});

@@ -26,7 +26,6 @@ const transactionSchema: Schema = new Schema({
 
     // Let users manually input categories for now. Dropdown list later
 
-    // To be added
     savingGroupId: {
       type: mongoose.Types.ObjectId,
       ref: 'GroupSaving'
