@@ -1,9 +1,11 @@
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
-import { startOfMonth, endOfMonth, subMonths, format, formatISO } from 'date-fns';
+import { startOfMonth, endOfMonth, subMonths, format, formatISO, startOfDay, endOfDay, startOfYear, endOfYear } from 'date-fns';
 import { localDate } from './datetime';
 import { PipelineStage } from 'mongoose';
 import mongoose from 'mongoose';
+import GroupSaving from 'src/models/groupSaving/model';
+import SharedBudget from 'src/models/sharedBudget/model';
 
 // Add userId == some user ID and we cool
 
@@ -27,6 +29,227 @@ import mongoose from 'mongoose';
 // req format: {transactionType: Income | Expense, userId}
 // 5) netSpend: total income - total expense for this month
 //      params: userId
+// 6) fetchTransactions: take in params and show transactions to admin/byUser page
+
+export const fetchTransactions = async(searchParams: any, origin: any): Promise<{status: number, response: any}> =>{
+    // Origin
+    const fromUser = origin['fromUser'];
+    const fromAdmin = origin['fromAdmin'];
+    const fromGroupSaving = origin['fromGroupSaving'];
+    const fromSharedBudget = origin['fromSharedBudget'];
+
+    let groupByUser = ( searchParams['groupByUser'] === 'true' ) ? true : false
+    // Match/Filter
+    const userId = searchParams['userId']
+    const type = searchParams['type']
+    const category = searchParams['category']
+    const fromDate = searchParams['fromDate']
+    const toDate = searchParams['toDate']
+    const fromAmount = searchParams['fromAmount']
+    const toAmount = searchParams['toAmount']
+    const createdDate = searchParams['createdDate'] // 2024 or 2024-06 or 2024-06-13
+    // Sort: ascending/descending
+    // const sort = searchParams['sort'] || 'descending' // sort: ascending/descending
+    const sortDateCreated = searchParams['sortDateCreated']
+    const sortDateEdited = searchParams['sortDateEdited']
+    const sortUserCreated = searchParams['sortUserCreated']
+    const sortAmount = searchParams['sortAmount']
+
+    try {    
+        await connectMongoDB();
+
+    // Match and Filter
+        let filter = []
+        // Handle if called from byUser route
+        if(fromUser){
+            filter.push({ "userId": new mongoose.Types.ObjectId(fromUser) });
+        }
+
+        // Handle situations where transactions from GroupSaving or SharedBudget are called
+        if(fromGroupSaving){
+            const group = await GroupSaving.findById(fromGroupSaving);
+            if (!group) {
+                return { response: 'Group Saving not found', status: 404 };
+            }
+            filter.push({ "savingGroupId": new mongoose.Types.ObjectId(fromGroupSaving)});
+        } else if (fromSharedBudget){
+            const budget = await SharedBudget.findById(fromSharedBudget);
+            if (!budget) {
+                return { response: 'Shared Budget not found', status: 404 };
+            }
+            filter.push({ "budgetGroupId": new mongoose.Types.ObjectId(fromSharedBudget)});
+        }
+
+        if (userId) {
+            filter.push({ "userId": new mongoose.Types.ObjectId(userId) })
+        }
+
+        if (type) {
+        filter.push({ "type": type })
+        }
+
+        if (category) {
+        filter.push({ "category": category })
+        }
+
+        if (fromDate || toDate ) {
+        let dateFilter : any = {}
+        if (fromDate) dateFilter['$gte'] = new Date(fromDate)
+        if (toDate) dateFilter['$lte'] = new Date(toDate)
+            filter.push({ "createdDate": dateFilter })
+        }
+
+        if (fromAmount || toAmount ) {
+            let amountFilter : any = {}
+            if (fromAmount) amountFilter['$gte'] = Number(fromAmount)
+            if (toAmount) amountFilter['$lte'] = Number(toAmount)
+            filter.push({ "amount": amountFilter })
+        }
+
+        if(createdDate){
+            console.log(createdDate);
+            const dateParts = createdDate.split('-');
+            let dateFilter: any = {};
+
+            if (dateParts.length === 1) { //Only year is provided
+                const year = parseInt(dateParts[0]);
+                dateFilter['$gte'] = localDate(startOfYear(new Date(year, 0)));
+                dateFilter['$lte'] = localDate(endOfYear(new Date(year, 0)));
+            } else if (dateParts.length === 2) { //Year and Month are provided
+                const year = parseInt(dateParts[0]);
+                const month = parseInt(dateParts[1]) - 1;
+                dateFilter['$gte'] = localDate(startOfMonth(new Date(year, month)));
+                dateFilter['$lte'] = localDate(endOfMonth(new Date(year, month)));
+            } else if (dateParts.length === 3) { // Year, month, date are provided
+                const date = new Date(createdDate);
+                dateFilter['$gte'] = localDate(startOfDay(date));
+                dateFilter['$lte'] = localDate(endOfDay(date));
+            }
+            filter.push({ "createdDate": dateFilter});
+        }
+
+        let query = {}
+        if (filter.length > 0) query['$and'] = filter
+
+        let groupBy = []
+        if (groupByUser) {
+        groupBy = [
+            { $group :{
+                _id: "$user._id",
+                userId: { $first: "$user._id"},
+                transactions: { $push: "$$ROOT" }
+            }
+            }
+        ]
+        }
+
+        let project = [] 
+        if (groupByUser) {
+        project = [
+            { $project: { _id: 0 }} // stop userId from showing up twice
+        ]
+        }
+// Sort
+        let sort = {};
+        // Default option
+        sort["createdDate"] = -1;
+        if(sortAmount){
+            const order = sortAmount == "ascending" ? 1:-1;
+            sort["amount"] = order;
+        }
+        if(sortDateCreated){
+            const order = sortDateCreated == "ascending" ? 1:-1;
+            sort["createdDate"] = order;
+        }
+        if(sortDateEdited){
+            const order = sortDateEdited == "ascending" ? 1:-1;
+            sort["editedDate"] = order;
+        }
+        if(sortUserCreated){
+            const order = sortUserCreated == "ascending" ? 1:-1;
+            sort["user.username"] = order;
+            console.log(order);
+        }
+        // execute pipeline
+        let history = []
+        history = await Transaction.aggregate([
+        { $match: query },
+        { $lookup: { 
+            from: 'users', 
+            localField: 'userId', 
+            foreignField: '_id',
+            pipeline: [
+                { $project: {
+                    _id: 1,
+                    username: 1,
+                    fullname: 1,
+                    phone: 1,
+                    tymeReward: 1
+                }
+                }
+            ], 
+            as: 'user' 
+            } 
+        },
+        { $unwind : "$user" },
+        { $sort: sort },
+        { $project: { userId: 0 }},
+        ...groupBy,
+        ...project,
+        ]);
+
+        // IF NO FORMATTING (I.E. GROUP BY MONTH), start comment the block below
+        // let response: { [key: string]: any } = {};
+        // if(groupByUser){
+        //     history.forEach((userGroup: any) => {
+        //         userGroup.transactions.forEach((transaction: any) => {
+        //             const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
+        //             if (!response[monthLabel]) {
+        //                 response[monthLabel] = {};
+        //             }
+        //             const userId = userGroup.userId;
+        //             if (!response[monthLabel][userId]) {
+        //                 response[monthLabel][userId] = {
+        //                     userId: userId,
+        //                     transactions: []
+        //                 };
+        //             }
+        //             response[monthLabel][userId].transactions.push(transaction);
+        //         });
+        //     });
+        // }
+        // else{
+        //     history.forEach((transaction: any) => {
+        //         const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
+        //         if (!response[monthLabel]) {
+        //             response[monthLabel] = {
+        //                 transactions: []
+        //             };
+        //         }
+        //         response[monthLabel].transactions.push(transaction);
+        //     });
+        // }
+        // // Sort months in descending order
+        // const sortedMonths = Object.keys(response).sort((a, b) => {
+        //     const monthOrder = {
+        //         JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6,
+        //         JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12
+        //     };
+        //     return monthOrder[b] - monthOrder[a];
+        // });
+        // // Construct final response in sorted order
+        // const sortedResponse = {};
+        // sortedMonths.forEach(month => {
+        //     sortedResponse[month] = response[month];
+        // });
+        // If no formatting (group by month), stop commenting
+
+        // return { response: response , status: 200 }; // use this if format into months
+        return { response: history , status: 200 }; // use this if no formatting
+    } catch (error){
+        return { response: error, status: 500};
+    }
+}
 
 
 

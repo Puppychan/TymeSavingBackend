@@ -16,8 +16,8 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
     const userId = searchParams.get('userId')
     const type = searchParams.get('type')
     const category = searchParams.get('category')
-    const from = searchParams.get('fromDate')
-    const to = searchParams.get('toDate')
+    const fromDate = searchParams.get('fromDate')
+    const toDate = searchParams.get('toDate')
     const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
     await connectMongoDB();
 
@@ -49,10 +49,10 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
       filter.push({ "category": category })
     }
 
-    if (from || to ) {
+    if (fromDate || toDate ) {
       let dateFilter : any = {}
-      if (from) dateFilter['$gte'] = new Date(from)
-      if (to) dateFilter['$lte'] = new Date(to)
+      if (fromDate) dateFilter['$gte'] = new Date(fromDate)
+      if (toDate) dateFilter['$lte'] = new Date(toDate)
         filter.push({ "createdDate": dateFilter })
     }
 
