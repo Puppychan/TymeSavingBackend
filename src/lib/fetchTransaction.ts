@@ -171,7 +171,7 @@ export const fetchTransactions = async(searchParams: any, origin: any): Promise<
             console.log(order);
         }
         // execute pipeline
-        let history = []
+        let history : any = []
         history = await Transaction.aggregate([
         { $match: query },
         { $lookup: { 
@@ -198,53 +198,57 @@ export const fetchTransactions = async(searchParams: any, origin: any): Promise<
         ...project,
         ]);
 
-        // IF NO FORMATTING (I.E. GROUP BY MONTH), start comment the block below
-        // let response: { [key: string]: any } = {};
-        // if(groupByUser){
-        //     history.forEach((userGroup: any) => {
-        //         userGroup.transactions.forEach((transaction: any) => {
-        //             const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
-        //             if (!response[monthLabel]) {
-        //                 response[monthLabel] = {};
-        //             }
-        //             const userId = userGroup.userId;
-        //             if (!response[monthLabel][userId]) {
-        //                 response[monthLabel][userId] = {
-        //                     userId: userId,
-        //                     transactions: []
-        //                 };
-        //             }
-        //             response[monthLabel][userId].transactions.push(transaction);
-        //         });
-        //     });
-        // }
-        // else{
-        //     history.forEach((transaction: any) => {
-        //         const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
-        //         if (!response[monthLabel]) {
-        //             response[monthLabel] = {
-        //                 transactions: []
-        //             };
-        //         }
-        //         response[monthLabel].transactions.push(transaction);
-        //     });
-        // }
-        // // Sort months in descending order
-        // const sortedMonths = Object.keys(response).sort((a, b) => {
-        //     const monthOrder = {
-        //         JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6,
-        //         JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12
-        //     };
-        //     return monthOrder[b] - monthOrder[a];
-        // });
-        // // Construct final response in sorted order
-        // const sortedResponse = {};
-        // sortedMonths.forEach(month => {
-        //     sortedResponse[month] = response[month];
-        // });
-        // If no formatting (group by month), stop commenting
 
-        // return { response: response , status: 200 }; // use this if format into months
+        let response: any | { [key: string]: any } = {};
+        if(groupByUser){
+            history.forEach((userGroup: any) => {
+                userGroup.transactions.forEach((transaction: any) => {
+                    const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
+                    if (!response[monthLabel]) {
+                        response[monthLabel] = {};
+                    }
+                    const userId = userGroup.userId;
+                    if (!response[monthLabel][userId]) {
+                        response[monthLabel][userId] = {
+                            userId: userId,
+                            transactions: []
+                        };
+                    }
+                    response[monthLabel][userId].transactions.push(transaction);
+                });
+            });
+        }
+        else{
+            history.forEach((transaction: any) => {
+                const monthLabel = format(new Date(transaction.createdDate), 'MMM').toUpperCase();
+                if (!response[monthLabel]) {
+                    response[monthLabel] = {
+                        transactions: []
+                    };
+                }
+                response[monthLabel].transactions.push(transaction);
+            });
+        }
+        // Sort months in descending order
+        const sortedMonths = Object.keys(response).sort((a, b) => {
+            const monthOrder = {
+                JAN: 1, FEB: 2, MAR: 3, APR: 4, MAY: 5, JUN: 6,
+                JUL: 7, AUG: 8, SEP: 9, OCT: 10, NOV: 11, DEC: 12
+            };
+            return monthOrder[b] - monthOrder[a];
+        });
+        // Construct final response in sorted order
+        const sortedResponse = {};
+        sortedMonths.forEach(month => {
+            sortedResponse[month] = response[month];
+        });
+
+        // change this line below to quickly compare output of with and without Month Formatting
+        const formatIntoMonth = true;
+        if(formatIntoMonth){
+            history = response;
+        }
+
         return { response: history , status: 200 }; // use this if no formatting
     } catch (error){
         return { response: error, status: 500};

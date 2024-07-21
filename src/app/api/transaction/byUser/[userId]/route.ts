@@ -3,6 +3,22 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connectMongoDB } from 'src/config/connectMongoDB';
 import { fetchTransactions } from 'src/lib/fetchTransaction';
 
+// let groupByUser = ( searchParams['groupByUser'] === 'true' ) ? true : false
+// // Match/Filter
+// const userId = searchParams['userId']
+// const type = searchParams['type']
+// const category = searchParams['category']
+// const fromDate = searchParams['fromDate']
+// const toDate = searchParams['toDate']
+// const fromAmount = searchParams['fromAmount']
+// const toAmount = searchParams['toAmount']
+// const createdDate = searchParams['createdDate'] // 2024 or 2024-06 or 2024-06-13
+// // Sort: ascending/descending
+// const sortDateCreated = searchParams['sortDateCreated']
+// const sortDateEdited = searchParams['sortDateEdited']
+// const sortUserCreated = searchParams['sortUserCreated']
+// const sortAmount = searchParams['sortAmount']
+
 export const GET = async (req: NextRequest, { params }: { params: { userId: string } }) => {
     try {
         const userId = params.userId;
