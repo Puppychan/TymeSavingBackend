@@ -5,10 +5,8 @@ import { verifyAuth } from "src/lib/authentication";
 import { IChallengeCheckpoint } from "src/models/challengeCheckpoint/interface";
 import ChallengeCheckpoint from "src/models/challengeCheckpoint/model";
 import FinancialChallenge from "src/models/financialChallenge/model";
-import { IReward } from "src/models/reward/interface";
-import Reward from "src/models/reward/model";
 
-export const POST = async (req: NextRequest, { params }: { params: { challengeId: string }}) => {
+export const PUT = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId}}) => {
   const dbSession = await startSession();
   dbSession.startTransaction();
 
@@ -23,39 +21,31 @@ export const POST = async (req: NextRequest, { params }: { params: { challengeId
     const user = verification.response;
 
     const payload = await req.json() as Partial<IChallengeCheckpoint>
-    const { name, description, checkpoint, reward, startDate, endDate} = payload
 
     const challenge = await FinancialChallenge.findOne({ _id: params.challengeId})
     if (!challenge) {
       return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
     }
 
-    let newReward : IReward = null;
-    if (reward) {
-      newReward = new Reward(reward)
-      await newReward.save({session: dbSession});
-    }
+    const updateQuery: any = {};
+    Object.keys(payload).forEach(key => {
+      updateQuery[`${key}`] = payload[key as keyof IChallengeCheckpoint];
+    });
 
-    // Create a new challenge
-    let newCheckpoint = new ChallengeCheckpoint({
-      createdBy: user._id,
-      name: name,
-      description: description,
-      checkpoint: checkpoint,
-      reward: newReward,
-      startDate: startDate,
-      endDate: endDate,
-    })
-    await newCheckpoint.save({session: dbSession});
-
-    // Add the new checkpoint to the challenge
-    challenge.checkpoints.push(newCheckpoint._id);
-    await challenge.save({session: dbSession});
-    
+    const updated = await ChallengeCheckpoint.findOneAndUpdate(
+      { _id: params.checkpointId },
+      { $set: updateQuery },
+      {
+        new: true,
+        runValidators: true,
+        session: dbSession
+      }
+    );
+      
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: newCheckpoint }, { status: 200 });
+    return  NextResponse.json({ response: updated }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session

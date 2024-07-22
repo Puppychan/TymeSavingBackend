@@ -1,20 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { ChallengeCategory, IFinancialChallenge } from './interface';
-
-const memberProgressSchema: Schema = new Schema({
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  currentProgress: {type: Number, required: true, default: 0},
-  lastUpdate: {type: Date, required: true, default: Date.now()},
-  checkpointPassed: {
-    type: [Schema.Types.ObjectId],
-    ref: 'ChallengeCheckpoint',
-    default: []
-  },
-});
+import { ChallengeCategory, ChallengeScope, IFinancialChallenge } from './interface';
 
 const financialChallengeSchema: Schema = new Schema({
   name: {type: String, required: true},
@@ -24,18 +9,28 @@ const financialChallengeSchema: Schema = new Schema({
     enum: Object.values(ChallengeCategory),
     required: true
   },
-  challengeCheckpoint: {
+  checkpoints: {
     type: [Schema.Types.ObjectId],
     ref: 'ChallengeCheckpoint',
-    required: true,
     default: []
   },
 
-  progress: {
-    type: [memberProgressSchema], 
+  members: {
+    type: [Schema.Types.ObjectId],
+    ref: 'User',
+    default: []
+  },
+  memberProgress: {
+    type: [Schema.Types.ObjectId],
+    ref: 'ChallengeProgress',
     default: []
   },
   
+  scope: {
+    type: String,
+    enum: Object.values(ChallengeScope),
+    required: true
+  },
   savingGroupId: {
     type: mongoose.Types.ObjectId,
     ref: 'GroupSaving'

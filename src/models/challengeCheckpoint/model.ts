@@ -1,5 +1,7 @@
 import mongoose, {Schema} from 'mongoose';
 import { IChallengeCheckpoint } from './interface';
+import { start } from 'repl';
+import { endOfDay } from 'date-fns';
 
 const challengeCheckpointSchema: Schema = new Schema({
   name: {type: String, required: true},
@@ -9,10 +11,8 @@ const challengeCheckpointSchema: Schema = new Schema({
     type: mongoose.Types.ObjectId,
     ref: 'Reward',
   },
-  punishment: {
-    type: mongoose.Types.ObjectId,
-    ref: 'Punishment',
-  }
+  startDate: {type: Date},
+  endDate: {type: Date},
 });
 const ChallengeCheckpoint = mongoose.models.ChallengeCheckpoint || mongoose.model<IChallengeCheckpoint>('ChallengeCheckpoint', challengeCheckpointSchema);
 

@@ -1,5 +1,7 @@
+import { ObjectId } from "mongoose"
+import GroupSavingParticipation from "src/models/groupSavingParticipation/model"
 import SharedBudget from "src/models/sharedBudget/model"
-import { GroupRole } from "src/models/sharedBudgetParticipation/interface"
+import { GroupRole, ISharedBudgetParticipation } from "src/models/sharedBudgetParticipation/interface"
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model"
 import { TransactionType } from "src/models/transaction/interface"
 import Transaction from "src/models/transaction/model"
@@ -90,6 +92,26 @@ export async function changeBudgetGroupBalance(transactionId) {
 
       group.save()
       resolve(group)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
+}
+
+export async function getMemberListBudgetGroup(groupId) : Promise<ObjectId[]>{
+  return new Promise(async (resolve, reject) => {
+    try {
+      let group = await SharedBudget.findById(groupId);
+      if (!group) {
+        throw("Group Saving not found")
+      }
+
+      let members : ISharedBudgetParticipation[] = await SharedBudgetParticipation.find({ sharedBudget: groupId });
+      let memberList : ObjectId[] = []
+      if (members.length > 0) memberList = members.map(member => member.user)
+      resolve(memberList)
     }
     catch (error) {
       console.log(error)
