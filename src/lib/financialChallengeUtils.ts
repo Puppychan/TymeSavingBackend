@@ -1,12 +1,15 @@
 
-import mongoose, { ObjectId } from "mongoose";
-import { IFinancialChallenge } from "src/models/financialChallenge/interface";
+import { ObjectId } from "mongoose";
+import FinancialChallenge from "src/models/financialChallenge/model";
 
-export async function verifyMember(userId: ObjectId, financialChallenge: IFinancialChallenge) : Promise<boolean> {
+export async function verifyMember(userId: ObjectId, challengeId: string) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
     try {
-      let isMember = financialChallenge.members.includes(userId)
-      resolve(isMember)
+      let isMember = await FinancialChallenge.find({ _id: challengeId, members: {$in : [userId]} })
+      if (isMember) {
+        return resolve(true)
+      }
+      resolve(false)
     }
     catch (error) {
       console.log(error)

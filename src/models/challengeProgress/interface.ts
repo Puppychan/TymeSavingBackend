@@ -7,8 +7,8 @@ export interface ICheckpointPass {
 
 // Interface for FinancialChallenge document
 export interface IChallengeProgress extends Document {    
-    user: ObjectId;
-    challenge: ObjectId;
+    userId: ObjectId;
+    challengeId: ObjectId;
     currentProgress: number;
     lastUpdate: Date;
     checkpointPassed: ICheckpointPass[];

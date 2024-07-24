@@ -4,6 +4,7 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import { getMemberListSavingGroup } from "src/lib/groupSavingUtils";
 import { getMemberListBudgetGroup } from "src/lib/sharedBudgetUtils";
+import { IChallengeProgress } from "src/models/challengeProgress/interface";
 import ChallengeProgress from "src/models/challengeProgress/model";
 import { ChallengeScope } from "src/models/financialChallenge/interface";
 import FinancialChallenge from "src/models/financialChallenge/model";
@@ -37,7 +38,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     // Create a new challenge
-    let newChallenge = new FinancialChallenge({
+    let newChallenge = await FinancialChallenge.create([{
       createdBy: authUser._id,
       name: name,
       description: description,
@@ -47,34 +48,33 @@ export const POST = async (req: NextRequest) => {
       savingGroupId: savingGroupId,
       budgetGroupId: budgetGroupId,
       createdDate: Date.now(),
-    });
-    await newChallenge.save({session: dbSession});
+    }], {session: dbSession});
 
-
-    let progress: ObjectId[] = [];
+    let progress = [];
     members.forEach(async userId => {
-      let memProgress = new ChallengeProgress({
-        user: userId,
-        challenge: newChallenge[0]._id,
-      });
-      await memProgress.save({session: dbSession});
-
-      progress.push(memProgress._id);
+      let memProgress = {
+        userId: userId,
+        challengeId: newChallenge[0]._id,
+      };
+      progress.push(memProgress);
     });
+    let memberProgress : IChallengeProgress[] = await ChallengeProgress.create(progress, {session: dbSession});
 
-    newChallenge.progress = progress;
-    await newChallenge.save({session: dbSession});
-
+    let challenge = await FinancialChallenge.findOneAndUpdate(
+      { _id: newChallenge[0]._id }, 
+      { $set: { memberProgress: memberProgress } }, 
+      { new: true, runValidators: true, session: dbSession }
+    );
 
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: newChallenge }, { status: 200 });
+    return  NextResponse.json({ response: challenge }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    console.log("Error creating group saving: ", error);
-    return NextResponse.json({ response: 'Failed to create group saving'}, { status: 500 });
+    console.log("Error creating challenge: ", error);
+    return NextResponse.json({ response: 'Failed to create challenge: '+error}, { status: 500 });
   }
 };

@@ -2,9 +2,10 @@ import {Document, ObjectId} from 'mongoose';
 import { IReward } from '../reward/interface';
 
 export interface IChallengeCheckpoint extends Document {
+    challengeId: ObjectId;
     name: string;
     description: string;
-    checkpoint: number;
+    checkpointValue: number;
     reward: IReward;
     startDate: Date;
     endDate: Date;

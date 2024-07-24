@@ -1,12 +1,15 @@
 import mongoose, {Schema} from 'mongoose';
 import { IChallengeCheckpoint } from './interface';
-import { start } from 'repl';
-import { endOfDay } from 'date-fns';
 
 const challengeCheckpointSchema: Schema = new Schema({
+  challengeId: {
+    type: mongoose.Types.ObjectId,
+    ref: 'FinancialChallenge',
+    required: true
+  },
   name: {type: String, required: true},
   description: {type: String},
-  checkpoint: {type: Number, required: true},
+  checkpointValue: {type: Number, required: true},
   reward: {
     type: mongoose.Types.ObjectId,
     ref: 'Reward',

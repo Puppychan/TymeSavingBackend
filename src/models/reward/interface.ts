@@ -8,15 +8,15 @@ export enum RewardCategory {
     Bandage = 'Bandage'
 }
 
-export interface IRewardPrice {
+export interface IRewardPrize {
     category: RewardCategory;
     value: number | BandageValue;
 }
 
 // Interface for IReward document
 export interface IReward extends Document {
+    checkpointId: ObjectId;
     name: string;
     description: string;
-    price: IRewardPrice[];
-    createdBy: ObjectId;
+    prize: IRewardPrize[];
 }

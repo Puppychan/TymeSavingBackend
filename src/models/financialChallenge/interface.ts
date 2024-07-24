@@ -1,4 +1,6 @@
 import {Document, ObjectId} from 'mongoose';
+import { IChallengeProgress } from '../challengeProgress/interface';
+import { IChallengeCheckpoint } from '../challengeCheckpoint/interface';
 
 export enum ChallengeCategory {
     Saving = 'Saving',
@@ -16,10 +18,10 @@ export interface IFinancialChallenge extends Document {
     name: string;
     description: string;
     category: ChallengeCategory;
-    checkpoints: ObjectId[];
+    checkpoints: IChallengeCheckpoint[];
 
     members: ObjectId[];
-    memberProgress: ObjectId[];
+    memberProgress: IChallengeProgress[];
 
     scope: ChallengeScope;
     savingGroupId: ObjectId;

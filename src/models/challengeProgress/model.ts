@@ -10,12 +10,12 @@ const checkpointPassSchema: Schema = new Schema({
 });
 
 const challengeProgressSchema: Schema = new Schema({
-  user: {
+  userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  challenge: {
+  challengeId: {
     type: mongoose.Types.ObjectId,
     ref: 'FinancialChallenge',
     required: true

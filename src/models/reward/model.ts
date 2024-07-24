@@ -1,7 +1,7 @@
 import mongoose, {Schema} from 'mongoose';
 import { IReward, RewardCategory } from './interface';
 
-const rewardPriceSchema: Schema = new Schema({
+const rewardPrizeSchema: Schema = new Schema({
   category: {
     type: String,
     enum: Object.values(RewardCategory),
@@ -13,15 +13,15 @@ const rewardPriceSchema: Schema = new Schema({
 
 // Define the schema for the user
 const rewardChema: Schema = new Schema({
-  name: {type: String, required: true},
-  description: {type: String},
-  price: {
-    type: [rewardPriceSchema], 
+  checkpointId: {
+    type: mongoose.Types.ObjectId,
+    ref: 'ChallengeCheckpoint',
     required: true
   },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
+  name: {type: String, required: true},
+  description: {type: String},
+  prize: {
+    type: [rewardPrizeSchema], 
     required: true
   }
 });

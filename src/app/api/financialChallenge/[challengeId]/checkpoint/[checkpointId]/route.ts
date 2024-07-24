@@ -22,18 +22,13 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
 
     const payload = await req.json() as Partial<IChallengeCheckpoint>
 
-    const challenge = await FinancialChallenge.findOne({ _id: params.challengeId})
-    if (!challenge) {
-      return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
-    }
-
     const updateQuery: any = {};
     Object.keys(payload).forEach(key => {
       updateQuery[`${key}`] = payload[key as keyof IChallengeCheckpoint];
     });
 
     const updated = await ChallengeCheckpoint.findOneAndUpdate(
-      { _id: params.checkpointId },
+      { _id: params.checkpointId, challengeId: params.challengeId },
       { $set: updateQuery },
       {
         new: true,
@@ -41,6 +36,10 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
         session: dbSession
       }
     );
+
+    if (!updated) {
+      return NextResponse.json({ response: 'Either challenge not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
+    }
       
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
@@ -50,7 +49,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    console.log("Error creating group saving: ", error);
-    return NextResponse.json({ response: 'Failed to create group saving'}, { status: 500 });
+    console.log("Error creating checkpoint: ", error);
+    return NextResponse.json({ response: 'Failed to create checkpoint'}, { status: 500 });
   }
 };

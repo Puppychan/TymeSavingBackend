@@ -5,13 +5,12 @@ import { verifyAuth } from "src/lib/authentication";
 import { IChallengeCheckpoint } from "src/models/challengeCheckpoint/interface";
 import ChallengeCheckpoint from "src/models/challengeCheckpoint/model";
 import FinancialChallenge from "src/models/financialChallenge/model";
-import { IReward } from "src/models/reward/interface";
 import Reward from "src/models/reward/model";
 
 export const POST = async (req: NextRequest, { params }: { params: { challengeId: string }}) => {
   const dbSession = await startSession();
   dbSession.startTransaction();
-
+  
   try {
     await connectMongoDB();
     
@@ -22,45 +21,47 @@ export const POST = async (req: NextRequest, { params }: { params: { challengeId
 
     const user = verification.response;
 
-    const payload = await req.json() as Partial<IChallengeCheckpoint>
-    const { name, description, checkpoint, reward, startDate, endDate} = payload
+    const payload = await req.json() as Partial<IChallengeCheckpoint>[]
+
+    console.log("Payload: ", payload);
 
     const challenge = await FinancialChallenge.findOne({ _id: params.challengeId})
     if (!challenge) {
-      return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
+      return NextResponse.json({ response: 'Challenge not found' }, { status: 404 });
     }
 
-    let newReward : IReward = null;
-    if (reward) {
-      newReward = new Reward(reward)
-      await newReward.save({session: dbSession});
+    // create checkpoints
+    let checkpoints : IChallengeCheckpoint[] = [];
+    for (let i = 0; i < payload.length; i++) {
+      const { name, description, checkpointValue, reward, startDate, endDate } = payload[i];
+
+      let newCheckpoint = await ChallengeCheckpoint.create([{
+        challengeId: challenge._id,
+        name: name,
+        description: description,
+        checkpointValue: checkpointValue,
+        reward: reward ? new Reward(reward) : null,
+        startDate: startDate ? new Date(startDate) : null,
+        endDate: endDate ? new Date(endDate) : null,
+        createdBy: user._id,
+      }], {session: dbSession});
+
+      checkpoints.push(newCheckpoint[0]);
     }
-
-    // Create a new challenge
-    let newCheckpoint = new ChallengeCheckpoint({
-      createdBy: user._id,
-      name: name,
-      description: description,
-      checkpoint: checkpoint,
-      reward: newReward,
-      startDate: startDate,
-      endDate: endDate,
-    })
-    await newCheckpoint.save({session: dbSession});
-
-    // Add the new checkpoint to the challenge
-    challenge.checkpoints.push(newCheckpoint._id);
+    
+    // Add the new checkpoints to the challenge
+    challenge.checkpoints = checkpoints;
     await challenge.save({session: dbSession});
     
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: newCheckpoint }, { status: 200 });
+    return  NextResponse.json({ response: challenge }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
-    console.log("Error creating group saving: ", error);
-    return NextResponse.json({ response: 'Failed to create group saving'}, { status: 500 });
+    console.log("Error creating challenge checkpoint: ", error);
+    return NextResponse.json({ response: 'Failed to create challenge checkpoint: ' + error}, { status: 500 });
   }
 };
