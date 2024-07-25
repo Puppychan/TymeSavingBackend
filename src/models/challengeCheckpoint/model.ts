@@ -16,6 +16,7 @@ const challengeCheckpointSchema: Schema = new Schema({
   },
   startDate: {type: Date},
   endDate: {type: Date},
+  createdBy: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 const ChallengeCheckpoint = mongoose.models.ChallengeCheckpoint || mongoose.model<IChallengeCheckpoint>('ChallengeCheckpoint', challengeCheckpointSchema);
 

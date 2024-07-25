@@ -9,4 +9,5 @@ export interface IChallengeCheckpoint extends Document {
     reward: IReward;
     startDate: Date;
     endDate: Date;
+    createdBy: ObjectId;
 }

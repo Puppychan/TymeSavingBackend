@@ -50,17 +50,18 @@ export const POST = async (req: NextRequest) => {
       createdDate: Date.now(),
     }], {session: dbSession});
 
-    let progress = [];
-    members.forEach(async userId => {
-      let memProgress = {
-        userId: userId,
-        challengeId: newChallenge[0]._id,
-      };
-      progress.push(memProgress);
+    let memberProgress = []
+    members.forEach(userId => {
+      let progress = {
+        userId: userId, 
+        challengeId: newChallenge[0]._id
+      }
+      memberProgress.push(progress);
     });
-    let memberProgress : IChallengeProgress[] = await ChallengeProgress.create(progress, {session: dbSession});
+    memberProgress = await ChallengeProgress.create(memberProgress, {session: dbSession});
+    console.log("memberProgress: ", memberProgress);
 
-    let challenge = await FinancialChallenge.findOneAndUpdate(
+    newChallenge = await FinancialChallenge.findOneAndUpdate(
       { _id: newChallenge[0]._id }, 
       { $set: { memberProgress: memberProgress } }, 
       { new: true, runValidators: true, session: dbSession }
@@ -69,12 +70,12 @@ export const POST = async (req: NextRequest) => {
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: challenge }, { status: 200 });
+    return  NextResponse.json({ response: newChallenge }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
     console.log("Error creating challenge: ", error);
-    return NextResponse.json({ response: 'Failed to create challenge: '+error}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to create challenge: '+ error}, { status: 500 });
   }
 };

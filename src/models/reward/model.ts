@@ -8,22 +8,18 @@ const rewardPrizeSchema: Schema = new Schema({
     required: true
   },
   value: {type: Schema.Types.Mixed, required: true}
-});
+}, { _id : false });
 
 
 // Define the schema for the user
 const rewardChema: Schema = new Schema({
-  checkpointId: {
-    type: mongoose.Types.ObjectId,
-    ref: 'ChallengeCheckpoint',
-    required: true
-  },
   name: {type: String, required: true},
   description: {type: String},
   prize: {
     type: [rewardPrizeSchema], 
     required: true
-  }
+  },
+  createdBy: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
 // const prize = mongoose.models.Prize || mongoose.model('Prize', prizeSchema);

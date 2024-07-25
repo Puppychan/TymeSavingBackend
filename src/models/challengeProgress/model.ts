@@ -7,7 +7,7 @@ const checkpointPassSchema: Schema = new Schema({
     ref: 'ChallengeCheckpoint',
   },
   date: Date
-});
+}, {_id: false});
 
 const challengeProgressSchema: Schema = new Schema({
   userId: {

@@ -13,6 +13,8 @@ export const GET = async (req: NextRequest) => {
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
+      const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
+      const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
 
       await connectMongoDB();
 
@@ -22,7 +24,6 @@ export const GET = async (req: NextRequest) => {
       }
 
       const authUser = verification.response;
-      console.log(authUser)
 
       if (authUser.role !== UserRole.Admin) {
         return NextResponse.json({ response: 'Forbidden Action: available for admin only' }, { status: 401 });
@@ -47,6 +48,8 @@ export const GET = async (req: NextRequest) => {
       list = await GroupSaving.aggregate([
           { $match: query },
           { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          { $skip: (pageNo - 1) * pageSize },
+          { $limit: pageSize }
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });

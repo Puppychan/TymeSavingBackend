@@ -15,8 +15,8 @@ export interface IRewardPrize {
 
 // Interface for IReward document
 export interface IReward extends Document {
-    checkpointId: ObjectId;
     name: string;
     description: string;
     prize: IRewardPrize[];
+    createdBy: ObjectId;
 }
