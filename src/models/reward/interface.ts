@@ -5,7 +5,7 @@ export enum BandageValue {
 
 export enum RewardCategory {
     Point = 'Point',
-    Bandage = 'Bandage'
+    Bandage = 'Badge'
 }
 
 export interface IRewardPrize {

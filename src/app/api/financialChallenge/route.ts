@@ -59,7 +59,6 @@ export const POST = async (req: NextRequest) => {
       memberProgress.push(progress);
     });
     memberProgress = await ChallengeProgress.create(memberProgress, {session: dbSession});
-    console.log("memberProgress: ", memberProgress);
 
     newChallenge = await FinancialChallenge.findOneAndUpdate(
       { _id: newChallenge[0]._id }, 

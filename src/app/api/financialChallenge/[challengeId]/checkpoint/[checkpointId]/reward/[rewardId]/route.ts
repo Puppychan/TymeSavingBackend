@@ -8,6 +8,37 @@ import FinancialChallenge from "src/models/financialChallenge/model";
 import { IReward } from "src/models/reward/interface";
 import Reward from "src/models/reward/model";
 
+//GET: get a reward info
+export const GET = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string, rewardId: string}}) => {
+  try {
+    await connectMongoDB();
+    
+    const verification = await verifyAuth(req.headers)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
+    const authUser = verification.response;
+
+    if (authUser.role !== 'Admin') {
+      let isMember = await verifyMember(authUser._id, params.challengeId)
+      if (!isMember) {
+        return NextResponse.json({ response: 'This user is neither an admin nor a member of the financial challenge' }, { status: 401 });
+      }
+    }
+
+    const reward = await Reward.findOne({_id: params.rewardId});
+    if (!reward) {
+      return NextResponse.json({ response: 'Reward not found' }, { status: 404 });
+    }
+
+    return  NextResponse.json({ response: reward }, { status: 200 });
+  } catch (error: any) {
+    console.log("Error getting reward: ", error);
+    return NextResponse.json({ response: 'Failed to get reward: ' + error }, { status: 500 });
+  }
+};
+
 // PUT: Update a reward
 export const PUT = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string, rewardId: string}}) => {
   const dbSession = await startSession();
@@ -70,7 +101,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
 };
 
 
-//DELETE: Delete a checkpoint
+//DELETE: Delete a reward
 export const DELETE = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string, rewardId: string}}) => {
   const dbSession = await startSession();
   dbSession.startTransaction();
@@ -93,7 +124,10 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
     }
 
     const deleted = await Reward.findOneAndDelete({ _id: params.rewardId }, { session: dbSession });
-
+    if (!deleted) {
+      return NextResponse.json({ response: 'Reward not found' }, { status: 404 });
+    }
+    
     // remove reward from checkpoint
     const checkpoint = await ChallengeCheckpoint.findOneAndUpdate(
       { _id: params.challengeId},
@@ -108,7 +142,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: 'Reward is deleted successfully' }, { status: 200 });
+    return  NextResponse.json({ response: 'Reward is deleted successfully: \n' + deleted }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session

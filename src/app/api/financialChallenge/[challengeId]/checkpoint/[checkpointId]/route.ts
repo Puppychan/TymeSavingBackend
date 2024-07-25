@@ -9,6 +9,41 @@ import ChallengeProgress from "src/models/challengeProgress/model";
 import FinancialChallenge from "src/models/financialChallenge/model";
 import Reward from "src/models/reward/model";
 
+
+//GET: get a checkpoint info
+export const GET = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string}}) => {
+  try {
+    await connectMongoDB();
+    
+    const verification = await verifyAuth(req.headers)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
+    const authUser = verification.response;
+
+    if (authUser.role !== 'Admin') {
+      let isMember = await verifyMember(authUser._id, params.challengeId)
+      if (!isMember) {
+        return NextResponse.json({ response: 'This user is neither an admin nor a member of the financial challenge' }, { status: 401 });
+      }
+    }
+
+    const checkpoint = await ChallengeCheckpoint.findOne(
+      { _id: params.checkpointId, challengeId: params.challengeId }
+    );
+
+    if (!checkpoint) {
+      return NextResponse.json({ response: 'Either challenge not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
+    }
+
+    return  NextResponse.json({ response: checkpoint }, { status: 200 });
+  } catch (error: any) {
+    console.log("Error getting checkpoint: ", error);
+    return NextResponse.json({ response: 'Failed to get checkpoint: ' + error}, { status: 500 });
+  }
+};
+
 //PUT: Update a checkpoint
 export const PUT = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string}}) => {
   const dbSession = await startSession();
@@ -60,8 +95,8 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    console.log("Error creating checkpoint: ", error);
-    return NextResponse.json({ response: 'Failed to create checkpoint'}, { status: 500 });
+    console.log("Error updating checkpoint: ", error);
+    return NextResponse.json({ response: 'Failed to update checkpoint: ' + error}, { status: 500 });
   }
 };
 
@@ -115,12 +150,12 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: deletedCheckpoint }, { status: 200 });
+    return  NextResponse.json({ response: "Deleted checkpoint: \n" + deletedCheckpoint }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    console.log("Error creating checkpoint: ", error);
-    return NextResponse.json({ response: 'Failed to create checkpoint: ' + error }, { status: 500 });
+    console.log("Error deleting checkpoint: ", error);
+    return NextResponse.json({ response: 'Failed to delete checkpoint: ' + error }, { status: 500 });
   }
 };
