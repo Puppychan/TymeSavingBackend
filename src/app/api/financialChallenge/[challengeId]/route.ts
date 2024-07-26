@@ -73,18 +73,18 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
 
       const authUser = verification.response;
 
+      if (authUser.role !== 'Admin') {
+        let isMember = await verifyMember(authUser._id, params.challengeId)
+        if (!isMember) {
+          return NextResponse.json({ response: 'This user is neither an admin nor a member of the financial challenge' }, { status: 401 });
+        }
+      }
+
       const payload = await req.json() as Partial<IFinancialChallenge>
 
       const challenge = await FinancialChallenge.findById(params.challengeId)
       if (!challenge) {
         return NextResponse.json({ response: 'Financial Challenge not found' }, { status: 404 });
-      }
-
-      if (authUser.role !== 'Admin') {
-        let isMember = await verifyMember(authUser._id, challenge)
-        if (!isMember) {
-          return NextResponse.json({ response: 'This user is neither an admin nor a member of the financial challenge' }, { status: 401 });
-        }
       }
 
       const updateQuery: any = {};
@@ -120,20 +120,20 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
       }
 
       const authUser = verification.response;
-
-      const challenge = await FinancialChallenge.findOneAndDelete({ _id: params.challengeId})
-      if (!challenge) {
-        return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
-      }
-
+      
       if (authUser.role !== 'Admin') {
-        let isMember = await verifyMember(authUser._id, challenge)
+        let isMember = await verifyMember(authUser._id, params.challengeId)
         if (!isMember) {
           return NextResponse.json({ response: 'This user is neither an admin nor a member of the financial challenge' }, { status: 401 });
         }
       }
 
-      return NextResponse.json({ response: "Delted successfully" }, { status: 200 });
+      const deletedChallenge = await FinancialChallenge.findOneAndDelete({ _id: params.challengeId})
+      if (!deletedChallenge) {
+        return NextResponse.json({ response: 'Challenge not found' }, { status: 404 });
+      }
+
+      return NextResponse.json({ response: "Deleted challenge successfully: " + deletedChallenge._id }, { status: 200 });
   } catch (error: any) {
     console.log('Error deleting financial challenge:', error);
     return NextResponse.json({ response: 'Failed to delete financial challenge: ' + error }, { status: 500 });

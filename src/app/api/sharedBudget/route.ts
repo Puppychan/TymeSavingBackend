@@ -7,11 +7,11 @@ import { GroupRole } from "src/models/sharedBudgetParticipation/interface";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 
 export const POST = async (req: NextRequest) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
-
+  
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {

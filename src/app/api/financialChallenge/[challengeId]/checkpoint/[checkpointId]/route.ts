@@ -46,12 +46,11 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
 
 //PUT: Update a checkpoint
 export const PUT = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string}}) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
 
-  try {
-    await connectMongoDB();
-    
+  try {    
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });
@@ -102,12 +101,11 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
 
 //DELETE: Delete a checkpoint
 export const DELETE = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string}}) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
 
   try {
-    await connectMongoDB();
-    
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });
@@ -128,7 +126,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
     );
 
     if (!deletedCheckpoint) {
-      return NextResponse.json({ response: 'Either challenge not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
+      return NextResponse.json({ response: 'Either checkpoint not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
     }
 
     const deletedReward = await Reward.findOneAndDelete({ _id: deletedCheckpoint.reward }, { session: dbSession });
@@ -142,18 +140,18 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
 
     // remove checkpoint from member progress
     const memberProgress = await ChallengeProgress.updateMany(
-      { challengeId: challenge._id, checkpointPassed: { checkpointId: deletedCheckpoint._id } },
-      { $pull: { checkpointPassed: { checkpointId: deletedCheckpoint._id } } },
+      { challengeId: params.challengeId, "checkpointPassed.checkpointId": params.checkpointId } ,
+      { $pull: { checkpointPassed: { checkpointId: params.checkpointId } } },
       { session: dbSession }
     );
       
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: "Deleted checkpoint: \n" + deletedCheckpoint }, { status: 200 });
+    return  NextResponse.json({ response: "Deleted checkpoint: " + deletedCheckpoint._id }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log("Error deleting checkpoint: ", error);
     return NextResponse.json({ response: 'Failed to delete checkpoint: ' + error }, { status: 500 });

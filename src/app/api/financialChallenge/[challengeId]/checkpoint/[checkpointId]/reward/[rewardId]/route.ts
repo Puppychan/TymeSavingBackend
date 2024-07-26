@@ -41,11 +41,11 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
 
 // PUT: Update a reward
 export const PUT = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string, rewardId: string}}) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
-
+  
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
@@ -103,11 +103,11 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
 
 //DELETE: Delete a reward
 export const DELETE = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string, rewardId: string}}) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
-
+  
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
@@ -142,7 +142,7 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
     await dbSession.commitTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session
 
-    return  NextResponse.json({ response: 'Reward is deleted successfully: \n' + deleted }, { status: 200 });
+    return  NextResponse.json({ response: 'Reward is deleted successfully: ' + deleted._id }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
     dbSession.endSession();  // End the session

@@ -9,12 +9,11 @@ import Reward from "src/models/reward/model";
 
 // POST: Add reward to a checkpoint
 export const POST = async (req: NextRequest, { params }: { params: { challengeId: string, checkpointId: string }}) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
   
   try {
-    await connectMongoDB();
-    
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });

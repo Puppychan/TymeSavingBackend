@@ -10,11 +10,11 @@ import { ChallengeScope } from "src/models/financialChallenge/interface";
 import FinancialChallenge from "src/models/financialChallenge/model";
 
 export const POST = async (req: NextRequest) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
 
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {

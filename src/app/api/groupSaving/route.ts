@@ -7,11 +7,11 @@ import { GroupRole } from "src/models/groupSavingParticipation/interface";
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 
 export const POST = async (req: NextRequest) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
-
+  
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {

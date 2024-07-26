@@ -10,11 +10,11 @@ import Reward from "src/models/reward/model";
 
 // POST: Add checkpoints to a challenge
 export const POST = async (req: NextRequest, { params }: { params: { challengeId: string }}) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
   
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
