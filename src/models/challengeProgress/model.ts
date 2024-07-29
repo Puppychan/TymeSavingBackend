@@ -1,7 +1,7 @@
 import mongoose, {Schema} from 'mongoose';
-import { IChallengeProgress } from './interface';
+import { IChallengeProgress, ICheckpointPass } from './interface';
 
-const checkpointPassSchema: Schema = new Schema({
+export const checkpointPassSchema: Schema = new Schema({
   checkpointId: {
     type: Schema.Types.ObjectId,
     ref: 'ChallengeCheckpoint',
@@ -30,5 +30,6 @@ const challengeProgressSchema: Schema = new Schema({
 });
 
 const ChallengeProgress = mongoose.models.ChallengeProgress || mongoose.model<IChallengeProgress>('ChallengeProgress', challengeProgressSchema);
+export const CheckpointPass = mongoose.models.CheckpointPass || mongoose.model<ICheckpointPass>('CheckpointPass', checkpointPassSchema);
 
 export default ChallengeProgress;

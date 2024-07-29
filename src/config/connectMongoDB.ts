@@ -19,8 +19,8 @@ export const connectMongoDB = async () => {
     await mongoose.connect(
       MONGODB_URI, 
       {
-        dbName: MONGODB_DBNAME,
-        // dbName: "tymetest",
+        // dbName: MONGODB_DBNAME,
+        dbName: "tymetest",
         // useNewUrlParser: true,    //default is true -> remove
         // useUnifiedTopology: true, //default is true -> remove
       }
