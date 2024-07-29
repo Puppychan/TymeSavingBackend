@@ -12,11 +12,12 @@ import { startSession } from "mongoose";
 */
 
 export const POST = async (req:NextRequest) => {
+    await connectMongoDB();
+
     const dbSession = await startSession();
     dbSession.startTransaction();
   
     try{
-        await connectMongoDB();
         const payload = await req.json()
         // Transaction.id will be auto assigned by MongoDB
         // createdDate and editedDate are auto assigned to now

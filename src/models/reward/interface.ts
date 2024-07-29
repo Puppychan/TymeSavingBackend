@@ -5,10 +5,10 @@ export enum BandageValue {
 
 export enum RewardCategory {
     Point = 'Point',
-    Bandage = 'Bandage'
+    Bandage = 'Badge'
 }
 
-export interface IRewardPrice {
+export interface IRewardPrize {
     category: RewardCategory;
     value: number | BandageValue;
 }
@@ -17,6 +17,6 @@ export interface IRewardPrice {
 export interface IReward extends Document {
     name: string;
     description: string;
-    price: IRewardPrice[];
+    prize: IRewardPrize[];
     createdBy: ObjectId;
 }

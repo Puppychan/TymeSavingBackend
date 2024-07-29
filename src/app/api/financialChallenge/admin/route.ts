@@ -1,14 +1,15 @@
-export const dynamic = 'force-dynamic';
+import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
-import SharedBudget from "src/models/sharedBudget/model";
+import FinancialChallenge from "src/models/financialChallenge/model";
 import { UserRole } from "src/models/user/interface";
 
-// GET: get shared budget list of all users
-export const GET = async (req: NextRequest) => {
+// GET: get financial challenge list of a user
+export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
   try {
       const searchParams = req.nextUrl.searchParams
+      const userId = searchParams.get('userId')
       const name = searchParams.get('name')
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
@@ -18,19 +19,22 @@ export const GET = async (req: NextRequest) => {
 
       await connectMongoDB();
 
-      const verification = await verifyAuth(req.headers)
+      const verification = await verifyAuth(req.headers, params.userId)
       if (verification.status !== 200) {
         return NextResponse.json({ response: verification.response }, { status: verification.status });
       }
 
       const authUser = verification.response;
-      console.log(authUser)
 
       if (authUser.role !== UserRole.Admin) {
         return NextResponse.json({ response: 'Forbidden Action: available for admin only' }, { status: 401 });
       }
 
       let filter = []
+      if (userId) {
+        filter.push({ "members":{ $in: [new ObjectId(userId)] } })
+      }
+
       if (name) {
         filter.push({ "name":{ $regex:'.*' + name + '.*', $options: 'i' } })
       }
@@ -46,7 +50,7 @@ export const GET = async (req: NextRequest) => {
       if (filter.length > 0) query['$and'] = filter
 
       let list = []
-      list = await SharedBudget.aggregate([
+      list = await FinancialChallenge.aggregate([
           { $match: query },
           { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
           { $skip: (pageNo - 1) * pageSize },
@@ -55,7 +59,7 @@ export const GET = async (req: NextRequest) => {
        
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {
-    console.log('Error getting shared budget list:', error);
-    return NextResponse.json({ response: 'Failed to get shared budget list'}, { status: 500 });
+    console.log('Error getting financial challenge list:', error);
+    return NextResponse.json({ response: 'Failed to get financial challenge list: ' + error }, { status: 500 });
   }
 };

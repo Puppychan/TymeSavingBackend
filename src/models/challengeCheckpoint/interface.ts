@@ -1,17 +1,13 @@
 import {Document, ObjectId} from 'mongoose';
-
-export enum ICheckpointCategory {
-    Reward = 'Reward',
-    Punishment = 'Punishment'
-}
+import { IReward } from '../reward/interface';
 
 export interface IChallengeCheckpoint extends Document {
+    challengeId: ObjectId;
     name: string;
     description: string;
-    type: ICheckpointCategory;
-    checkpoint: number;
-    reward: ObjectId;
-    punishment: ObjectId;
+    checkpointValue: number;
+    reward: IReward;
     startDate: Date;
     endDate: Date;
+    createdBy: ObjectId;
 }
