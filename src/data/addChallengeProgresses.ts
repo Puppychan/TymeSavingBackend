@@ -1,7 +1,6 @@
 import { readCSV } from "src/lib/readCSV";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import ChallengeProgress from "src/models/challengeProgress/model";
-import { CheckpointPass } from "src/models/challengeProgress/model";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 
@@ -24,13 +23,12 @@ export const addChallengeProgress = async () => {
             if (challengeProgress.checkpointPassed) {
                 challengeProgress.checkpointPassed = challengeProgress.checkpointPassed.split(';').map(link => {
                     if (mongoose.Types.ObjectId.isValid(link.trim())) {
-                        return new CheckpointPass({
+                        return {
                             checkpointId: new mongoose.Types.ObjectId(link.trim()),
                             date: challengeProgress.lastUpdate
-                        });
+                        };
                     }
                 }).filter(checkpoint => checkpoint !== undefined); // Filter out invalid IDs
-                console.log(challengeProgress.checkpointPassed);
             }
             else {
                 delete challengeProgress.checkpointPassed;

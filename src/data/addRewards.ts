@@ -1,7 +1,6 @@
 import { readCSV } from "src/lib/readCSV";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import Reward from "src/models/reward/model";
-import { RewardPrize } from "src/models/reward/model";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 
@@ -19,10 +18,11 @@ export const addReward = async () => {
                 reward.createdBy = new mongoose.Types.ObjectId(reward.createdBy);
             }
             if (reward.prize){
-                const dataPrize = new RewardPrize({
+                // since there is only 1 prize in the data file
+                const dataPrize = {
                     category: reward.prize.split(':')[0],
                     value: reward.prize.split(':')[1]
-                });
+                };
                 reward.prize = [dataPrize];
             }
             return reward;

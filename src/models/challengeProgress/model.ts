@@ -30,6 +30,6 @@ const challengeProgressSchema: Schema = new Schema({
 });
 
 const ChallengeProgress = mongoose.models.ChallengeProgress || mongoose.model<IChallengeProgress>('ChallengeProgress', challengeProgressSchema);
-export const CheckpointPass = mongoose.models.CheckpointPass || mongoose.model<ICheckpointPass>('CheckpointPass', checkpointPassSchema);
+// export const CheckpointPass = mongoose.models.CheckpointPass || mongoose.model<ICheckpointPass>('CheckpointPass', checkpointPassSchema);
 
 export default ChallengeProgress;
