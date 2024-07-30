@@ -43,13 +43,13 @@ export const DELETE = async (req: NextRequest, { params }: { params: { groupId: 
       await GroupSaving.findOneAndDelete({ _id: params.groupId}).session(dbSession)
 
       await dbSession.commitTransaction();  // Commit the transaction
-      dbSession.endSession();  // End the session
+      await dbSession.endSession();  // End the session
       
       return NextResponse.json({ response: 'Deleted successfully' }, { status: 200 });
 
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log('Error deleting group saving:', error);
     return NextResponse.json({ response: 'Failed to delete group saving'}, { status: 500 });

@@ -87,12 +87,12 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
     }
       
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     return  NextResponse.json({ response: updated }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log("Error updating checkpoint: ", error);
     return NextResponse.json({ response: 'Failed to update checkpoint: ' + error}, { status: 500 });
