@@ -42,12 +42,12 @@ export const POST = async (req: NextRequest) => {
     }], {session: dbSession});
 
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     return  NextResponse.json({ response: newGroup }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log("Error creating group saving: ", error);
     return NextResponse.json({ response: 'Failed to create group saving'}, { status: 500 });

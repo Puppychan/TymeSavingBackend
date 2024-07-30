@@ -88,12 +88,12 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
     }
       
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     return  NextResponse.json({ response: updated }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log("Error updating Reward: ", error);
     return NextResponse.json({ response: 'Failed to update Reward: ' + error }, { status: 500 });
@@ -140,12 +140,12 @@ export const DELETE = async (req: NextRequest, { params }: { params: { challenge
     );
       
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     return  NextResponse.json({ response: 'Reward is deleted successfully: ' + deleted._id }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log("Error deleting reward: ", error);
     return NextResponse.json({ response: 'Failed to delete reward: ' + error }, { status: 500 });
