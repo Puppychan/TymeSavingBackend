@@ -48,6 +48,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $skip: (pageNo - 1) * pageSize },
           { $limit: pageSize }
         ])
+
+      console.log("Group Saving List: ", list);
        
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {
