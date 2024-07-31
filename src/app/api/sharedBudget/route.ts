@@ -7,11 +7,11 @@ import { GroupRole } from "src/models/sharedBudgetParticipation/interface";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 
 export const POST = async (req: NextRequest) => {
+  await connectMongoDB();
   const dbSession = await startSession();
   dbSession.startTransaction();
-
+  
   try {
-    await connectMongoDB();
     
     const verification = await verifyAuth(req.headers)
     if (verification.status !== 200) {
@@ -42,12 +42,12 @@ export const POST = async (req: NextRequest) => {
     }], {session: dbSession});
 
     await dbSession.commitTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     return  NextResponse.json({ response: newSharedBudget }, { status: 200 });
   } catch (error: any) {
     await dbSession.abortTransaction();  // Commit the transaction
-    dbSession.endSession();  // End the session
+    await dbSession.endSession();  // End the session
 
     console.log("Error creating shared budget: ", error);
     return NextResponse.json({ response: 'Failed to create shared budget'}, { status: 500 });
