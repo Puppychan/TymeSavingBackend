@@ -12,6 +12,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
+      const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
+      const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
 
       await connectMongoDB();
 
@@ -42,7 +44,9 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $unwind : "$groupSaving" },
           { $match: query },
           { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
-          { $replaceRoot: { newRoot: "$groupSaving" } }
+          { $replaceRoot: { newRoot: "$groupSaving" } },
+          { $skip: (pageNo - 1) * pageSize },
+          { $limit: pageSize }
         ])
 
       console.log("Group Saving List: ", list);

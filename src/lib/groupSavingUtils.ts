@@ -1,10 +1,9 @@
-import { GroupRole } from "src/models/groupSavingParticipation/interface"
+import { GroupRole, IGroupSavingParticipation } from "src/models/groupSavingParticipation/interface"
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model"
 import GroupSaving from "src/models/groupSaving/model"
 import Transaction from "src/models/transaction/model"
 import { TransactionType } from "src/models/transaction/interface"
-import e from "express"
-import SharedBudget from "src/models/sharedBudget/model"
+import { ObjectId } from "mongoose"
 
 export async function checkDeletableGroupSaving(groupSavingId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -86,6 +85,26 @@ export async function changeSavingGroupBalance(transactionId) {
       group.concurrentAmount += transaction.amount
       group.save()
       resolve(group)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
+}
+
+export async function getMemberListSavingGroup(groupId) : Promise<ObjectId[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let group = await GroupSaving.findById(groupId);
+      if (!group) {
+        throw("Group Saving not found")
+      }
+
+      let members : IGroupSavingParticipation[] = await GroupSavingParticipation.find({ groupSaving: groupId });
+      let memberList : ObjectId[] = []
+      if (members.length > 0) memberList = members.map(member => member.user)
+      resolve(memberList)
     }
     catch (error) {
       console.log(error)
