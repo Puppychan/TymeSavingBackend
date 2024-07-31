@@ -33,6 +33,11 @@ export const PUT = async (req: NextRequest, { params }: { params: { sharedBudget
           if (key === 'endDate') {
             updateQuery[`${key}`] = new Date(payload[key as keyof ISharedBudget]);
           }
+          else if (key == 'amount') {
+            updateQuery[`${key}`] = payload[key as keyof ISharedBudget] ?? 0;
+            if (sharedBudget.concurrentAmount === sharedBudget.amount)
+              updateQuery['concurrentAmount'] = payload[key as keyof ISharedBudget] ?? 0
+          }
           else updateQuery[`${key}`] = payload[key as keyof ISharedBudget];
       });
 

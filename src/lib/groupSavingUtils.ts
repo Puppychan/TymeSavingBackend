@@ -13,7 +13,7 @@ export async function checkDeletableGroupSaving(groupSavingId) : Promise<boolean
         { $match: { savingGroupId: groupSavingId } },
       ])
       
-      if (associated.length >= 0) resolve(false)
+      if (associated.length > 0) resolve(false)
       resolve(true)
     }
     catch (error) {
@@ -84,6 +84,31 @@ export async function changeSavingGroupBalance(transactionId) {
       }
 
       group.concurrentAmount += transaction.amount
+      group.save()
+      resolve(group)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
+}
+
+export async function removeTransactionFromGroupSaving(transactionId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const transaction = await Transaction.findById(transactionId)
+      if (!transaction) {
+        throw ("Transaction not found")
+      }
+
+      const group = await GroupSaving.findById(transaction.savingGroupId)
+      if (!group) {
+        throw ("Group Saving not found")
+      }
+
+      group.concurrentAmount -= transaction.amount;
+
       group.save()
       resolve(group)
     }
