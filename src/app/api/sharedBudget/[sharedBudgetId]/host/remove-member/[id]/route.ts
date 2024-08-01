@@ -6,9 +6,10 @@ import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/mode
 import User from "src/models/user/model";
 
 // DELETE: remove a member from a shared budget (available only for Host User of the shared budget)
-export const DELETE = async (req: NextRequest, { params }: { params: { sharedBudgetId: string }}) => {
+export const DELETE = async (req: NextRequest, { params }: { params: { sharedBudgetId: string, id: string }}) => {
   try {
       await connectMongoDB();
+      const memberId = params.id;
 
       const verification = await verifyAuth(req.headers)
       if (verification.status !== 200) {
@@ -17,8 +18,8 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
 
       const authUser = verification.response;
 
-      const payload = await req.json()
-      const { memberId } = payload
+      // const payload = await req.json()
+      // const { memberId } = payload
 
       const sharedBudget = await SharedBudget.findById(params.sharedBudgetId)
       if (!sharedBudget) {
