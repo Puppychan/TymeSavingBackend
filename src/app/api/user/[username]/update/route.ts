@@ -6,11 +6,14 @@ import { exist_email, exist_username } from "src/lib/checkExist";
 import { usernameValidator } from "src/lib/validator";
 import { IUser } from "src/models/user/interface";
 import User from "src/models/user/model";
+import { startSession } from "mongoose";
 
 // PUT: update user information (except for password and pin)
 export const PUT = async (req: NextRequest, { params }: { params: { username: string }}) => {
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
   try {
-      await connectMongoDB();
       const verification = await verifyUser(req.headers, params.username)
       if (verification.status !== 200) {
         return NextResponse.json({ response: verification.response }, { status: verification.status });
@@ -53,9 +56,14 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       // Convert the user document to a plain JavaScript object and remove the password field
       let returnUser = updatedUser.toObject();
       delete returnUser.password;
+
+      await dbSession.commitTransaction();  // Commit the transaction
+      await dbSession.endSession();  // End the session
       // return NextResponse.json({ response: { token, user: returnUser } }, { status: 200 });
       return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
+    await dbSession.abortTransaction();  // Abort the transaction
+    await dbSession.endSession();  // End the session
     if (error.code === 11000) {
       // Extract the field name causing the duplicate key error
       const fieldMatch = error.message.match(/index: (\w+)_1/);

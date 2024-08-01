@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { IInvitation } from "src/models/invitation/interface";
 import Invitation from "src/models/invitation/model";
-
+import { startSession } from "mongoose";
 // IMPORTANT: invitationId here is the invitation's assigned MongoDB ID
 
 /*
@@ -31,9 +31,10 @@ export const GET = async(req: NextRequest, { params }: { params: { invitationId:
 // Discuss: Do we pass in users and cancelledUsers as "u1;u2", or [u1, u2]?
 // Using [u1, u2] currently
 export const PUT = async(req: NextRequest, { params }: { params: {invitationId: string} }) => {
-    try {
-        await connectMongoDB();
-  
+    await connectMongoDB();
+    const dbSession = await startSession();
+    dbSession.startTransaction();
+    try {  
         const payload = await req.json() as Partial<IInvitation> //payload = newInvitation
         const invitation = await Invitation.findOne({ _id: params.invitationId });
         if (!invitation) {
@@ -68,10 +69,13 @@ export const PUT = async(req: NextRequest, { params }: { params: {invitationId: 
                 runValidators: true,
             }
         );
-        console.log('updatedInvitation:', updatedInvitation);
-        console.log('updated fields: ', updateQuery);
+        
+        await dbSession.commitTransaction();  // Commit the transaction
+        await dbSession.endSession();  // End the session
         return NextResponse.json({ response: updatedInvitation }, { status: 200 });
     } catch (error: any) {
+        await dbSession.abortTransaction();  // Abort the transaction
+        await dbSession.endSession();  // End the session
         console.log('Error updating user:', error);
         return NextResponse.json({ response: 'Cannot update invitation with id ' + params.invitationId }, { status: 500 });
     }
@@ -80,9 +84,10 @@ export const PUT = async(req: NextRequest, { params }: { params: {invitationId: 
 // DELETE invitation
 export const DELETE = async(req: NextRequest, { params }: { params: { invitationId: string } }) => {
     const invitationId = params.invitationId;
+    await connectMongoDB();
+    const dbSession = await startSession();
+    dbSession.startTransaction();
     try {
-        await connectMongoDB();
-
         const query_invitation = await Invitation.findOne({ _id: invitationId });
         if (query_invitation) {
             await Invitation.deleteOne({ _id: invitationId });
@@ -94,6 +99,8 @@ export const DELETE = async(req: NextRequest, { params }: { params: { invitation
             return NextResponse.json({ response: "No such invitation." }, { status: 400 });
         }
     } catch (error) {
+        await dbSession.abortTransaction();  // Abort the transaction
+        await dbSession.endSession();  // End the session
         console.log(error);
         return NextResponse.json(
         { response: "Invitation with id " + invitationId + " could not be deleted." },

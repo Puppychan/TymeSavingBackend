@@ -3,14 +3,17 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyUser } from "src/lib/authentication";
 import { uploadFile } from "src/lib/firebase/storage";
 import User from "src/models/user/model";
+import { startSession } from "mongoose";
 
 // PUT: update user avatar
 export const PUT = async (req: NextRequest, { params }: { params: { username: string }}) => {
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
   try {
       const formData = await req.formData();
       const file = formData.get("file") as File;
 
-      await connectMongoDB();
       const verification = await verifyUser(req.headers, params.username)
       if (verification.status !== 200) {
         return NextResponse.json({ response: verification.response }, { status: verification.status });
@@ -41,8 +44,12 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
       delete returnUser.password;
       delete returnUser.pin;
       
+      await dbSession.commitTransaction();  // Commit the transaction
+      await dbSession.endSession();  // End the session
       return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
+    await dbSession.abortTransaction();  // Abort the transaction
+    await dbSession.endSession();  // End the session
     console.log('Error updating user avatar:', error);
     return NextResponse.json({ response: 'Cannot update user avatar: ' + error.message }, { status: 500 });
   }

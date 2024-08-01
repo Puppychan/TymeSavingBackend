@@ -39,7 +39,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let list = []
       list = await FinancialChallenge.aggregate([
-          { $match: { member: { $in: [new ObjectId(params.userId)]} } },
+          { $match: { members: { $in: [new ObjectId(params.userId)]} } },
           { $match: query },
           { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
           { $skip: (pageNo - 1) * pageSize },
