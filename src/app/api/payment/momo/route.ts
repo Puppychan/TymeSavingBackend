@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { payment_config_momo } from "src/lib/payment.config";
 import * as crypto from 'crypto';
 import * as https from 'https';
+import { connectMongoDB } from "src/config/connectMongoDB";
+import Transaction from "src/models/transaction/model";
+import { verifyAuth } from "src/lib/authentication";
 
 interface MoMoResponse {
     partnerCode: string;
@@ -12,22 +15,43 @@ interface MoMoResponse {
     message: string;
     resultCode: number;
     payUrl: string;
-    deeplink: string | undefined | null;
-    qrCodeUrl: string | undefined | null;
-    deeplinkMiniApp: string | undefined | null;
-    signature: string | undefined | null;
-    userFee: number | undefined | null;
+    deeplink?: string;
+    qrCodeUrl?: string;
+    deeplinkMiniApp?: string;
+    signature?: string;
+    userFee?: number;
 }
 
 export const POST = async (req: NextRequest) => {
   try {
+    await connectMongoDB();
+
+    // const verification = await verifyAuth(req.headers)
+    // if (verification.status !== 200) {
+    //   return NextResponse.json({ response: verification.response }, { status: verification.status });
+    // }
+
+    // const authUser = verification.response;
+
     const payload = await req.json();
-    const {transactionId, description, amount} = payload;
+    const {transactionId} = payload;
+
+    let transaction = await Transaction.findOne({_id: transactionId});
+    if (!transaction) {
+        return NextResponse.json({ response: "Transaction not found"}, {status: 404})
+    }
+
+    // if (transaction.userId.toString() !== authUser._id.toString()) {
+    //     return NextResponse.json({ response: "Unauthorized"}, {status: 401})
+    // }
+
     const { partnerCode, accessKey, secretkey, domain, redirectUrl, ipnUrl, requestType, extraData } = payment_config_momo;
     
     var requestId = partnerCode + new Date().getTime();
+    var amount = transaction.amount;
+    var description = transaction.description;
     var orderId = transactionId;
-    var orderInfo = description;
+    var orderInfo = (description && description !== "") ? description : `Payment for ${transactionId} with MoMo`;
 
     //create HMAC SHA256 signature
     var rawSignature = "accessKey=" + accessKey
@@ -49,7 +73,7 @@ export const POST = async (req: NextRequest) => {
     console.log(signature)
 
     //json object send to MoMo endpoint
-    const requestBody = JSON.stringify({
+    const requestBody = {
         partnerCode : partnerCode,
         requestId : requestId,
         amount : amount,
@@ -61,7 +85,9 @@ export const POST = async (req: NextRequest) => {
         extraData : extraData,
         lang: 'en',
         signature : signature,
-    });
+    };
+
+    console.log("requestBody: ", requestBody)
 
     const endpoint = 'https://' + domain + '/v2/gateway/api/create';
     const options = {
@@ -74,7 +100,7 @@ export const POST = async (req: NextRequest) => {
 
     const res = await fetch(endpoint, {...options})
     const momoResponse = await res.json() as MoMoResponse;
-    console.log(momoResponse)
+    console.log("momores: ", momoResponse)
 
     // const options = {
     //     hostname: domain,
