@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { payment_config_momo } from "src/lib/payment.config";
 import * as crypto from 'crypto';
-import * as https from 'https';
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import { verifyAuth } from "src/lib/authentication";
@@ -26,12 +25,12 @@ export const POST = async (req: NextRequest) => {
   try {
     await connectMongoDB();
 
-    // const verification = await verifyAuth(req.headers)
-    // if (verification.status !== 200) {
-    //   return NextResponse.json({ response: verification.response }, { status: verification.status });
-    // }
+    const verification = await verifyAuth(req.headers)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
 
-    // const authUser = verification.response;
+    const authUser = verification.response;
 
     const payload = await req.json();
     const {transactionId} = payload;
@@ -41,17 +40,16 @@ export const POST = async (req: NextRequest) => {
         return NextResponse.json({ response: "Transaction not found"}, {status: 404})
     }
 
-    // if (transaction.userId.toString() !== authUser._id.toString()) {
-    //     return NextResponse.json({ response: "Unauthorized"}, {status: 401})
-    // }
+    if (transaction.userId.toString() !== authUser._id.toString()) {
+        return NextResponse.json({ response: "Unauthorized"}, {status: 401})
+    }
 
     const { partnerCode, accessKey, secretkey, domain, redirectUrl, ipnUrl, requestType, extraData } = payment_config_momo;
     
     var requestId = partnerCode + new Date().getTime();
     var amount = transaction.amount;
-    var description = transaction.description;
     var orderId = transactionId;
-    var orderInfo = (description && description !== "") ? description : `Payment for ${transactionId} with MoMo`;
+    var orderInfo = `Pay with MoMo ${transactionId} ${transaction.description ?? ""}`;
 
     //create HMAC SHA256 signature
     var rawSignature = "accessKey=" + accessKey
@@ -100,40 +98,8 @@ export const POST = async (req: NextRequest) => {
 
     const res = await fetch(endpoint, {...options})
     const momoResponse = await res.json() as MoMoResponse;
-    console.log("momores: ", momoResponse)
+    console.log("Momo Response: ", momoResponse)
 
-    // const options = {
-    //     hostname: domain,
-    //     port: 443,
-    //     path: '/v2/gateway/api/create',
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json',
-    //         'Content-Length': Buffer.byteLength(requestBody)
-    //     }
-    // }
-
-    // //Send the request and get the response
-    // let data = '';
-    // const request = https.request(options, res => {
-    //     console.log(`Status: ${res.statusCode}`);
-    //     console.log(`Headers: ${JSON.stringify(res.headers)}`);
-    //     res.setEncoding('utf8');
-
-    //     res.on('data', (chunk) => { 
-    //         data += chunk.toString(); 
-    //     }); 
-    
-    //     res.on('end', () => { 
-    //         if (!res.complete) {
-    //             throw new Error(`The connection was terminated while the message was still being sent`);
-    //         }
-    //         const body = JSON.parse(data); 
-    //         console.log("body: ", body); 
-    //     }); 
-    // });
-
-    // request.end();
 
     if (!momoResponse){
         return NextResponse.json({ response: "Empty response from Momo"}, {status: 502})
@@ -143,7 +109,7 @@ export const POST = async (req: NextRequest) => {
     // 0: Success
     // Others: Failed
     if (momoResponse.resultCode !== 0) {
-        return NextResponse.json({ response: `Payment failed. Momo error code ${momoResponse.resultCode} - ${momoResponse.message}`}, {status: 502})
+        return NextResponse.json({ response: `Payment failed. Momo error code ${momoResponse.resultCode} - ${momoResponse.message}`}, {status: 400})
     }
 
     return NextResponse.json({response: momoResponse}, {status: 200})
