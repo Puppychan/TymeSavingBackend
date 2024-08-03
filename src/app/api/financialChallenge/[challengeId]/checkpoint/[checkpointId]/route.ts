@@ -64,7 +64,7 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
       return NextResponse.json({ response: 'Either challenge not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
     }
 
-    return  NextResponse.json({ response: checkpoint }, { status: 200 });
+    return  NextResponse.json({ response: checkpoint[0] }, { status: 200 });
   } catch (error: any) {
     console.log("Error getting checkpoint: ", error);
     return NextResponse.json({ response: 'Failed to get checkpoint: ' + error}, { status: 500 });
