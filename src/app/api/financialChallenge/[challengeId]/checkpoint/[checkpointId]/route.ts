@@ -8,7 +8,7 @@ import ChallengeCheckpoint from "src/models/challengeCheckpoint/model";
 import ChallengeProgress from "src/models/challengeProgress/model";
 import FinancialChallenge from "src/models/financialChallenge/model";
 import Reward from "src/models/reward/model";
-import mongoose from "mongoose";
+
 
 //GET: get a checkpoint info
 export const GET = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string}}) => {
@@ -29,36 +29,9 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
       }
     }
 
-    const checkpoint = await ChallengeCheckpoint.aggregate([
-      {
-        $match: {
-          _id: new mongoose.Types.ObjectId(params.checkpointId),
-          challengeId: new mongoose.Types.ObjectId(params.challengeId)
-        }
-      },
-      {
-        $lookup: {
-          from: 'rewards', // Name of the Reward collection
-          localField: 'reward', // Field in ChallengeCheckpoint
-          foreignField: '_id', // Field in Reward
-          as: 'rewardDetails'
-        }
-      },
-      {
-        $unwind: {
-          path: '$rewardDetails', 
-          preserveNullAndEmptyArrays: true // If there's no matching reward, still return the checkpoint
-        }
-      },
-      {
-        $project: {
-          _id: 1, // Fields from ChallengeCheckpoint
-          challengeId: 1,
-          reward: 1,
-          rewardDetails: 1 // Includes the matched reward details
-        }
-      }
-    ]);
+    const checkpoint = await ChallengeCheckpoint.findOne(
+      { _id: params.checkpointId, challengeId: params.challengeId }
+    );
 
     if (!checkpoint) {
       return NextResponse.json({ response: 'Either challenge not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
