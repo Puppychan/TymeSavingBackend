@@ -49,14 +49,6 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
           path: '$rewardDetails', 
           preserveNullAndEmptyArrays: true // If there's no matching reward, still return the checkpoint
         }
-      },
-      {
-        $project: {
-          _id: 1, // Fields from ChallengeCheckpoint
-          challengeId: 1,
-          reward: 1,
-          rewardDetails: 1 // Includes the matched reward details
-        }
       }
     ]);
 
