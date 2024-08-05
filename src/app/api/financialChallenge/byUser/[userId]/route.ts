@@ -39,6 +39,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       if (filter.length > 0) query['$and'] = filter
 
       let sort = {}
+      sort['name'] = 1; //default option
       if(sortCreatedDate === 'ascending' || sortCreatedDate === 'descending'){
         sort['createdDate'] = sortCreatedDate === 'ascending' ? 1:-1;
       }
