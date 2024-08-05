@@ -74,7 +74,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           },
           { $unwind: '$creator'},
           { $addFields: {
-            createdBy_fullname: '$creator.fullname' // Add the fullname field
+            createdBy: '$creator.fullname' // Show the fullname instead of user ID
             }
           },
           { $sort: sort },
