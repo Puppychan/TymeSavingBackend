@@ -51,9 +51,25 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       list = await FinancialChallenge.aggregate([
           { $match: { members: { $in: [new ObjectId(params.userId)]} } },
           { $match: query },
+          { $lookup: {
+            from: 'users', // Collection to join with
+            localField: 'createdBy', // Field from FinancialChallenge
+            foreignField: '_id', // Field from User
+            as: 'creator', // Output field name
+            pipeline: [
+              { $project: { _id: 0, fullname: 1 } } // Only fetch the fullname field
+            ]
+            }
+          },
+          { $unwind: '$creator'},
+          { $addFields: {
+            createdBy_fullname: '$creator.fullname' // Add the fullname field
+            }
+          },
           { $sort: sort },
           { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize }
+          { $limit: pageSize },
+          { $project: { creator: 0}}
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });
