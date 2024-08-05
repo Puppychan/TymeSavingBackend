@@ -8,7 +8,7 @@ import ChallengeCheckpoint from "src/models/challengeCheckpoint/model";
 import ChallengeProgress from "src/models/challengeProgress/model";
 import FinancialChallenge from "src/models/financialChallenge/model";
 import Reward from "src/models/reward/model";
-
+import mongoose from "mongoose";
 
 //GET: get a checkpoint info
 export const GET = async (req: NextRequest, { params }: { params: { challengeId: string , checkpointId: string}}) => {
@@ -29,15 +29,34 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
       }
     }
 
-    const checkpoint = await ChallengeCheckpoint.findOne(
-      { _id: params.checkpointId, challengeId: params.challengeId }
-    );
+    const checkpoint = await ChallengeCheckpoint.aggregate([
+      {
+        $match: {
+          _id: new mongoose.Types.ObjectId(params.checkpointId),
+          challengeId: new mongoose.Types.ObjectId(params.challengeId)
+        }
+      },
+      {
+        $lookup: {
+          from: 'rewards', // Name of the Reward collection
+          localField: 'reward', // Field in ChallengeCheckpoint
+          foreignField: '_id', // Field in Reward
+          as: 'rewardDetails'
+        }
+      },
+      {
+        $unwind: {
+          path: '$rewardDetails', 
+          preserveNullAndEmptyArrays: true // If there's no matching reward, still return the checkpoint
+        }
+      }
+    ]);
 
     if (!checkpoint) {
       return NextResponse.json({ response: 'Either challenge not found, or The checkpoint isnt belong to this challenge' }, { status: 404 });
     }
 
-    return  NextResponse.json({ response: checkpoint }, { status: 200 });
+    return  NextResponse.json({ response: checkpoint[0] }, { status: 200 });
   } catch (error: any) {
     console.log("Error getting checkpoint: ", error);
     return NextResponse.json({ response: 'Failed to get checkpoint: ' + error}, { status: 500 });

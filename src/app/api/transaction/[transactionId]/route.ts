@@ -3,6 +3,7 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { ITransaction } from "src/models/transaction/interface";
 import Transaction from "src/models/transaction/model";
 import { addHours } from 'date-fns'
+import { startSession } from "mongoose";
 
 // IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
@@ -30,9 +31,10 @@ export const GET = async(req: NextRequest, { params }: { params: { transactionId
 
 // UPDATE transaction details
 export const PUT = async(req: NextRequest, { params }: { params: {transactionId: string} }) => {
+    await connectMongoDB();
+    const dbSession = await startSession();
+    dbSession.startTransaction();
     try {
-        await connectMongoDB();
-  
         const payload = await req.json() as Partial<ITransaction> //payload = newUser
         const transaction = await Transaction.findOne({ _id: params.transactionId });
         if (!transaction) {
@@ -55,10 +57,13 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
                 runValidators: true,
             }
         );
-        console.log('updatedTransaction:', updatedTransaction);
-        console.log('updated fields: ', updateQuery);
+        
+        await dbSession.commitTransaction();  // Commit the transaction
+        await dbSession.endSession();  // End the session
         return NextResponse.json({ response: updatedTransaction }, { status: 200 });
     } catch (error: any) {
+        await dbSession.abortTransaction();  // Commit the transaction
+        await dbSession.endSession();  // End the session
         console.log('Error updating user:', error);
         return NextResponse.json({ response: 'Cannot update transaction with id ' + params.transactionId }, { status: 500 });
     }
@@ -67,21 +72,26 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
 // DELETE transaction
 export const DELETE = async(req: NextRequest, { params }: { params: { transactionId: string } }) => {
     const transactionId = params.transactionId;
+    await connectMongoDB();
+    const dbSession = await startSession();
+    dbSession.startTransaction();
     try {
-        await connectMongoDB();
-
         const query_transaction = await Transaction.findOne({ _id: transactionId });
         if (query_transaction) {
             await Transaction.deleteOne({ _id: transactionId });
+            await dbSession.commitTransaction();  // Commit the transaction
+            await dbSession.endSession();  // End the session
             return NextResponse.json(
                 { response: "Transaction deleted successfully." },
                 { status: 200 }
             );
         } else {
-            return NextResponse.json({ response: "No such transaction." }, { status: 400 });
+            return NextResponse.json({ response: "No such transaction." }, { status: 404 });
         }
     } catch (error) {
         console.log(error);
+        await dbSession.abortTransaction();  // Abort the transaction
+        await dbSession.endSession();  // End the session
         return NextResponse.json(
         { response: "Transaction with id " + transactionId + " could not be deleted." },
         { status: 500 }

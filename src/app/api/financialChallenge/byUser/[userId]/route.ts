@@ -11,7 +11,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       const name = searchParams.get('name')
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
-      const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
+      const sortCreatedDate = searchParams.get('sortCreatedDate'); // ascending/descending
+      const sortName = searchParams.get('sortName'); // ascending/descending
       const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
       const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
 
@@ -37,13 +38,38 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       let query = {}
       if (filter.length > 0) query['$and'] = filter
 
+      let sort = {}
+      sort['name'] = 1; //default option
+      if(sortCreatedDate === 'ascending' || sortCreatedDate === 'descending'){
+        sort['createdDate'] = sortCreatedDate === 'ascending' ? 1:-1;
+      }
+      if(sortName === 'ascending' || sortName === 'descending'){
+        sort['name'] = sortName === 'ascending' ? 1:-1;
+      }
+
       let list = []
       list = await FinancialChallenge.aggregate([
-          { $match: { member: { $in: [new ObjectId(params.userId)]} } },
+          { $match: { members: { $in: [new ObjectId(params.userId)]} } },
           { $match: query },
-          { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          { $lookup: {
+            from: 'users', // Collection to join with
+            localField: 'createdBy', // Field from FinancialChallenge
+            foreignField: '_id', // Field from User
+            as: 'creator', // Output field name
+            pipeline: [
+              { $project: { _id: 0, fullname: 1 } } // Only fetch the fullname field
+            ]
+            }
+          },
+          { $unwind: '$creator'},
+          { $addFields: {
+            createdBy: '$creator.fullname' // Show the fullname instead of user ID
+            }
+          },
+          { $sort: sort },
           { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize }
+          { $limit: pageSize },
+          { $project: { creator: 0}},
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });

@@ -7,6 +7,7 @@ import User from "src/models/user/model";
 import { InvitationType } from "src/models/invitation/interface";
 import { joinSharedBudget } from "src/lib/sharedBudgetUtils";
 import { joinGroupSaving } from "src/lib/groupSavingUtils";
+import { startSession } from "mongoose";
 /*
 Param: userId, invitationId  
 Pre-requisite: The user must have been invited i.e. must be in the invitation's 'users' array
@@ -18,8 +19,11 @@ Outcome:
 export const POST = async (req: NextRequest) => {
     const payload = await req.json();
     const { userId, invitationId } = payload;
+    await connectMongoDB();
+    const dbSession = await startSession();
+    dbSession.startTransaction();
+
     try{
-        await connectMongoDB();
         var invitation = await Invitation.findById(invitationId);
         if(!invitation){
             return NextResponse.json({response: "No such invitation with id: " + invitationId}, {status: 404});
@@ -61,8 +65,13 @@ export const POST = async (req: NextRequest) => {
             await joinGroupSaving(userId, invitation.groupId)
         } 
 
+        await dbSession.commitTransaction();  // Commit the transaction
+        await dbSession.endSession();  // End the session
+
         return NextResponse.json({ response: `User ${userId} accepted invitation ${invitationId}` }, { status: 200 });
     } catch (error){
+        await dbSession.abortTransaction();  // Abort the transaction
+        await dbSession.endSession();  // End the session
         return NextResponse.json({ response: `Error: ${error}` }, { status: 500 });
     }
 }

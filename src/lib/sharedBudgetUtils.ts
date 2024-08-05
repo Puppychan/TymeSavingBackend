@@ -4,6 +4,7 @@ import { GroupRole, ISharedBudgetParticipation } from "src/models/sharedBudgetPa
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model"
 import { TransactionType } from "src/models/transaction/interface"
 import Transaction from "src/models/transaction/model"
+import { userJoinGroupChallenge } from "./financialChallengeUtils"
 
 export async function checkDeletableSharedBudget(sharedBudgetId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -49,6 +50,7 @@ export async function joinSharedBudget(userId, sharedBudgetId) {
         throw ("Shared Budget not found")
       }
 
+      // new SharedBudgetParticipation object
       const newParticipation = new SharedBudgetParticipation({
         user: userId,
         sharedBudget: sharedBudgetId,
@@ -57,6 +59,10 @@ export async function joinSharedBudget(userId, sharedBudgetId) {
   
       await newParticipation.save()
       resolve(newParticipation)
+
+      // join existing challenges in the group
+      const joinedChallenges = await userJoinGroupChallenge(userId, sharedBudgetId, "SharedBudget");
+      console.log("Joining new challenges with status " + joinedChallenges.status);
     }
     catch (error) {
       console.log(error)

@@ -3,11 +3,14 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { checkPassword, hashPassword, verifyUser } from "src/lib/authentication";
 import { passwordValidator } from "src/lib/validator";
 import User from "src/models/user/model";
+import { startSession } from "mongoose";
 
 // Set/update PIN
 export const POST = async (req: NextRequest, { params }: { params: { username: string } }) => {
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
   try {
-    await connectMongoDB();
     const verification = await verifyUser(req.headers, params.username)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });
@@ -38,9 +41,13 @@ export const POST = async (req: NextRequest, { params }: { params: { username: s
         { $set: {password: hashPw} },
         { new: true }
       );
+    await dbSession.commitTransaction();  // Commit the transaction
+    await dbSession.endSession();  // End the session
     return NextResponse.json({ response: `Password is updated successfully` }, { status: 200 });
 
   } catch (error: any) {
+    await dbSession.abortTransaction();  // Abort the transaction
+    await dbSession.endSession();  // End the session
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
 };

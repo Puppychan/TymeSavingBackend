@@ -4,6 +4,7 @@ import GroupSaving from "src/models/groupSaving/model"
 import Transaction from "src/models/transaction/model"
 import { TransactionType } from "src/models/transaction/interface"
 import { ObjectId } from "mongoose"
+import { userJoinGroupChallenge } from "./financialChallengeUtils"
 
 export async function checkDeletableGroupSaving(groupSavingId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -56,8 +57,12 @@ export async function joinGroupSaving(userId, groupSavingId) {
         role: GroupRole.Member,
       })
   
-      await newParticipation.save()
-      resolve(newParticipation)
+      await newParticipation.save();
+      resolve(newParticipation);
+
+      // join existing challenges in the group
+      const joinedChallenges = await userJoinGroupChallenge(userId, groupSavingId, "GroupSaving");
+      console.log("Joining new challenges with status " + joinedChallenges.status);
     }
     catch (error) {
       console.log(error)

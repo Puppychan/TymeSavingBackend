@@ -65,7 +65,7 @@ export const POST = async (req:NextRequest) => {
         return NextResponse.json({response: newTransaction, status: 200});
     }
     catch (error: any) {
-        await dbSession.abortTransaction();  // Commit the transaction
+        await dbSession.abortTransaction();  // Abort the transaction
         await dbSession.endSession();  // End the session
 
         return NextResponse.json({ response: error.message}, { status: 500 });

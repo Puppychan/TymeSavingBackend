@@ -48,7 +48,7 @@ export const GET = async (req: NextRequest) => {
       let list = []
       list = await SharedBudget.aggregate([
           { $match: query },
-          { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $skip: (pageNo - 1) * pageSize },
           { $limit: pageSize }
         ])
