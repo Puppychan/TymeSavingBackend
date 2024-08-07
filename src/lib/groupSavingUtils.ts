@@ -118,7 +118,69 @@ export async function getMemberListSavingGroup(groupId) : Promise<ObjectId[]> {
   })
 }
 
-// Update relevant stats when a transaction is created/updated
-export async function transactionUpdateGroupSaving(transactionId, savingGroupId){
+/* Called when a transaction's amount is updated. Minus oldAmount, add new amount
+  Must discuss: What if user changes this transaction from one group to another?
+*/
+export async function updateTransactionGroupSaving(transactionId: string, oldAmount: number){
+  return new Promise(async (resolve, reject) => {  
+    try{
+      // Find the transaction
+      const transaction = await Transaction.findById(transactionId);
+      if(!transaction) {
+        throw "Transaction not found"
+      }      
+      if(transaction.type != 'Income'){
+        throw "Only transactions of type Income can belong to a Group Saving"
+      }
+      if(!transaction.savingGroupId){
+        throw "No savingGroupId provided"
+      }
+      if(oldAmount == transaction.amount) { // new amount and old amount is the same
+        throw "No changes to amount; No update to the Shared Budget."
+      }
+      // Find the group
+      const savingGroup = await GroupSaving.findById(transaction.savingGroupId);
+      if(!savingGroup){
+        throw "No Group Saving with provided id"
+      }
+      // Update the group's concurrentAmount: deduct the old amount, add the new amount
+      savingGroup.concurrentAmount += transaction.amount - oldAmount;
+      savingGroup.save();
+      resolve(savingGroup);
+    } catch (error) {
+      console.log(error);
+      reject("Update transaction to shared budget with error: " + error);
+    }
+  });
+}
 
+// Called when a transation is deleted.
+export async function deleteTransactionGroupSaving(transactionId: string, oldAmount: number){
+  return new Promise(async (resolve, reject) => {  
+    try{
+      // Find the transaction
+      const transaction = await Transaction.findById(transactionId);
+      if(!transaction) {
+        throw "Transaction not found"
+      }      
+      if(transaction.type != 'Income'){
+        throw "Only transactions of type Income can belong to a Group Saving"
+      }
+      if(!transaction.savingGroupId){
+        throw "No savingGroupId provided"
+      }
+      // Find the group
+      const savingGroup = await GroupSaving.findById(transaction.savingGroupId);
+      if(!savingGroup){
+        throw "No GroupSaving with provided id"
+      }
+      // Update the group's concurrentAmount: deduct the old amount
+      savingGroup.concurrentAmount -= oldAmount;
+      savingGroup.save();
+      resolve(savingGroup);
+    } catch (error) {
+      console.log(error);
+      reject("Update transaction to GroupSaving with error: " + error);
+    }
+  });
 }

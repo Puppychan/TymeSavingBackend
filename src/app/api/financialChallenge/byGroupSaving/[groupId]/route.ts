@@ -74,7 +74,8 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
           { $unwind: '$creator'},
           { $addFields: {
             createdBy: '$creator.fullname', // Show the fullname instead of user ID
-            createdBy_id: '$creator._id'
+            createdBy_id: '$creator._id',
+            totalCheckPointCount: { $size: '$checkpoints' } // Count the number of checkpoints
             }
           },
           { $sort: sort },
