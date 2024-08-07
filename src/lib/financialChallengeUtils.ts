@@ -87,3 +87,8 @@ export async function userJoinGroupChallenge (userId: mongoose.Types.ObjectId, g
     return {status: 500, response: error};
   }
 }
+
+// Update relevant stats when a transaction is created/updated
+export async function transactionUpdateChallenge(transactionId, challengeId){
+
+}

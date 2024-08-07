@@ -124,3 +124,8 @@ export async function getMemberListBudgetGroup(groupId: string) : Promise<Object
     }
   })
 }
+
+// Update relevant stats when a transaction is created/updated
+export async function transactionUpdateSharedBudget(transactionId, budgetGroupId){
+
+}

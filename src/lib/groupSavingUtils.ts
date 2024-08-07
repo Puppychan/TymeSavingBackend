@@ -117,3 +117,8 @@ export async function getMemberListSavingGroup(groupId) : Promise<ObjectId[]> {
     }
   })
 }
+
+// Update relevant stats when a transaction is created/updated
+export async function transactionUpdateGroupSaving(transactionId, savingGroupId){
+
+}

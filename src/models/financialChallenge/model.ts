@@ -48,6 +48,10 @@ const financialChallengeSchema: Schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
+  },
+  isPublished: {
+    type: Boolean,
+    default: false
   }
 });
 

@@ -47,9 +47,22 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
         sort['name'] = sortName === 'ascending' ? 1:-1;
       }
 
+      // Show unpublished challenges by this user as well
+
       let list = []
       list = await FinancialChallenge.aggregate([
-          { $match: { members: { $in: [new ObjectId(params.userId)]} } },
+          { $match: 
+            { 
+              members: { $in: [new ObjectId(params.userId)]},
+              $or: [
+                { isPublished: true }, // Only challenges published by its creator are shown
+                { // Unpublished challenges by this user
+                  isPublished: false,
+                  createdBy: new ObjectId(params.userId)
+                }
+              ]              
+            } 
+          },
           { $match: query },
           { $lookup: {
             from: 'users', // Collection to join with

@@ -96,6 +96,13 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
           updateQuery[`${key}`] = payload[key as keyof IFinancialChallenge];
       });
 
+      // If this challenge does not have ANY checkpoints, it cannot be made published (false -> true)
+      const checkpoints = await ChallengeCheckpoint.findOne({challengeId: params.challengeId});
+      if(challenge.isPublished == false && updateQuery.isPublished == true && !checkpoints){
+        return NextResponse.json({ response: 'Cannot publish: Financial Challenge has no checkpoints' }, { status: 500 });
+      }
+
+      // Otherwise, update.
       const updated = await FinancialChallenge.findOneAndUpdate(
           { _id: params.challengeId },
           { $set: updateQuery },
@@ -120,7 +127,7 @@ export const PUT = async (req: NextRequest, { params }: { params: { challengeId:
 };
 
 
-// PUT: edit challenge information (available only for the Host)
+// DELETE: delete challenge (available only for the Host)
 export const DELETE = async (req: NextRequest, { params }: { params: { challengeId: string }}) => {
   await connectMongoDB();
   const dbSession = await startSession();

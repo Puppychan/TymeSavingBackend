@@ -50,7 +50,16 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
 
       let list = []
       list = await FinancialChallenge.aggregate([
-          { $match: { savingGroupId: new mongoose.Types.ObjectId(params.groupId) } },
+          { $match: 
+            { savingGroupId: new mongoose.Types.ObjectId(params.groupId),
+              $or:[
+                // Only challenges published by its creator are shown
+                { isPublished: true }, 
+                // Unpublished challenges by the current user
+                { isPublished: false, createdBy: new mongoose.Types.ObjectId(verification.response._id)}
+              ]
+            }
+          },
           { $match: query },
           { $lookup: {
             from: 'users', // Collection to join with
@@ -58,7 +67,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
             foreignField: '_id', // Field from User
             as: 'creator', // Output field name
             pipeline: [
-              { $project: { _id: 1, fullname: 1 } } // Only fetch the fullname field
+              { $project: { _id: 1, fullname: 1 } } // Only fetch the fullname field and _id
             ]
             }
           },

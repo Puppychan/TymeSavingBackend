@@ -6,7 +6,7 @@ import FinancialChallenge from "src/models/financialChallenge/model";
 import { UserRole } from "src/models/user/interface";
 
 // GET: get financial challenge list for admin
-export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
+export const GET = async (req: NextRequest) => {
   try {
       const searchParams = req.nextUrl.searchParams
       const userId = searchParams.get('userId')
@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       await connectMongoDB();
 
-      const verification = await verifyAuth(req.headers, params.userId)
+      const verification = await verifyAuth(req.headers)
       if (verification.status !== 200) {
         return NextResponse.json({ response: verification.response }, { status: verification.status });
       }
@@ -61,6 +61,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let list = [];
       list = await FinancialChallenge.aggregate([
+          // { $match: { isPublished: true } }, // Can admin view unpublished challenges?
           { $match: query },
           { $lookup: {
             from: 'users', // Collection to join with
