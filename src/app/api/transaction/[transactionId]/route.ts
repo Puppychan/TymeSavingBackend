@@ -2,11 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { ITransaction } from "src/models/transaction/interface";
 import Transaction from "src/models/transaction/model";
-import { addHours } from 'date-fns'
 import { startSession } from "mongoose";
 import { localDate } from "src/lib/datetime";
-import { deleteTransactionSharedBudget, updateTransactionSharedBudget } from "src/lib/sharedBudgetUtils";
-import { updateTransactionGroupSaving, deleteTransactionGroupSaving } from "src/lib/groupSavingUtils";
+import { revertTransactionSharedBudget, updateTransactionSharedBudget } from "src/lib/sharedBudgetUtils";
+import { updateTransactionGroupSaving, revertTransactionGroupSaving } from "src/lib/groupSavingUtils";
 
 // IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
@@ -107,11 +106,11 @@ export const DELETE = async(req: NextRequest, { params }: { params: { transactio
         if (query_transaction) {
             // Add the amount back to the budget group
             if (query_transaction.budgetGroupId){
-                await deleteTransactionSharedBudget(params.transactionId, query_transaction.amount);
+                await revertTransactionSharedBudget(params.transactionId, query_transaction.amount);
             }          
             // Deduct the amount from the saving group
             else if (query_transaction.savingGroupId){
-                await deleteTransactionGroupSaving(params.transactionId, query_transaction.amount);
+                await revertTransactionGroupSaving(params.transactionId, query_transaction.amount);
             }
 
             // Delete the transaction
