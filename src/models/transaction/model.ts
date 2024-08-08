@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { ITransaction, TransactionType, TransactionCategory } from './interface';
+import { ITransaction, TransactionType, TransactionCategory, approveStatuses } from './interface';
 
 // Define the schema for the user
 const transactionSchema: Schema = new Schema({
@@ -39,7 +39,12 @@ const transactionSchema: Schema = new Schema({
       type: String,
       enum: Object.values(TransactionCategory),
       required: true
-  }
+    },
+    approveStatus:{ // Has this transaction been approved by the group's host?
+      type: String,
+      enum: approveStatuses
+    }
+
 });
 
 const Transaction = mongoose.models.Transaction || mongoose.model<ITransaction>('Transaction', transactionSchema);
