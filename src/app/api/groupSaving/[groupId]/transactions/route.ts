@@ -104,6 +104,16 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
         } 
       },
       { $unwind : "$user" },
+      { $addFields: { 
+        byThisUser: { 
+          $cond: { 
+            if: { $eq: ["$userId", new ObjectId(authUser._id)] }, 
+            then: "true", 
+            else: "false" 
+          } 
+        }
+      }
+      },
       { $project: { userId: 0 }},
       ...groupBy,
       ...project,
