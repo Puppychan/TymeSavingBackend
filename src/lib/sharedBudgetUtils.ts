@@ -164,7 +164,7 @@ export async function updateTransactionSharedBudget(transactionId: string, oldAm
 }
 
 // Called when a transation is deleted.
-export async function deleteTransactionSharedBudget(transactionId: string, oldAmount: number){
+export async function revertTransactionSharedBudget(transactionId: string, oldAmount: number){
   return new Promise(async (resolve, reject) => {  
     await connectMongoDB();
     try{

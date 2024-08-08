@@ -77,6 +77,7 @@ export const POST = async (req:NextRequest) => {
         // And the group auto-approve transactions
         if (savingGroupId && approveStatus === 'Approved'){
             await changeSavingGroupBalance(newTransaction._id);
+
         }
         if (budgetGroupId && approveStatus === 'Approved') {
             await changeBudgetGroupBalance(newTransaction._id);

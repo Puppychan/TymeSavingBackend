@@ -154,8 +154,8 @@ export async function updateTransactionGroupSaving(transactionId: string, oldAmo
   });
 }
 
-// Called when a transation is deleted.
-export async function deleteTransactionGroupSaving(transactionId: string, oldAmount: number){
+// Called when a transation is deleted or is declined by the group user
+export async function revertTransactionGroupSaving(transactionId: string, oldAmount: number){
   return new Promise(async (resolve, reject) => {  
     try{
       // Find the transaction
