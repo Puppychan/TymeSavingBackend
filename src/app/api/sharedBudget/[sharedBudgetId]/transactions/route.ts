@@ -110,7 +110,9 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
             then: "true", 
             else: "false" 
           } 
-        }
+        },
+        // budgetGroupConcurrentAmount: sharedBudget.concurrentAmount,
+        // budgetGroupTotalAmount: sharedBudget.amount
       }
       },
       { $project: { userId: 0 }},

@@ -41,8 +41,8 @@ export const POST = async(req: NextRequest, { params }: { params: { transactionI
         if (!sharedBudget) {
           return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
         }
-        if (authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
-          return NextResponse.json({ response: 'Only the Host can approve this transaction.' }, { status: 401 });
+        if ((authUser.role != 'Admin') && (authUser._id.toString() !== sharedBudget.hostedBy.toString())) {
+          return NextResponse.json({ response: 'Only an Admin or the Host can approve this transaction.' }, { status: 401 });
         }
         // Deduct the amount from SharedBudget
         await changeBudgetGroupBalance(transaction._id);
@@ -55,8 +55,8 @@ export const POST = async(req: NextRequest, { params }: { params: { transactionI
         if (!groupSaving) {
           return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
         }
-        if (authUser._id.toString() !== groupSaving.hostedBy.toString()) {
-          return NextResponse.json({ response: 'Only the Host can approve this transaction.' }, { status: 401 });
+        if ((authUser.role != 'Admin') && (authUser._id.toString() !== groupSaving.hostedBy.toString())) {
+          return NextResponse.json({ response: 'Only an Admin or the Host can approve this transaction.' }, { status: 401 });
         }
         // Deduct the amount from SharedBudget
         await changeSavingGroupBalance(transaction._id);
