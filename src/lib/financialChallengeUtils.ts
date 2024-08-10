@@ -8,6 +8,8 @@ import SharedBudget from "src/models/sharedBudget/model";
 import GroupSaving from "src/models/groupSaving/model";
 import mongoose from "mongoose";
 import ChallengeProgress from "src/models/challengeProgress/model";
+import Transaction from "src/models/transaction/model";
+import { localDate } from "./datetime";
 
 export async function verifyMember(userId: ObjectId, challengeId: string) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -86,4 +88,68 @@ export async function userJoinGroupChallenge (userId: mongoose.Types.ObjectId, g
     dbSession.endSession();
     return {status: 500, response: error};
   }
+}
+
+// Helper method for create/update transaction. Returns list of challenges.
+export async function getChallengesToUpdate(userId, transactionDateString, transactionType): Promise<{status: number, response: any}> {
+  try{
+    // 2. Get the list of challenges that this user is in (isPublished: true, endDate > now)
+    const transactionDate = new Date(transactionDateString);
+    const challengeScope = transactionType === 'Expense'? 'BudgetGroup' : 'SavingGroup';
+    let challengeList = await FinancialChallenge.find({
+      isPublished: true,
+      endDate: { $gte: transactionDate },
+      members: { $in: [new mongoose.Types.ObjectId(userId)]},
+      scope: challengeScope
+    })
+    if (challengeList.length == 0){
+      return { status: 404, response: "No challenges for this transaction to update."};
+    }
+    return { status: 200, response: challengeList };
+  } catch (error){
+    console.log(error);
+    return { status: 500, response: error };
+  }
+}
+
+// Update relevant stats when a transaction is created
+export async function createTransactionChallenge(transactionId): Promise<{status: number, response: any}>{
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
+  try {
+    // 1. Get the user creating this transaction
+    const transaction = await Transaction.findById(transactionId);
+    if(!transaction){
+      return {status: 404, response: "No such transaction with this id: " + transactionId};
+    }
+    const user = await User.findById(transaction.userId);
+    if(!user){
+      return { status: 404, response: "No user associated with this transaction"};
+    }
+    // 2. Get the list of challenges that this user is in (isPublished: true, endDate > now)    
+    let { status, response } = await getChallengesToUpdate(user._id, transaction.createdDate, transaction.type);
+    if (status != 200) 
+      return {status, response};
+    // 3. Update: For each challenge, get challengeProgress (userId, challengeId)
+    // currentProgress += amount; call achieveCheckpoint to see if user has passed the checkpoint
+    // if yes, give them the points!
+
+  } catch (error){
+    dbSession.abortTransaction();
+    dbSession.endSession();
+    console.log(error);
+    return {status: 500, response: error};
+  }
+}
+
+export async function updateTransactionChallenge(oldAmount: number, transactionId: ObjectId){
+
+}
+
+// This one will be called to see if the user has passed checkpoints in the challenge
+export async function achieveCheckpoint(userId, challengeId, newAmount){
+  // 1. Get challengeCheckpoint object.
+  // 2. Get current progress of the user. 
+  // 3. If newAmount > checkpointValue
 }

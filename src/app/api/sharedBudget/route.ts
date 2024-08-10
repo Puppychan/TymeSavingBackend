@@ -2,6 +2,7 @@ import { startSession } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
+import { localDate } from "src/lib/datetime";
 import SharedBudget from "src/models/sharedBudget/model";
 import { GroupRole } from "src/models/sharedBudgetParticipation/interface";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
@@ -30,14 +31,14 @@ export const POST = async (req: NextRequest) => {
       description: description,
       amount: amount ?? 0, // initial amount
       concurrentAmount: amount ?? 0, // initial concurrent amount = initial amount  
-      endDate: endDate ? new Date(endDate) : null,
-      createdDate: Date.now()
+      endDate: endDate ? localDate(new Date()) : null,
+      createdDate: localDate(new Date())
     }], {session: dbSession});
 
     const newParticipation = await SharedBudgetParticipation.create([{
       user: user._id,
       sharedBudget: newSharedBudget[0]._id,
-      joinedDate: Date.now(),
+      joinedDate: localDate(new Date()),
       role: GroupRole.Host
     }], {session: dbSession});
 

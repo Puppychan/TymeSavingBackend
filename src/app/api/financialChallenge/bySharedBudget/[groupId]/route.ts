@@ -3,9 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import FinancialChallenge from "src/models/financialChallenge/model";
+import mongoose from "mongoose";
 
-// GET: get financial challenge list of a user
-export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
+// GET: get financial challenge list of a SharedBudget
+export const GET = async (req: NextRequest, { params }: { params: { groupId: string }}) => {
   try {
       const searchParams = req.nextUrl.searchParams
       const name = searchParams.get('name')
@@ -18,7 +19,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       await connectMongoDB();
 
-      const verification = await verifyAuth(req.headers, params.userId)
+      const verification = await verifyAuth(req.headers)
       if (verification.status !== 200) {
         return NextResponse.json({ response: verification.response }, { status: verification.status });
       }
@@ -47,21 +48,17 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
         sort['name'] = sortName === 'ascending' ? 1:-1;
       }
 
-      // Show unpublished challenges by this user as well
-
       let list = []
       list = await FinancialChallenge.aggregate([
-          { $match: 
-            { 
-              members: { $in: [new ObjectId(params.userId)]},
-              $or: [
-                { isPublished: true }, // Only challenges published by its creator are shown
-                { // Unpublished challenges by this user
-                  isPublished: false,
-                  createdBy: new ObjectId(params.userId)
-                }
-              ]              
-            } 
+          { $match: { 
+            budgetGroupId: new mongoose.Types.ObjectId(params.groupId),
+            $or:[
+              // Only challenges published by its creator are shown
+              { isPublished: true }, 
+              // Unpublished challenges by the current user
+              { isPublished: false, createdBy: new mongoose.Types.ObjectId(verification.response._id)}
+            ]
+           } 
           },
           { $match: query },
           { $lookup: {
@@ -70,13 +67,14 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
             foreignField: '_id', // Field from User
             as: 'creator', // Output field name
             pipeline: [
-              { $project: { _id: 0, fullname: 1 } } // Only fetch the fullname field
+              { $project: { _id: 1, fullname: 1 } } // Only fetch the fullname field and _id
             ]
             }
           },
           { $unwind: '$creator'},
           { $addFields: {
             createdBy: '$creator.fullname', // Show the fullname instead of user ID
+            createdBy_id: '$creator._id',
             totalCheckPointCount: { $size: '$checkpoints' } // Count the number of checkpoints
             }
           },

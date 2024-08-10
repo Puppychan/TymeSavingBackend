@@ -1,4 +1,3 @@
-import { group } from "console";
 import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
@@ -104,6 +103,18 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
         } 
       },
       { $unwind : "$user" },
+      { $addFields: { 
+        byThisUser: { 
+          $cond: { 
+            if: { $eq: ["$userId", new ObjectId(authUser._id)] }, 
+            then: "true", 
+            else: "false" 
+          },
+          // savingGroupConcurrentAmount: group.concurrentAmount,
+          // savingGroupTotalAmount: group.amount
+        }
+      }
+      },
       { $project: { userId: 0 }},
       ...groupBy,
       ...project,

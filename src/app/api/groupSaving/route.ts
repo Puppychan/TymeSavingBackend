@@ -2,6 +2,7 @@ import { startSession } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
+import { localDate } from "src/lib/datetime";
 import GroupSaving from "src/models/groupSaving/model";
 import { GroupRole } from "src/models/groupSavingParticipation/interface";
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
@@ -31,13 +32,13 @@ export const POST = async (req: NextRequest) => {
       amount: amount ?? 0,
       concurrentAmount: concurrentAmount ?? 0,  
       endDate: endDate ? new Date(endDate) : null,
-      createdDate: Date.now()
+      createdDate: localDate(new Date())
     }], {session: dbSession});
 
     const newParticipation = await GroupSavingParticipation.create([{
       user: user._id,
       groupSaving: newGroup[0]._id,
-      joinedDate: Date.now(),
+      joinedDate: localDate(new Date()),
       role: GroupRole.Host
     }], {session: dbSession});
 
