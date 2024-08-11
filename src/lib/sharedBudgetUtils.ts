@@ -87,6 +87,7 @@ export async function changeBudgetGroupBalance(transactionId) {
         throw ("Transaction must be an Expense")
       }
       if(transaction.approveStatus != 'Approved' ){
+        console.log("CUrrent: " + transaction.approveStatus);
         throw "Only Approved transactions can affect the group's concurrent amount"
       }
 

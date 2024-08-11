@@ -47,8 +47,11 @@ export async function changeApproveStatus(transactionId: string, newApproveStatu
             throw "Transaction not found";
             }
             // Check if the CURRENT approveStatus is Pending - cannot change otherwise
-            if(transaction.approveStatus != "Pending")
+            if(transaction.approveStatus != "Pending"){
+                console.log("Invalid status");
+                console.log(transaction.approveStatus);
                 throw "Only Pending transactions can be approved or declined!";
+            }
     
             // Handle SharedBudget
             if(transaction.budgetGroupId){
@@ -60,21 +63,23 @@ export async function changeApproveStatus(transactionId: string, newApproveStatu
                     throw 'Only an Admin or the Host can approve this transaction.';
                 }
                 if(newApproveStatus === 'Approved'){
-                    // Deduct the amount from SharedBudget
-                    await changeBudgetGroupBalance(transaction._id);
                     // change the transaction.approveStatus to "Approved"
                     transaction.approveStatus = "Approved";
+                    await transaction.save();
+                    // Deduct the amount from SharedBudget
+                    await changeBudgetGroupBalance(transaction._id);
                 } else if (newApproveStatus === 'Declined'){
                     // Add the amount back to SharedBudget
-                    await revertTransactionSharedBudget(transaction._id, transaction.amount);
+                    // await revertTransactionSharedBudget(transaction._id, transaction.amount);
                     // change the transaction.approveStatus to "Approved"
                     transaction.approveStatus = "Declined";
+                    await transaction.save();
                 } else {
                     throw "Invalid approveStatus";
                 }                
-                await transaction.save();
             }
             else if(transaction.savingGroupId){ // Handle GroupSaving
+                console.log(transaction.savingGroupId);
                 const groupSaving = await GroupSaving.findById(transaction.savingGroupId);
                 if (!groupSaving) {
                     throw 'Group Saving not found';
@@ -83,21 +88,21 @@ export async function changeApproveStatus(transactionId: string, newApproveStatu
                     throw 'Only an Admin or the Host can approve this transaction.';
                 }
                 if(newApproveStatus === 'Approved'){
+                    transaction.approveStatus = "Approved";
+                    await transaction.save();
                     // Add the amount to GroupSaving
                     await changeSavingGroupBalance(transaction._id);
-                    transaction.approveStatus = "Approved";
                 } else if (newApproveStatus === 'Declined'){
-                    // Deduct the amount from GroupSaving
-                    await revertTransactionGroupSaving(transaction._id, transaction.amount);
                     transaction.approveStatus = "Declined";
+                    await transaction.save();
                 } else {
                     throw "Invalid approveStatus";
                 }                
-                await transaction.save();
             }
-            dbSession.commitTransaction();
+            await dbSession.commitTransaction();
             dbSession.endSession();
             resolve(transaction);
+            return;
         } catch (error){
             dbSession.abortTransaction();
             dbSession.endSession();

@@ -84,6 +84,7 @@ export async function changeSavingGroupBalance(transactionId) {
       }
 
       if (transaction.approveStatus != 'Approved' ){
+        console.log("CUrrent: " + transaction.approveStatus);
         throw "Only Approved transactions can affect group's concurrent amount";
       }
       const group = await GroupSaving.findById(transaction.savingGroupId)
@@ -162,7 +163,7 @@ export async function updateTransactionGroupSaving(transactionId: string, oldAmo
   });
 }
 
-// Called when a transation is deleted or is declined by the group user
+// Called when a transation is deleted
 export async function revertTransactionGroupSaving(transactionId: string, oldAmount: number){
   return new Promise(async (resolve, reject) => {  
     try{
