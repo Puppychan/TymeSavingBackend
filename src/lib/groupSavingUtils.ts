@@ -82,6 +82,10 @@ export async function changeSavingGroupBalance(transactionId) {
       if (transaction.type !== TransactionType.Income) {
         throw ("Transaction to a Group Saving must have type Income")
       }
+
+      if (transaction.approveStatus != 'Approved' ){
+        throw "Only Approved transactions can affect group's concurrent amount";
+      }
       const group = await GroupSaving.findById(transaction.savingGroupId)
       if (!group) {
         throw ("Group Saving not found")
@@ -138,7 +142,7 @@ export async function updateTransactionGroupSaving(transactionId: string, oldAmo
       if(oldAmount == transaction.amount) { // new amount and old amount is the same
         throw "No changes to amount; No update to the Shared Budget."
       }
-      if(transaction.approveStatus === 'Declined'){
+      if(transaction.approveStatus === 'Declined' || transaction.approveStatus === 'Pending' ){
         resolve("Declined transaction does not change the group concurrentAmount");
         return;
       }
@@ -173,7 +177,7 @@ export async function revertTransactionGroupSaving(transactionId: string, oldAmo
       if(!transaction.savingGroupId){
         throw "No savingGroupId provided"
       }
-      if(transaction.approveStatus === 'Declined'){
+      if(transaction.approveStatus === 'Declined' || transaction.approveStatus === 'Pending' ){
         resolve("Declined transaction does not change the group concurrentAmount");
         return;
       }

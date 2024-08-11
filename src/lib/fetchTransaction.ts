@@ -2,11 +2,13 @@ import { connectMongoDB } from 'src/config/connectMongoDB';
 import Transaction from 'src/models/transaction/model';
 import { startOfMonth, endOfMonth, subMonths, format, formatISO, startOfDay, endOfDay, startOfYear, endOfYear } from 'date-fns';
 import { localDate } from './datetime';
-import { PipelineStage } from 'mongoose';
+import { PipelineStage, startSession } from 'mongoose';
 import mongoose from 'mongoose';
 import GroupSaving from 'src/models/groupSaving/model';
 import SharedBudget from 'src/models/sharedBudget/model';
-
+import { verifyAuth } from './authentication';
+import { changeBudgetGroupBalance, revertTransactionSharedBudget } from './sharedBudgetUtils';
+import { changeSavingGroupBalance, revertTransactionGroupSaving } from './groupSavingUtils';
 // Add userId == some user ID and we cool
 
 // Call functions based on the parameters. Functions are: (May add more)
@@ -30,6 +32,80 @@ import SharedBudget from 'src/models/sharedBudget/model';
 // 5) netSpend: total income - total expense for this month
 //      params: userId
 // 6) fetchTransactions: take in params and show transactions to admin/byUser page
+// 7) changeApproveStatus(transactionId, newApproveStatus)
+
+// loggedInUser: pass in the user object that logged in
+// change a Pending transaction's approveStatus to Declined or Approved.
+export async function changeApproveStatus(transactionId: string, newApproveStatus: string, loggedInUser) {
+    return new Promise(async (resolve, reject) => {  
+        await connectMongoDB();
+        const dbSession = await startSession();
+        dbSession.startTransaction();
+        try{           
+            const transaction = await Transaction.findById({ _id: transactionId });
+            if (!transaction) {
+            throw "Transaction not found";
+            }
+            // Check if the CURRENT approveStatus is Pending - cannot change otherwise
+            if(transaction.approveStatus != "Pending")
+                throw "Only Pending transactions can be approved or declined!";
+    
+            // Handle SharedBudget
+            if(transaction.budgetGroupId){
+                const sharedBudget = await SharedBudget.findById(transaction.budgetGroupId);
+                if (!sharedBudget) {
+                    throw 'Shared Budget not found';
+                }
+                if ((loggedInUser.role != 'Admin') && (loggedInUser._id.toString() !== sharedBudget.hostedBy.toString())) {
+                    throw 'Only an Admin or the Host can approve this transaction.';
+                }
+                if(newApproveStatus === 'Approved'){
+                    // Deduct the amount from SharedBudget
+                    await changeBudgetGroupBalance(transaction._id);
+                    // change the transaction.approveStatus to "Approved"
+                    transaction.approveStatus = "Approved";
+                } else if (newApproveStatus === 'Declined'){
+                    // Add the amount back to SharedBudget
+                    await revertTransactionSharedBudget(transaction._id, transaction.amount);
+                    // change the transaction.approveStatus to "Approved"
+                    transaction.approveStatus = "Declined";
+                } else {
+                    throw "Invalid approveStatus";
+                }                
+                await transaction.save();
+            }
+            else if(transaction.savingGroupId){ // Handle GroupSaving
+                const groupSaving = await GroupSaving.findById(transaction.savingGroupId);
+                if (!groupSaving) {
+                    throw 'Group Saving not found';
+                }
+                if ((loggedInUser.role != 'Admin') && (loggedInUser._id.toString() !== groupSaving.hostedBy.toString())) {
+                    throw 'Only an Admin or the Host can approve this transaction.';
+                }
+                if(newApproveStatus === 'Approved'){
+                    // Add the amount to GroupSaving
+                    await changeSavingGroupBalance(transaction._id);
+                    transaction.approveStatus = "Approved";
+                } else if (newApproveStatus === 'Declined'){
+                    // Deduct the amount from GroupSaving
+                    await revertTransactionGroupSaving(transaction._id, transaction.amount);
+                    transaction.approveStatus = "Declined";
+                } else {
+                    throw "Invalid approveStatus";
+                }                
+                await transaction.save();
+            }
+            dbSession.commitTransaction();
+            dbSession.endSession();
+            resolve(transaction);
+        } catch (error){
+            dbSession.abortTransaction();
+            dbSession.endSession();
+            console.log("Error changing approveStatus: " + error);
+            reject(error);
+        }
+    });
+}
 
 export const fetchTransactions = async(searchParams: any, origin: any): Promise<{status: number, response: any}> =>{
     // Origin
