@@ -14,5 +14,5 @@ export interface IGroupSaving extends Document {
     concurrentAmount: number;
     createdDate: Date;
     endDate: Date;
-    approveStatus: string;
+    defaultApproveStatus: string;
 }
