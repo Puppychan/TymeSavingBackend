@@ -2,7 +2,7 @@ import mongoose, {Document} from 'mongoose';
 
 export enum approveStatuses{
     Approved = "Approved",
-    Declined = "Declined"
+    Pending = "Pending"
 }
 
 // Interface for Shared Budget document

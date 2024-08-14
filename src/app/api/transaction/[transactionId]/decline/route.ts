@@ -8,6 +8,7 @@ import { verifyAuth } from "src/lib/authentication";
 import SharedBudget from "src/models/sharedBudget/model";
 import GroupSaving from "src/models/groupSaving/model";
 import { startSession } from "mongoose";
+import { changeApproveStatus } from "src/lib/fetchTransaction";
 
 // IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
@@ -27,46 +28,9 @@ export const POST = async(req: NextRequest, { params }: { params: { transactionI
 
       // User is logged in.
       const authUser = verification.response;
-      
-      const transaction = await Transaction.findById({ _id: params.transactionId });
-      if (!transaction) {
-        return NextResponse.json({ response: "Transaction not found" }, { status: 404 });
-      }
-      if(transaction.approveStatus === "Declined")
-        return NextResponse.json({ response: "Transaction is already declined" }, { status: 500 });
 
-      // Handle SharedBudget
-      if(transaction.budgetGroupId){
-        const sharedBudget = await SharedBudget.findById(transaction.budgetGroupId);
-        if (!sharedBudget) {
-          return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
-        }
-        if ((authUser.role != 'Admin') && authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
-          return NextResponse.json({ response: 'Only an Admin or the Host can decline this transaction.' }, { status: 401 });
-        }
-        // Deduct the amount from SharedBudget
-        await revertTransactionSharedBudget(transaction._id, transaction.amount);
-        // change the transaction.approveStatus to "Declined"
-        transaction.approveStatus = "Declined";
-        await transaction.save();
-      }
-      else if(transaction.savingGroupId){ // Handle GroupSaving
-        const groupSaving = await GroupSaving.findById(transaction.savingGroupId);
-        if (!groupSaving) {
-          return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
-        }
-        if ((authUser.role != 'Admin') && authUser._id.toString() !== groupSaving.hostedBy.toString()) {
-          return NextResponse.json({ response: 'Only an Admin or the Host can decline this transaction.' }, { status: 401 });
-        }
-        // Return the amount to SharedBudget
-        await revertTransactionGroupSaving(transaction._id, transaction.amount);
-        // change the transaction.approveStatus to "Approved"
-        transaction.approveStatus = "Declined";
-        await transaction.save();
-      }
-      dbSession.commitTransaction();
-      dbSession.endSession();
-      return NextResponse.json({ response: transaction }, { status: 200 });
+      const message = await changeApproveStatus(params.transactionId, 'Declined', authUser);
+      return NextResponse.json({ response: message }, { status: 200 });
     }
     catch (error: any) {
       dbSession.abortTransaction();

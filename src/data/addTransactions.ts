@@ -27,6 +27,8 @@ export const addTransactions = async () => {
 
             if (transaction.transactionImages) {
                 transaction.transactionImages = transaction.transactionImages.split(';').map(link => link.trim());
+            } else if (!transaction.transactionImages || transaction.transactionImages == ""){
+                transaction.transactionImages = [];
             }
             return transaction;
         });

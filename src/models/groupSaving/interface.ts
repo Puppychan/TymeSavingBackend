@@ -2,7 +2,7 @@ import mongoose, {Document} from 'mongoose';
 
 export enum approveStatuses{
     Approved = "Approved",
-    Declined = "Declined"
+    Pending = "Pending"
 }
 
 // Interface for GroupSaving document
@@ -14,5 +14,5 @@ export interface IGroupSaving extends Document {
     concurrentAmount: number;
     createdDate: Date;
     endDate: Date;
-    approveStatus: string;
+    defaultApproveStatus: string;
 }

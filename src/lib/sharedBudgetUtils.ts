@@ -85,6 +85,10 @@ export async function changeBudgetGroupBalance(transactionId) {
       if (!transaction.type || transaction.type === 'Income') {
         throw ("Transaction must be an Expense")
       }
+      if(transaction.approveStatus != 'Approved' ){
+        console.log("CUrrent: " + transaction.approveStatus);
+        throw "Only Approved transactions can affect the group's concurrent amount"
+      }
 
       const group = await SharedBudget.findById(transaction.budgetGroupId)
       if (!group) {
@@ -146,7 +150,7 @@ export async function updateTransactionSharedBudget(transactionId: string, oldAm
       if(oldAmount == transaction.amount) { // new amount and old amount is the same
         throw "No changes to amount; No update to the Shared Budget."
       }
-      if(transaction.approveStatus === 'Declined'){
+      if(transaction.approveStatus === 'Declined' || transaction.approveStatus === 'Pending' ){
         resolve("Declined transactions do not affect the group concurrentAmount");
         return;
       }
@@ -182,7 +186,7 @@ export async function revertTransactionSharedBudget(transactionId: string, oldAm
       if(!transaction.budgetGroupId){
         throw "No budgetGroupId provided"
       }
-      if(transaction.approveStatus === 'Declined'){
+      if(transaction.approveStatus === 'Declined' || transaction.approveStatus === 'Pending' ){
         resolve("Declined transactions do not affect the group concurrentAmount");
         return;
       }

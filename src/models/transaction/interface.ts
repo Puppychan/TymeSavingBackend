@@ -32,7 +32,8 @@ export enum TransactionCategory {
 
 export enum approveStatuses{
     Approved = "Approved",
-    Declined = "Declined"
+    Declined = "Declined",
+    Pending = "Pending"
 }
 
 // Interface for transaction document
