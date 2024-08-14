@@ -18,7 +18,6 @@ export interface IFinancialChallenge extends Document {
     name: string;
     description: string;
     category: ChallengeCategory;
-    isPublished: boolean;
     checkpoints: IChallengeCheckpoint[];
 
     members: ObjectId[];

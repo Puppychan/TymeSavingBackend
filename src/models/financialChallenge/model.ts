@@ -4,7 +4,6 @@ import { ChallengeCategory, ChallengeScope, IFinancialChallenge } from './interf
 const financialChallengeSchema: Schema = new Schema({
   name: {type: String, required: true},
   description: {type: String},
-  isPublished: {type: Boolean, default: false},
   category: {
     type: String, 
     enum: Object.values(ChallengeCategory),
