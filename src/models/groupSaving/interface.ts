@@ -1,5 +1,10 @@
 import mongoose, {Document} from 'mongoose';
 
+export enum approveStatuses{
+    Approved = "Approved",
+    Pending = "Pending"
+}
+
 // Interface for GroupSaving document
 export interface IGroupSaving extends Document {
     hostedBy: mongoose.Types.ObjectId;
@@ -9,4 +14,5 @@ export interface IGroupSaving extends Document {
     concurrentAmount: number;
     createdDate: Date;
     endDate: Date;
+    defaultApproveStatus: string;
 }

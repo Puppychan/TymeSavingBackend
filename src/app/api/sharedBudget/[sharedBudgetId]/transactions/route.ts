@@ -103,6 +103,18 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
         } 
       },
       { $unwind : "$user" },
+      { $addFields: { 
+        byThisUser: { 
+          $cond: { 
+            if: { $eq: ["$userId", new ObjectId(authUser._id)] }, 
+            then: "true", 
+            else: "false" 
+          } 
+        },
+        // budgetGroupConcurrentAmount: sharedBudget.concurrentAmount,
+        // budgetGroupTotalAmount: sharedBudget.amount
+      }
+      },
       { $project: { userId: 0 }},
       ...groupBy,
       ...project,

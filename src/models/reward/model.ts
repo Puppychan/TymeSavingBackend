@@ -22,7 +22,7 @@ const rewardChema: Schema = new Schema({
   createdBy: {type: Schema.Types.ObjectId, ref: 'User'}
 });
 
-// const prize = mongoose.models.Prize || mongoose.model('Prize', prizeSchema);
+// export const RewardPrize = mongoose.models.RewardPrize || mongoose.model('RewardPrize', rewardPrizeSchema);
 const Reward = mongoose.models.Reward || mongoose.model<IReward>('Reward', rewardChema);
 
 export default Reward;

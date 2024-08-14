@@ -43,7 +43,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $lookup: {from: 'groupsavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
           { $unwind : "$groupSaving" },
           { $match: query },
-          { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$groupSaving" } },
           { $skip: (pageNo - 1) * pageSize },
           { $limit: pageSize }

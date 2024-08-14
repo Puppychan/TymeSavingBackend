@@ -4,10 +4,13 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { hashPassword } from "src/lib/authentication";
 import { passwordValidator, usernameValidator } from "src/lib/validator";
 import User from "src/models/user/model";
+import { startSession } from 'mongoose';
 
 export const POST = async (req: NextRequest) => {
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
   try {
-    await connectMongoDB();
     const payload = await req.json()
     const {username, password, email, fullname, phone } = payload;
     const existingUsername = await User.findOne({'username': username });
@@ -40,8 +43,12 @@ export const POST = async (req: NextRequest) => {
       tymeReward: TymeRewardLevel.Classic,
     });
     await newUser.save(); // Save the new user to the database
-    return  NextResponse.json({ response: newUser }, { status: 200 });
+    await dbSession.commitTransaction();  // Commit the transaction
+    await dbSession.endSession();  // End the session
+    return NextResponse.json({ response: newUser }, { status: 200 });
   } catch (error: any) {
+    await dbSession.abortTransaction();  // Commit the transaction
+    await dbSession.endSession();  // End the session
     return NextResponse.json({ response: error.message}, { status: 500 });
   }
 };

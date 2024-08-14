@@ -21,9 +21,14 @@ export const addTransactions = async () => {
             } else {
                 delete transaction.budgetGroupId;  // Remove savingGroupId if it's invalid
             }
+            if(!transaction.approveStatus){
+                delete transaction.approveStatus;
+            }
 
             if (transaction.transactionImages) {
                 transaction.transactionImages = transaction.transactionImages.split(';').map(link => link.trim());
+            } else if (!transaction.transactionImages || transaction.transactionImages == ""){
+                transaction.transactionImages = [];
             }
             return transaction;
         });

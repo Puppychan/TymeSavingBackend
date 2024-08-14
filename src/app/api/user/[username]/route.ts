@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyUser, newToken } from "src/lib/authentication";
 import User from "src/models/user/model";
+import { startSession } from "mongoose";
 
 // GET: Read the user information
 export const GET = async (
@@ -38,8 +39,10 @@ export const DELETE = async (
   { params }: { params: { username: string } }
 ) => {
   const username = params.username;
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
   try {
-    await connectMongoDB();
     const verification = await verifyUser(req.headers, params.username)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });
@@ -48,14 +51,20 @@ export const DELETE = async (
     const query_user = await User.findOne({ username: username });
     if (query_user) {
       await User.deleteOne({ username: username });
+      await dbSession.commitTransaction();  // Commit the transaction
+      await dbSession.endSession();  // End the session
       return NextResponse.json(
         { response: "User deleted successfully." },
         { status: 200 }
       );
     } else {
-      return NextResponse.json({ response: "No such user." }, { status: 400 });
+      await dbSession.abortTransaction();  // Abort the transaction
+      await dbSession.endSession();  // End the session
+      return NextResponse.json({ response: "No such user." }, { status: 404 });
     }
   } catch (error) {
+    await dbSession.abortTransaction();  // Abort the transaction
+    await dbSession.endSession();  // End the session
     console.log(error);
     return NextResponse.json(
       { response: username + " could not be deleted." },

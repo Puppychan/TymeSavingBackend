@@ -30,6 +30,12 @@ export enum TransactionCategory {
     OtherIncomes = "Other incomes"
 }
 
+export enum approveStatuses{
+    Approved = "Approved",
+    Declined = "Declined",
+    Pending = "Pending"
+}
+
 // Interface for transaction document
 export interface ITransaction extends Document {
     // MongoDB IDs
@@ -47,4 +53,5 @@ export interface ITransaction extends Document {
     budgetGroupId: mongoose.Types.ObjectId; // MongoDB ID of the budget group that this transaction is in
 
     category: string;
+    approveStatus: string;
 }

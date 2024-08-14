@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
@@ -34,6 +35,24 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
                               { groupSaving: params.groupId }, 
                               {_id: 0, group: 0})
                             .populate('user', '_id username fullname phone email avatar tymeReward')
+      // const members = await GroupSavingParticipation
+      //                       .aggregate([
+      //                         { $match: { groupSaving: new mongoose.Types.ObjectId(params.groupId) } },
+      //                         { $lookup: {
+      //                             from: 'users',
+      //                             localField: 'user',
+      //                             foreignField: '_id',
+      //                             as: 'user'
+      //                           }
+      //                         },
+      //                         { $unwind: '$user' }, // Unwind the user array
+      //                         // { $project: { 
+      //                         //     'user': 1,
+
+      //                         //   }
+      //                         // },
+      //                         { $sort: { 'user.fullname': -1 } } // Sort by fullname in ascending order
+      //                       ]);
 
       return NextResponse.json({ response: members }, { status: 200 });
   } catch (error: any) {

@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { ISharedBudget } from './interface';
+import { approveStatuses, ISharedBudget } from './interface';
 
 // Define the schema for the user
 const sharedBudgetSchema: Schema = new Schema({
@@ -14,6 +14,12 @@ const sharedBudgetSchema: Schema = new Schema({
     concurrentAmount: {type: Number, default: 0},
     createdDate: {type: Date, default: Date.now()},
     endDate: {type: Date},
+    defaultApproveStatus: {
+      type: String,
+      enum: approveStatuses,
+      required: true,
+      default: "Approved"
+    }
 });
 
 const SharedBudget = mongoose.models.SharedBudget || mongoose.model<ISharedBudget>('SharedBudget', sharedBudgetSchema);

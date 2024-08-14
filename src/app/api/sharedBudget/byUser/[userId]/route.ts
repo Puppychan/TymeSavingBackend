@@ -43,7 +43,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $lookup: {from: 'sharedbudgets', localField: 'sharedBudget', foreignField: '_id', as: 'sharedBudget'} },
           { $unwind : "$sharedBudget" },
           { $match: query },
-          { $sort: { joinedDate: (sort === 'ascending') ? 1 : -1 } },
+          { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$sharedBudget" } },
           { $skip: (pageNo - 1) * pageSize },
           { $limit: pageSize }

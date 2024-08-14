@@ -47,6 +47,7 @@ export const POST = async (req: NextRequest) => {
       members: members,
       savingGroupId: savingGroupId,
       budgetGroupId: budgetGroupId,
+      isPublished: false,
       createdDate: Date.now(),
     }], {session: dbSession});
 

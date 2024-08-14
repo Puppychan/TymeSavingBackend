@@ -32,4 +32,5 @@ export interface IFinancialChallenge extends Document {
     endDate: Date;
 
     createdBy: ObjectId;
+    isPublished: boolean
 }
