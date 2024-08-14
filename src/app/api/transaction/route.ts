@@ -9,7 +9,7 @@ import { updateUserPoints } from "src/lib/userUtils";
 import { startSession } from "mongoose";
 import GroupSaving from "src/models/groupSaving/model";
 import SharedBudget from "src/models/sharedBudget/model";
-import { ObjectId } from "mongodb";
+import { createTransactionChallenge } from "src/lib/financialChallengeUtils";
 /*
     POST: Create a transaction
 */
@@ -69,20 +69,18 @@ export const POST = async (req:NextRequest) => {
             approveStatus: approveStatus
         });
         await newTransaction.save();
-
-        let userAfterUpdatePoint = await updateUserPoints(userId, 1)
+        // Update SharedBudget, GroupSaving, and corresponding challenges
 
         // Change the group balance
         // Only if the transaction is associated with a group
         // And the group auto-approve transactions
         if (savingGroupId && approveStatus === 'Approved'){
             await changeSavingGroupBalance(newTransaction._id);
-
         }
         if (budgetGroupId && approveStatus === 'Approved') {
             await changeBudgetGroupBalance(newTransaction._id);
         }
-
+        await createTransactionChallenge(newTransaction._id); // attempt to update challenge progress
         await dbSession.commitTransaction();  // Commit the transaction
         await dbSession.endSession();  // End the session
         

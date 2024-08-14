@@ -2,6 +2,7 @@ import { readCSV } from "src/lib/readCSV";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
 import { hashPassword } from "src/lib/authentication";
+import { getTymeRewardLevel } from "src/lib/userUtils";
 
 export const addUsers = async () => {
     await connectMongoDB();
@@ -12,6 +13,8 @@ export const addUsers = async () => {
             if (user.password) {
                 user.password = await hashPassword(user.password);
             }
+            // Insert user reward level with the calculated points
+            user.tymeReward = getTymeRewardLevel(user.userPoints);
             return user;
         }));
         await User.insertMany(hashedData);

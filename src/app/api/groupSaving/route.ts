@@ -22,7 +22,7 @@ export const POST = async (req: NextRequest) => {
     const user = verification.response;
 
     const payload = await req.json()
-    const { name, description, amount, concurrentAmount, endDate } = payload
+    const { name, description, amount, concurrentAmount, endDate, defaultApproveStatus } = payload
 
     // Create a new group saving document
     const newGroup = await GroupSaving.create([{
@@ -32,7 +32,8 @@ export const POST = async (req: NextRequest) => {
       amount: amount ?? 0,
       concurrentAmount: concurrentAmount ?? 0,  
       endDate: endDate ? new Date(endDate) : null,
-      createdDate: localDate(new Date())
+      createdDate: localDate(new Date()),
+      defaultApproveStatus: defaultApproveStatus ?? 'Approved'
     }], {session: dbSession});
 
     const newParticipation = await GroupSavingParticipation.create([{
@@ -47,7 +48,7 @@ export const POST = async (req: NextRequest) => {
 
     return  NextResponse.json({ response: newGroup }, { status: 200 });
   } catch (error: any) {
-    await dbSession.abortTransaction();  // Commit the transaction
+    await dbSession.abortTransaction();  // Abort the transaction
     await dbSession.endSession();  // End the session
 
     console.log("Error creating group saving: ", error);
