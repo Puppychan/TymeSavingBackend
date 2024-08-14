@@ -120,7 +120,6 @@ export async function getChallengesToUpdate(userId, transaction): Promise<any[]>
         endDate: { $gte: transactionDate },
         members: { $in: [new mongoose.Types.ObjectId(userId)]}
       });
-      console.log(challengeList);
       if (challengeList.length == 0){
         console.log("FC: No challenges for this transaction to update.");
         resolve([]);
@@ -157,7 +156,10 @@ export async function createTransactionChallenge(transactionId) {
 
       // 2. Get the list of challenges that this transaction can update (isPublished: true, endDate > now)    
       let challengeList = await getChallengesToUpdate(user._id, transaction);
-
+      if (challengeList.length == 0){
+        resolve("No challenge to update.");
+        return;
+      }
       // 3. Update: For each challenge, get challengeProgress (userId, challengeId)
       for (const challenge of challengeList) {
         let challengeProgress = await ChallengeProgress.findOne({
@@ -168,25 +170,30 @@ export async function createTransactionChallenge(transactionId) {
         // Update the current progress
         challengeProgress.currentProgress += transaction.amount;
         challengeProgress.lastUpdate = localDate(new Date());
-
+        console.log(challenge.checkpoints.length);
         // 4. Check if any checkpoints have been passed
-        const checkpoints = await ChallengeCheckpoint.find({
-          challengeId: challenge._id
-        }).sort({checkpointValue: 1}).session(dbSession);
+        if(!challenge.checkpoints || challenge.checkpoints.length == 0){
+          console.log("Challenge " + challenge._id + " has no checkpoints to compare progress to.");
+        }
+        else {  
+          const checkpoints = await ChallengeCheckpoint.find({
+            challengeId: challenge._id
+          }).sort({checkpointValue: 1}).session(dbSession);
 
-        for (const checkpoint of checkpoints) {
-          if (challengeProgress.currentProgress >= checkpoint.checkpointValue) {
-            // If the checkpoint has been passed, add it to checkpointPassed
-            if (!challengeProgress.checkpointPassed.some(cp => cp.checkpointId.equals(checkpoint._id))) {
-              challengeProgress.checkpointPassed.push({
-                checkpointId: checkpoint._id,
-                date: localDate(new Date())
-              });
+          for (const checkpoint of checkpoints) {
+            if (challengeProgress.currentProgress >= checkpoint.checkpointValue) {
+              // If the checkpoint has been passed, add it to checkpointPassed
+              if (!challengeProgress.checkpointPassed.some(cp => cp.checkpointId.equals(checkpoint._id))) {
+                challengeProgress.checkpointPassed.push({
+                  checkpointId: checkpoint._id,
+                  date: localDate(new Date())
+                });
 
-              // Optionally: Give the user the reward associated with this checkpoint
-              if (checkpoint.reward) {
-                const rewardObject = await Reward.findById(checkpoint.reward);
-                user.userPoints += rewardObject.prize[0].value;
+                // Optionally: Give the user the reward associated with this checkpoint
+                if (checkpoint.reward) {
+                  const rewardObject = await Reward.findById(checkpoint.reward);
+                  user.userPoints += rewardObject.prize[0].value;
+                }
               }
             }
           }
@@ -210,14 +217,98 @@ export async function createTransactionChallenge(transactionId) {
   });
 }
 
+// If oldAmount is provided, the transaction is updated. Otherwise, it is deleted.
+export async function updateTransactionChallenge(transactionId: ObjectId, oldAmount?: number){
+  return new Promise(async (resolve, reject) => {  
+    await connectMongoDB();
+    const dbSession = await startSession();
+    dbSession.startTransaction();
+    try {
+      // 1. Get the user creating this transaction
+      const transaction = await Transaction.findById(transactionId).session(dbSession);
+      if (!transaction) {
+        reject("No such transaction with this id: " + transactionId);
+        return; // Exit the function to prevent further execution
+      }
 
-export async function updateTransactionChallenge(oldAmount: number, transactionId: ObjectId){
+      const user = await User.findById(transaction.userId).session(dbSession);
+      if (!user) {
+        reject("No user associated with this transaction");
+        return; // Exit the function to prevent further execution
+      }
 
-}
+      // 2. Get the list of challenges that this transaction can update (isPublished: true, endDate > now)    
+      let challengeList = await getChallengesToUpdate(user._id, transaction);
 
-// This one will be called to see if the user has passed checkpoints in the challenge
-export async function achieveCheckpoint(userId, challengeId, newAmount){
-  // 1. Get challengeCheckpoint object.
-  // 2. Get current progress of the user. 
-  // 3. If newAmount > checkpointValue
+      // 3. Update: For each challenge, get challengeProgress (userId, challengeId)
+      for (const challenge of challengeList) {
+        let challengeProgress = await ChallengeProgress.findOne({
+          userId: user._id,
+          challengeId: challenge._id
+        }).session(dbSession);
+
+        // Update the current progress when the transaction is updated
+        if(oldAmount){
+          challengeProgress.currentProgress += transaction.amount - oldAmount;
+        }
+        else { // Update the progress when the transaction is deleted
+          challengeProgress.currentProgress -= transaction.amount;
+        }
+        
+        challengeProgress.lastUpdate = localDate(new Date());
+
+        // 4. Check if any checkpoints have been passed
+        if(!challenge.checkpoints || challenge.checkpoints.length == 0){
+          console.log("FC: Challenge " + challenge._id + " has no checkpoints to compare progress to.");
+        }
+        else {  
+          const checkpoints = await ChallengeCheckpoint.find({
+            challengeId: challenge._id
+          }).sort({checkpointValue: 1}).session(dbSession);
+
+          // If the user's update makes them drop down from the last checkpoint
+          // DONT LET THEM UPDATE IN THAT CASE!
+          const lastCheckpointPassed = await ChallengeCheckpoint.findById(challengeProgress.checkpointPassed
+            [challengeProgress.checkpointPassed.length - 1].checkpointId);
+          console.log("FC: Last achieved at value: " + lastCheckpointPassed.checkpointValue + " - new value: " + challengeProgress.currentProgress);
+          if(challengeProgress.currentProgress < lastCheckpointPassed.checkpointValue){
+            throw "FC: Cannot update or delete transaction - The previous amount was needed to achieve points.";
+          }
+
+          for (const checkpoint of checkpoints) {
+            // Get the last passed checkpoint and its value
+            if (challengeProgress.currentProgress >= checkpoint.checkpointValue) {
+              // If the checkpoint has been passed, add it to checkpointPassed if it is not added
+              if (!challengeProgress.checkpointPassed.some(cp => cp.checkpointId.equals(checkpoint._id))) {
+                challengeProgress.checkpointPassed.push({
+                  checkpointId: checkpoint._id,
+                  date: localDate(new Date())
+                });
+
+                if (checkpoint.reward) {
+                  const rewardObject = await Reward.findById(checkpoint.reward);
+                  user.userPoints += rewardObject.prize[0].value;
+                }
+              }
+            }
+          }
+        }
+
+        // Save the updated user and progress
+        await user.save({ session: dbSession });
+        await challengeProgress.save({ session: dbSession });
+      }
+
+      await dbSession.commitTransaction();
+      dbSession.endSession();
+      resolve("challenge stats updated successfully");
+      return;
+    } 
+    catch (error) {
+      await dbSession.abortTransaction();
+      dbSession.endSession();
+      console.log(error);
+      reject("Error updating transaction challenge stats: " + error);
+    }
+  });
 }

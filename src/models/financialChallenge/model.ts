@@ -1,5 +1,6 @@
 import mongoose, {Schema} from 'mongoose';
 import { ChallengeCategory, ChallengeScope, IFinancialChallenge } from './interface';
+import { localDate } from 'src/lib/datetime';
 
 const financialChallengeSchema: Schema = new Schema({
   name: {type: String, required: true},
@@ -40,7 +41,7 @@ const financialChallengeSchema: Schema = new Schema({
     ref: 'SharedBudget'
   },
   
-  createdDate: {type: Date, default: Date.now()},
+  createdDate: {type: Date, default: localDate(new Date())},
   startDate: {type: Date},
   endDate: {type: Date},
 
