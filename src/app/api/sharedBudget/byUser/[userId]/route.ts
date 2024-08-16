@@ -48,6 +48,16 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $match: { user: new ObjectId(params.userId) } },
           { $lookup: {from: 'sharedbudgets', localField: 'sharedBudget', foreignField: '_id', as: 'sharedBudget'} },
           { $unwind : "$sharedBudget" },
+          { 
+            $addFields: {
+              "sharedBudget.isClosedOrExpired": {
+                $or: [
+                  { $lt: ["$sharedBudget.endDate", localDate(new Date())] },
+                  "$sharedBudget.isClosed"
+                ]
+              }
+            }
+          },
           { $match: query },
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$sharedBudget" } },

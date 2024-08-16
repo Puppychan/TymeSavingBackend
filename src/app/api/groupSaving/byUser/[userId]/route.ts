@@ -16,8 +16,6 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       const showClosedExpired = searchParams.get('showClosedExpired') ?? 'true'; // also show closed or expired groups
       const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
       const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
-      console.log(showClosedExpired, searchParams.get('showClosedExpired'));
-      console.log("YEEEE");
       await connectMongoDB();
 
       const verification = await verifyAuth(req.headers, params.userId)
@@ -49,6 +47,16 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $match: { user: new ObjectId(params.userId) } },
           { $lookup: {from: 'groupsavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
           { $unwind : "$groupSaving" },
+          { 
+            $addFields: {
+              "groupSaving.isClosedOrExpired": {
+                $or: [
+                  { $lt: ["$groupSaving.endDate", localDate(new Date())] },
+                  "$groupSaving.isClosed"
+                ]
+              }
+            }
+          },
           { $match: query },
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$groupSaving" } },
