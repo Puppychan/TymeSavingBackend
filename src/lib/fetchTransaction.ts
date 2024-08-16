@@ -9,30 +9,39 @@ import SharedBudget from 'src/models/sharedBudget/model';
 import { verifyAuth } from './authentication';
 import { changeBudgetGroupBalance, revertTransactionSharedBudget } from './sharedBudgetUtils';
 import { changeSavingGroupBalance, revertTransactionGroupSaving } from './groupSavingUtils';
+import { match } from 'assert';
 // Add userId == some user ID and we cool
 
-// Call functions based on the parameters. Functions are: (May add more)
-// 1) currentMonthTotal: total expense/income of current month i.e. From the 1st to the current date. 
-//      params: transactionType: "Income" or "Expense"
-//              userId
-//      return: amount + month
-// 2) pastMonthTotal: total income/expense of past 5 months: from the 1st to the end of that month. 
-//      params: transactionType: "Income" or "Expense"
-//              userId
-//      return: amount + month
-// 3) compareToLastMonth: Total income and expense for this month. Compare them to the last month
-//      params: userId
-//      return: { total income for this month, percentage compared to the last month },
-//              { total expense for this month, percentage compared to the last month }
-// 4) topCategories: Group categories for this month. Top 3 categories + Group the others as "Other"
-//      params: transactionType: "Income" or "Expense"
-//              userId
-//      return: [{ category, total amount, percentage }]
-// req format: {transactionType: Income | Expense, userId}
-// 5) netSpend: total income - total expense for this month
-//      params: userId
-// 6) fetchTransactions: take in params and show transactions to admin/byUser page
-// 7) changeApproveStatus(transactionId, newApproveStatus)
+/* Call functions based on the parameters. Functions are: (May add more)
+1) currentMonthTotal: total expense/income of current month i.e. From the 1st to the current date. 
+    params: transactionType: "Income" or "Expense"
+            userId
+    return: amount + month
+2) pastMonthTotal: total income/expense of past 5 months: from the 1st to the end of that month. 
+    params: transactionType: "Income" or "Expense"
+            userId
+    return: amount + month
+3) compareToLastMonth: Total income and expense for this month. Compare them to the last month
+    params: userId
+    return: { total income for this month, percentage compared to the last month },
+            { total expense for this month, percentage compared to the last month }
+4) topCategories: Group categories for this month. Top 3 categories + Group the others as "Other"
+    params: transactionType: "Income" or "Expense"
+            userId
+    return: [{ category, total amount, percentage }]
+req format: {transactionType: Income | Expense, userId}
+5) netSpend: total income minus total expense for this month
+    params: userId
+6) fetchTransactions: take in params and show transactions to admin/byUser page
+7) changeApproveStatus(transactionId, newApproveStatus)
+--- The functions below generate responses for the report page of SharedBudget and GroupSaving
+8) groupReportCategories(groupType, groupId): show categories and % that made up the group's amount
+9) groupReportUsers(groupType, groupId): show users and % that made up the group's amount
+10) groupReportTransactions(groupType, groupId, filter): show some transactions that match the filter
+(Only allow one filter out of the four below)
+- filter = latest/earliest: show the last or first transactions made to the group
+- filter = highest/lowest: show the transactions with the highest or lowest amount
+*/
 
 // loggedInUser: pass in the user object that logged in
 // change a Pending transaction's approveStatus to Declined or Approved.
@@ -48,8 +57,7 @@ export async function changeApproveStatus(transactionId: string, newApproveStatu
             }
             // Check if the CURRENT approveStatus is Pending - cannot change otherwise
             if(transaction.approveStatus != "Pending"){
-                console.log("Invalid status");
-                console.log(transaction.approveStatus);
+                console.log("Invalid status: " + transaction.approveStatus);
                 throw "Only Pending transactions can be approved or declined!";
             }
     

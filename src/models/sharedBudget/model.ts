@@ -19,7 +19,11 @@ const sharedBudgetSchema: Schema = new Schema({
       enum: approveStatuses,
       required: true,
       default: "Approved"
-    }
+    },
+    isClosed: {
+      type: Boolean, 
+      default: false
+    } // true when the host deactivates, or when "endDate" is reached
 });
 
 const SharedBudget = mongoose.models.SharedBudget || mongoose.model<ISharedBudget>('SharedBudget', sharedBudgetSchema);

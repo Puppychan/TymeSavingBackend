@@ -4,10 +4,10 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import { getMemberListSavingGroup } from "src/lib/groupSavingUtils";
 import { getMemberListBudgetGroup } from "src/lib/sharedBudgetUtils";
-import { IChallengeProgress } from "src/models/challengeProgress/interface";
 import ChallengeProgress from "src/models/challengeProgress/model";
 import { ChallengeScope } from "src/models/financialChallenge/interface";
 import FinancialChallenge from "src/models/financialChallenge/model";
+import { localDate } from "src/lib/datetime";
 
 export const POST = async (req: NextRequest) => {
   await connectMongoDB();
@@ -24,7 +24,8 @@ export const POST = async (req: NextRequest) => {
     const authUser = verification.response;
 
     const payload = await req.json()
-    const { name, description, category, scope, savingGroupId, budgetGroupId} = payload
+    const { name, description, category, scope, 
+      savingGroupId, budgetGroupId, startDate, endDate} = payload
 
     let members: ObjectId[] = []; // Initialize members as an empty array
     if (scope === ChallengeScope.SavingGroup) {
@@ -47,8 +48,9 @@ export const POST = async (req: NextRequest) => {
       members: members,
       savingGroupId: savingGroupId,
       budgetGroupId: budgetGroupId,
-      isPublished: false,
-      createdDate: Date.now(),
+      startDate: startDate ?? localDate(new Date()), // default is now
+      // default is 1 month from the startDate
+      endDate: endDate ?? new Date().setMonth(startDate.getMonth() + 1) 
     }], {session: dbSession});
 
     let memberProgress = []

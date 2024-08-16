@@ -44,7 +44,6 @@ const transactionSchema: Schema = new Schema({
       type: String,
       enum: approveStatuses
     }
-
 });
 
 const Transaction = mongoose.models.Transaction || mongoose.model<ITransaction>('Transaction', transactionSchema);

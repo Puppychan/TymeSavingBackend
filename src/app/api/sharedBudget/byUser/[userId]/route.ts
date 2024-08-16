@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
-
+import { localDate } from "src/lib/datetime";
+import { PipelineStage } from "mongoose";
+// import ISODate
 // GET: get shared budget list of a user
 export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
   try {
@@ -36,18 +38,21 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let query = {}
       if (filter.length > 0) query['$and'] = filter
-
-      let list = []
-      list = await SharedBudgetParticipation.aggregate([
+      const filterFutureDate = { "sharedBudget.endDate": { $gt: localDate(new Date()) }, 
+        "sharedBudget.isClosed": false };
+      
+      // Only allow transactions to be made to groups that have not been closed: endDate + isClosed = false
+      let list = await SharedBudgetParticipation.aggregate([
           { $match: { user: new ObjectId(params.userId) } },
           { $lookup: {from: 'sharedbudgets', localField: 'sharedBudget', foreignField: '_id', as: 'sharedBudget'} },
           { $unwind : "$sharedBudget" },
           { $match: query },
+          { $match: filterFutureDate},
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$sharedBudget" } },
           { $skip: (pageNo - 1) * pageSize },
           { $limit: pageSize }
-        ])
+        ]);
        
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {

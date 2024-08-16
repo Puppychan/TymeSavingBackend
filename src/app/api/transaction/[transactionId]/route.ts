@@ -6,6 +6,7 @@ import { startSession } from "mongoose";
 import { localDate } from "src/lib/datetime";
 import { revertTransactionSharedBudget, updateTransactionSharedBudget } from "src/lib/sharedBudgetUtils";
 import { updateTransactionGroupSaving, revertTransactionGroupSaving } from "src/lib/groupSavingUtils";
+import { updateTransactionChallenge } from "src/lib/financialChallengeUtils";
 
 // IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
@@ -82,6 +83,7 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
             else if (updatedTransaction.savingGroupId){
                 await updateTransactionGroupSaving(params.transactionId, oldAmount);
             }
+            await updateTransactionChallenge(updatedTransaction._id, oldAmount);
         }
         
         await dbSession.commitTransaction();  // Commit the transaction
@@ -112,6 +114,7 @@ export const DELETE = async(req: NextRequest, { params }: { params: { transactio
             else if (query_transaction.savingGroupId){
                 await revertTransactionGroupSaving(params.transactionId, query_transaction.amount);
             }
+            await updateTransactionChallenge(query_transaction._id);
 
             // Delete the transaction
             await Transaction.deleteOne({ _id: transactionId });
