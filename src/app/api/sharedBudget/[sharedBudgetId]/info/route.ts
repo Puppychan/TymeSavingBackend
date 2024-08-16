@@ -30,11 +30,13 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
       if(sharedBudget.endDate <= localDate(new Date()) || sharedBudget.isClosed){
-        if(!sharedBudget.isClosed){
-          sharedBudget.isClosed = true;
-          await sharedBudget.save();
-        }
-        // return NextResponse.json({ response: 'CLOSED: SharedBudget has ended, or is closed by the host'}, {status: 500});
+        // // Handle time-based expiration using FACTS AND LOGIC
+        // // isClosed indicates if the host manually closed the group.
+        // if(!sharedBudget.isClosed){
+        //   sharedBudget.isClosed = true;
+        //   await sharedBudget.save();
+        // }
+        return NextResponse.json({ response: 'CLOSED: SharedBudget has ended, or is closed by the host'}, {status: 500});
       }
 
       return NextResponse.json({ response: sharedBudget }, { status: 200 });

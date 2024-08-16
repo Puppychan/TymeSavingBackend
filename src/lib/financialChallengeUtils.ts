@@ -45,16 +45,17 @@ export async function userJoinGroupChallenge (userId: mongoose.Types.ObjectId, g
     // Check if user and group exist. If yes, get the group's challenges list
     const checkUser = await User.findById(userId);
     let challengeList;
+    const dateFilter = {endDate: {$gt: localDate(new Date())}};
 
     if(!checkUser) return {status: 404, response: "User not found"};
     if(groupType === 'SharedBudget'){
       const checkSB = await SharedBudget.findById(groupId);
       if(!checkSB) return {status: 404, response: "SharedBudget not found"};
-      challengeList = await FinancialChallenge.find({budgetGroupId: new mongoose.Types.ObjectId(groupId)});
+      challengeList = await FinancialChallenge.find({budgetGroupId: new mongoose.Types.ObjectId(groupId)}).find(dateFilter);
     } else if (groupType === 'GroupSaving'){
       const checkGS = await GroupSaving.findById(groupId);
       if(!checkGS) return {status: 404, response: "GroupSaving not found"};
-      challengeList = await FinancialChallenge.find({budgetGroupId: new mongoose.Types.ObjectId(groupId)});
+      challengeList = await FinancialChallenge.find({budgetGroupId: new mongoose.Types.ObjectId(groupId)}).find(dateFilter);
     } else return {status: 500, response: "Invalid group type"};
     // For each element in challenge list, create a challengeProgress object.
     let progressList = [];
