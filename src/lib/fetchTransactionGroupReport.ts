@@ -84,7 +84,7 @@ export async function groupReportCategories(groupType, groupId) {
 
 export async function groupReportUsers(groupType, groupId) {
     try {
-      // Determine the correct group field based on the groupType
+      // Determine the correct group field based on the groupType - groupId is checked by the caller (route)
       let matchGroup = {};
       if(groupType === 'budgetGroup'){
           matchGroup = { budgetGroupId: new mongoose.Types.ObjectId(groupId)};
@@ -149,7 +149,7 @@ export async function groupReportUsers(groupType, groupId) {
       // Check if 'Others' percentage > 0. If yes, add "Others" to the report
       if (othersPercentage > 0) {
         topUsers.push({
-          category: 'Others',
+          user: 'Others',
           totalAmount: totalAmount - sumTopAmount,
           percentage: othersPercentage
         });

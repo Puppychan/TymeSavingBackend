@@ -23,7 +23,11 @@ export const POST = async (req: NextRequest) => {
 
     const payload = await req.json()
     const { name, description, amount, concurrentAmount, endDate, defaultApproveStatus } = payload
-
+    // Initialize default dates
+    const currentDate = localDate(new Date());
+    const currentDateNextMonth = localDate(new Date());
+    currentDateNextMonth.setMonth(currentDateNextMonth.getMonth() + 1);
+    
     // Create a new shared budget document
     const newSharedBudget = await SharedBudget.create([{
       hostedBy: user._id,
@@ -31,8 +35,8 @@ export const POST = async (req: NextRequest) => {
       description: description,
       amount: amount ?? 0, // initial amount
       concurrentAmount: amount ?? 0, // initial concurrent amount = initial amount  
-      endDate: endDate ? localDate(new Date()) : null,
-      createdDate: localDate(new Date()),
+      createdDate: currentDate,
+      endDate: endDate ? localDate(new Date(endDate)) : currentDateNextMonth, // default: ends 1 month from now
       defaultApproveStatus: defaultApproveStatus ?? 'Approved'
     }], {session: dbSession});
 
