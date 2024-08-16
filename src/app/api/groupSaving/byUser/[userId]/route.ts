@@ -60,8 +60,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $match: query },
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$groupSaving" } },
-          { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize }
+          // { $skip: (pageNo - 1) * pageSize },
+          // { $limit: pageSize }
         ])
       // console.log("Group Saving List: ", list);
        
