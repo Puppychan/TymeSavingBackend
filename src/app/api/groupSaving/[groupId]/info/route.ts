@@ -33,7 +33,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
           group.isClosed = true;
           await group.save();
         }
-        return NextResponse.json({ response: 'CLOSED: GroupSaving has ended, or is closed by the host'}, {status: 500});
+        // return NextResponse.json({ response: 'CLOSED: GroupSaving has ended, or is closed by the host'}, {status: 500});
       }
 
       return NextResponse.json({ response: group }, { status: 200 });

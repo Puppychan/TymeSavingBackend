@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
           sharedBudget.isClosed = true;
           await sharedBudget.save();
         }
-        return NextResponse.json({ response: 'CLOSED: SharedBudget has ended, or is closed by the host'}, {status: 500});
+        // return NextResponse.json({ response: 'CLOSED: SharedBudget has ended, or is closed by the host'}, {status: 500});
       }
 
       return NextResponse.json({ response: sharedBudget }, { status: 200 });
