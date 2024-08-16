@@ -132,7 +132,8 @@ export const invitationData = async (fromUser: string | null, params) => {
     }
 }
 
-// Check if this user is in the GroupSaving/SharedBudget
+// When the user accepts/declines an invitation to a group, 
+// delete the other pending invitations for the user to join
 export const checkUserInGroup = async (userId: string, groupId: string, groupType: 'SharedBudget' | ' GroupSaving') => {
     
 }

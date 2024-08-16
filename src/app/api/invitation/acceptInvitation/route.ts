@@ -65,6 +65,8 @@ export const POST = async (req: NextRequest) => {
             await joinGroupSaving(userId, invitation.groupId)
         } 
 
+        // Delete pending invitations to the same group
+
         await dbSession.commitTransaction();  // Commit the transaction
         await dbSession.endSession();  // End the session
 
