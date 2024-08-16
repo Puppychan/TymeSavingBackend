@@ -5,6 +5,8 @@ import Transaction from "src/models/transaction/model"
 import { TransactionType } from "src/models/transaction/interface"
 import { ObjectId } from "mongoose"
 import { userJoinGroupChallenge } from "./financialChallengeUtils"
+import { localDate } from "./datetime";
+import { query } from "express"
 
 export async function checkDeletableGroupSaving(groupSavingId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -194,6 +196,31 @@ export async function revertTransactionGroupSaving(transactionId: string, oldAmo
     } catch (error) {
       console.log(error);
       reject("Update transaction to GroupSaving with error: " + error);
+    }
+  });
+}
+
+// GroupSaving can be closed manually by the host, or expired when the endDate is reached
+// Transactions cannot be made to these GroupSaving
+export async function checkGroupSavingClosed(savingGroupId){
+  return new Promise(async (resolve, reject) => {
+    try{
+      const querySaving = await GroupSaving.findById(savingGroupId);
+      if(!querySaving){
+        throw ("Cannot find the desired GroupSaving.");
+      }
+      if(querySaving.endDate < localDate(new Date())){
+        throw ("This GroupSaving has expired since " + querySaving.endDate);
+      }
+      if(querySaving.isClosed){
+        throw ("This GroupSaving has been closed by its host.");
+      }
+      resolve(querySaving);
+    }
+    catch (error) {
+      console.log(error);
+      reject(error);
+      return;
     }
   });
 }

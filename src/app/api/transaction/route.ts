@@ -3,8 +3,8 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
 import { localDate } from 'src/lib/datetime';
-import { changeSavingGroupBalance } from "src/lib/groupSavingUtils";
-import { changeBudgetGroupBalance } from "src/lib/sharedBudgetUtils";
+import { changeSavingGroupBalance, checkGroupSavingClosed } from "src/lib/groupSavingUtils";
+import { changeBudgetGroupBalance, checkSharedBudgetClosed } from "src/lib/sharedBudgetUtils";
 import { updateUserPoints } from "src/lib/userUtils";
 import { startSession } from "mongoose";
 import GroupSaving from "src/models/groupSaving/model";
@@ -38,19 +38,22 @@ export const POST = async (req:NextRequest) => {
         }
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
         if(savingGroupId){
-            console.log(savingGroupId)
+            console.log("Creating a transaction to " + savingGroupId);
             const savingGroup = await GroupSaving.findById(savingGroupId);
             if(!savingGroup){
                 return NextResponse.json({response: "No such Group Saving", status: 404});
             }
+            // Check if the group has been closed or expired
+            await checkGroupSavingClosed(savingGroupId);
             approveStatus = savingGroup.defaultApproveStatus;
         }
         if(budgetGroupId){
-            console.log(budgetGroupId);
+            console.log("Creating a transaction to " + budgetGroupId);
             const budgetGroup = await SharedBudget.findById(budgetGroupId);
             if(!budgetGroup){
                 return NextResponse.json({response: "No such Shared Budget", status: 404});
             }
+            await checkSharedBudgetClosed(budgetGroupId);
             approveStatus = budgetGroup.defaultApproveStatus;
         }
 
