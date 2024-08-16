@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
+import { localDate } from "src/lib/datetime";
 
 // GET: get group saving list of a user
 export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
@@ -36,6 +37,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let query = {}
       if (filter.length > 0) query['$and'] = filter
+      const filterFutureDate = { "groupSaving.endDate": { $gt: localDate(new Date()) }};
+      const filterClosed ={ "groupSaving.isClosed": false };
 
       let list = []
       list = await GroupSavingParticipation.aggregate([
@@ -43,13 +46,14 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $lookup: {from: 'groupsavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
           { $unwind : "$groupSaving" },
           { $match: query },
+          { $match: filterFutureDate },
+          { $match: filterClosed},
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$groupSaving" } },
           { $skip: (pageNo - 1) * pageSize },
           { $limit: pageSize }
         ])
-
-      console.log("Group Saving List: ", list);
+      // console.log("Group Saving List: ", list);
        
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {

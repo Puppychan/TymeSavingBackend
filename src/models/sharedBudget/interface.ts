@@ -15,4 +15,5 @@ export interface ISharedBudget extends Document {
     createdDate: Date;
     endDate: Date;
     defaultApproveStatus: string;
+    isClosed: boolean; // true when the host deactivates, or when "endDate" is reached
 }
