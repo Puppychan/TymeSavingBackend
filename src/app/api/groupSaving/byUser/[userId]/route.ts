@@ -13,9 +13,11 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
+      const showClosedExpired = searchParams.get('showClosedExpired') ?? 'true'; // also show closed or expired groups
       const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
       const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
-
+      console.log(showClosedExpired, searchParams.get('showClosedExpired'));
+      console.log("YEEEE");
       await connectMongoDB();
 
       const verification = await verifyAuth(req.headers, params.userId)
@@ -37,8 +39,10 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let query = {}
       if (filter.length > 0) query['$and'] = filter
-      const filterFutureDate = { "groupSaving.endDate": { $gt: localDate(new Date()) }};
-      const filterClosed ={ "groupSaving.isClosed": false };
+      if(showClosedExpired != 'true'){  
+        query["groupSaving.endDate"] = { $gt: localDate(new Date()) };
+        query["groupSaving.isClosed"] = false ;
+      }
 
       let list = []
       list = await GroupSavingParticipation.aggregate([
@@ -46,8 +50,6 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $lookup: {from: 'groupsavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
           { $unwind : "$groupSaving" },
           { $match: query },
-          { $match: filterFutureDate },
-          { $match: filterClosed},
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$groupSaving" } },
           { $skip: (pageNo - 1) * pageSize },
