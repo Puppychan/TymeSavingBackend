@@ -53,7 +53,14 @@ export async function groupReportCategories(groupType, groupId) {
           $project: {
             _id: 0,
             category: '$_id',
-            totalAmount: 1,
+            totalAmount: {
+              $convert: {
+                input: '$totalAmount',
+                to: 'double',
+                onError: 0.0,
+                onNull: 0.0
+              }
+            },
             percentage: {
               $round: [{ $multiply: [{ $divide: ['$totalAmount', totalAmount] }, 100] }, 2]
             }
@@ -133,7 +140,14 @@ export async function groupReportUsers(groupType, groupId) {
             $project: {
                 _id: 0,
                 user: '$user.fullname', // full name or username?
-                totalAmount: 1,
+                totalAmount: {
+                  $convert: {
+                    input: '$totalAmount',
+                    to: 'double',
+                    onError: 0.0,
+                    onNull: 0.0
+                  }
+                },
                 percentage: {
                     $round: [{ $multiply: [{ $divide: ['$totalAmount', totalAmount] }, 100] }, 2]
                 }
