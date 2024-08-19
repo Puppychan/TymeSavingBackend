@@ -2,6 +2,10 @@ import Invitation from "src/models/invitation/model";
 import User from "src/models/user/model";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import mongoose from "mongoose";
+import SharedBudget from "src/models/sharedBudget/model";
+import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
+import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
+import GroupSaving from "src/models/groupSaving/model";
 // Queries for invitation/admin and invitation/byUser/[userId]
 /* 
     Sort: 
@@ -133,7 +137,53 @@ export const invitationData = async (fromUser: string | null, params) => {
 }
 
 // When the user accepts/declines an invitation to a group, 
-// delete the other pending invitations for the user to join
-export const checkUserInGroup = async (userId: string, groupId: string, groupType: 'SharedBudget' | ' GroupSaving') => {
-    
+// returns true if the user is already in said group, false otherwise
+export const isUserInGroup = async (userId: string, groupId: string, groupType) => {
+    return new Promise(async(resolve, reject) => {    
+        await connectMongoDB();
+        try{
+            const user = await User.findById(userId);
+            if (!user){
+                throw("CheckInvitation: User not found");
+            }
+            if(groupType == 'SharedBudget'){
+                const budgetGroup = await SharedBudget.findById(groupId);
+                if(!budgetGroup){
+                    throw("CheckInvitation: SharedBudget not found");
+                }
+                const existSBP = await SharedBudgetParticipation.find({
+                    userId: userId,
+                    sharedBudget: groupId
+                });
+                if(existSBP){
+                    console.log("CheckInvitation: User is already in this SharedBudget");
+                    resolve(true);
+                    return;
+                }
+                console.log("CheckInvitation:User is not in this SharedBudget and can be invited.");
+                resolve(false);
+                return;
+            } else if (groupType == 'GroupSaving'){
+                const savingGroup = await GroupSaving.findById(groupId);
+                if(!savingGroup){
+                    throw("CheckInvitation: GroupSaving not found");
+                }
+                const existSBP = await GroupSavingParticipation.find({
+                    userId: userId,
+                    sharedBudget: groupId
+                });
+                if(existSBP){
+                    console.log("CheckInvitation: User is already in this GroupSaving");
+                    resolve(true);
+                    return;
+                }
+                console.log("CheckInvitation: User is not in this GroupSaving and can be invited.");
+                resolve(false);
+                return;
+            }
+        }
+        catch (error){
+            reject(error);
+        }
+    });
 }
