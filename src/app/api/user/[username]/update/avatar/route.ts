@@ -50,6 +50,6 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
     await dbSession.abortTransaction();  // Abort the transaction
     await dbSession.endSession();  // End the session
     console.log('Error updating user avatar:', error);
-    return NextResponse.json({ response: 'Cannot update user avatar: ' + error.message }, { status: 500 });
+    return NextResponse.json({ response: 'Cannot update user avatar: ' + error }, { status: 500 });
   }
 };
