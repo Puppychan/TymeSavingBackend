@@ -4,6 +4,8 @@ import Invitation from "src/models/invitation/model";
 import { InvitationType } from "src/models/invitation/interface";
 import UserInvitation from "src/models/userInvitation/model";
 import { startSession } from "mongoose";
+import GroupSaving from "src/models/groupSaving/model";
+import SharedBudget from "src/models/sharedBudget/model";
 
 /*
     POST: CREATE a new invitation
@@ -45,16 +47,26 @@ export const POST = async (req: NextRequest) => {
     }
     // Read information from request
     var { description, type, groupId, users, cancelledUsers } = payload;
-    let newType = InvitationType.GroupSaving;
-    if (type == "SharedBudget") {
-      newType = InvitationType.SharedBudget;
+
+    // Check if the group exists
+    let groupType = (type == "SharedBudget") ? InvitationType.SharedBudget : InvitationType.GroupSaving;
+    if (groupType === InvitationType.GroupSaving) {
+      const savingGroup = await GroupSaving.findById(groupId);
+      if(!savingGroup){
+          return NextResponse.json({response: "No such Group Saving", status: 404});
+      }
+    }
+    else{
+      const budgetGroup = await SharedBudget.findById(groupId);
+      if(!budgetGroup){
+          return NextResponse.json({response: "No such Shared Budget", status: 404});
+      }
     }
 
-    let usersArray = [];
-    if (users) {
-      const trimmedUsers = users.slice(1, -1);
-      usersArray = trimmedUsers.split(",").map((link: string) => link.trim());
-    }
+    // if (users) {
+    //   const trimmedUsers = users.slice(1, -1);
+    //   usersArray = trimmedUsers.split(",").map((link: string) => link.trim());
+    // }
 
     // Parse users and cancelledUsers: from u1;u2;u3 to [u1, u2, u3]
     // let usersList = [];
@@ -68,30 +80,27 @@ export const POST = async (req: NextRequest) => {
     const newInvitation = new Invitation({
       code: generatedCode,
       description: description,
-      type: newType,
+      type: groupType,
       groupId: groupId,
-      users: usersArray ? usersArray : [],
+      users: users,
       cancelledUsers: cancelledUsers ? cancelledUsers : [],
     });
     await newInvitation.save({ session });
-    console.log("Saved new invitation:", newInvitation);
     const newInvitationId = newInvitation._id;
 
     if (users) {
-      const newUserInvitations = usersArray.map((user) => ({
+      const newUserInvitations = users.map((user) => ({
         userId: user,
         invitationId: newInvitationId,
         status: "Pending",
       }));
       await UserInvitation.insertMany(newUserInvitations, { session });
-      console.log("Saved new user invitations:", newUserInvitations);
     }
 
     const insertedUserInvitations =
-      usersArray.length > 0
+      users.length > 0
         ? await UserInvitation.find({ invitationId: newInvitationId }).session(session)
         : [];
-    console.log("Inserted user invitations checked:", insertedUserInvitations);
 
     await session.commitTransaction();
     session.endSession();

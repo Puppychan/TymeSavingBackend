@@ -34,7 +34,11 @@ export const GET = async(req: NextRequest, { params }: { params: { groupId: stri
     if(!groupSaving){
       throw "GroupSavingReport: Cannot find GroupSaving";
     }
-    var response = {categories: [], users: [], transactions: []};
+    var response = {information: {}, categories: [], users: [], transactions: []};
+    // Fetch basic information
+    ['name', 'description', 'createdDate', 'endDate', 'concurrentAmount', 'amount'].forEach(key => {
+      response.information[key] = groupSaving[key];
+    });
     response.categories = await groupReportCategories(groupType, groupId);
     response.users = await groupReportUsers(groupType, groupId);
     response.transactions = await groupReportTransactions(groupType, groupId, filter);

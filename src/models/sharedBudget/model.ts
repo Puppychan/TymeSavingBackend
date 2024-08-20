@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { approveStatuses, ISharedBudget } from './interface';
+import { ApproveStatuses, ISharedBudget } from './interface';
 
 // Define the schema for the user
 const sharedBudgetSchema: Schema = new Schema({
@@ -16,7 +16,7 @@ const sharedBudgetSchema: Schema = new Schema({
     endDate: {type: Date},
     defaultApproveStatus: {
       type: String,
-      enum: approveStatuses,
+      enum: ApproveStatuses,
       required: true,
       default: "Approved"
     },

@@ -3,70 +3,98 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
 import { localDate } from 'src/lib/datetime';
-import { changeSavingGroupBalance } from "src/lib/groupSavingUtils";
-import { changeBudgetGroupBalance } from "src/lib/sharedBudgetUtils";
+import { changeSavingGroupBalance, checkGroupSavingClosed } from "src/lib/groupSavingUtils";
+import { changeBudgetGroupBalance, checkSharedBudgetClosed } from "src/lib/sharedBudgetUtils";
 import { updateUserPoints } from "src/lib/userUtils";
 import { startSession } from "mongoose";
 import GroupSaving from "src/models/groupSaving/model";
 import SharedBudget from "src/models/sharedBudget/model";
 import { createTransactionChallenge } from "src/lib/financialChallengeUtils";
+import { verifyAuth } from "src/lib/authentication";
+import { uploadFile } from "src/lib/firebase/storage";
 /*
     POST: Create a transaction
 */
 
 export const POST = async (req:NextRequest) => {
     await connectMongoDB();
-
     const dbSession = await startSession();
     dbSession.startTransaction();
   
     try{
-        const payload = await req.json()
-        // Transaction.id will be auto assigned by MongoDB
-        // createdDate and editedDate are auto assigned to now
-        var {userId, createdDate, editedDate,description, type,amount,
-            transactionImages,payBy, category, savingGroupId, budgetGroupId, approveStatus} = payload;
-        let newType = TransactionType.Expense;
-        if (type == 'Income'){
-            newType = TransactionType.Income;
+        // const verification = await verifyAuth(req.headers)
+        // if (verification.status !== 200) {
+        //   return NextResponse.json({ response: verification.response }, { status: verification.status });
+        // }    
+        // const user = verification.response;
+
+        const formData = await req.formData();
+        const transactionImages = formData.getAll("image") as File[];
+        let userId = formData.get("userId");
+        let description = formData.get("description");
+        let type = formData.get("type");
+        let amount : any = formData.get("amount");
+        let payBy = formData.get("payBy");
+        let category = formData.get("category");
+        let savingGroupId = formData.get("savingGroupId");
+        let budgetGroupId = formData.get("budgetGroupId");
+        let approveStatus = formData.get("approveStatus");
+        let createdDate = formData.get("createdDate");
+        let editedDate = formData.get("editedDate");
+
+        if (!amount || amount === '' || isNaN(Number(amount))) {
+            return NextResponse.json({response: "Amount must be a valid number", status: 400});
         }
-        if(!createdDate){
-            createdDate = localDate(new Date());
+        amount = Number(amount);
+        if (amount <= 0) {
+            return NextResponse.json({response: "Amount must be greater than 0", status: 400});
         }
-        if(!editedDate){
-            editedDate = localDate(new Date());
+
+        let imageUrls = []
+        if (transactionImages) {
+            for (let i = 0; i < transactionImages.length; i++) {
+                let filename = transactionImages[i].name.split(' ').join('_')
+                const fileRef = `${Date.now()}_${filename}`;
+                let imageUrl = await uploadFile(transactionImages[i], fileRef)
+                imageUrls.push(imageUrl)
+            }
         }
+
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
         if(savingGroupId){
-            console.log(savingGroupId)
+            console.log("Creating a transaction to " + savingGroupId);
             const savingGroup = await GroupSaving.findById(savingGroupId);
             if(!savingGroup){
                 return NextResponse.json({response: "No such Group Saving", status: 404});
             }
+            // Check if the group has been closed or expired
+            await checkGroupSavingClosed(savingGroupId);
             approveStatus = savingGroup.defaultApproveStatus;
         }
+
         if(budgetGroupId){
-            console.log(budgetGroupId);
+            console.log("Creating a transaction to " + budgetGroupId);
             const budgetGroup = await SharedBudget.findById(budgetGroupId);
             if(!budgetGroup){
                 return NextResponse.json({response: "No such Shared Budget", status: 404});
             }
+            await checkSharedBudgetClosed(budgetGroupId);
             approveStatus = budgetGroup.defaultApproveStatus;
         }
 
         const newTransaction = new Transaction({
             userId: userId,
-            createdDate: createdDate,
-            editedDate: editedDate,
             description: description,
-            type: newType,
+            type: type === 'Income' ? TransactionType.Income : TransactionType.Expense,
             amount: amount,
-            transactionImages: transactionImages,
+            transactionImages: imageUrls,
             payBy: payBy,
             category: category,
             savingGroupId: savingGroupId,
             budgetGroupId: budgetGroupId,
-            approveStatus: approveStatus
+            approveStatus: approveStatus,
+            createdDate: createdDate ? localDate(new Date(createdDate as string)) : localDate(new Date()),
+            editedDate: editedDate ? localDate(new Date(editedDate as string)) : localDate(new Date()),
         });
         await newTransaction.save();
         // Update SharedBudget, GroupSaving, and corresponding challenges

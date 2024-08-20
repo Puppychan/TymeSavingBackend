@@ -7,6 +7,7 @@ import Transaction from "src/models/transaction/model"
 import { userJoinGroupChallenge } from "./financialChallengeUtils"
 import { connectMongoDB } from "src/config/connectMongoDB"
 import { Share } from "next/font/google"
+import { localDate } from "./datetime";
 
 export async function checkDeletableSharedBudget(sharedBudgetId) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -203,6 +204,31 @@ export async function revertTransactionSharedBudget(transactionId: string, oldAm
     catch (error) {
       console.log(error);
       reject("Update transaction to shared budget with error: " + error);
+    }
+  });
+}
+
+// GroupSaving can be closed manually by the host, or expired when the endDate is reached
+// Transactions cannot be made to these GroupSaving
+export async function checkSharedBudgetClosed(budgetGroupId){
+  return new Promise(async (resolve, reject) => {
+    try{
+      const queryBudget = await SharedBudget.findById(budgetGroupId);
+      if(!queryBudget){
+        throw ("Cannot find the desired SharedBudget.");
+      }
+      if(queryBudget.endDate < localDate(new Date())){
+        throw ("This SharedBudget has expired since " + queryBudget.endDate);
+      }
+      if(queryBudget.isClosed){
+        throw ("This SharedBudget has been closed by its host.");
+      }
+      resolve(queryBudget);
+    }
+    catch (error) {
+      console.log(error);
+      reject(error);
+      return;
     }
   });
 }

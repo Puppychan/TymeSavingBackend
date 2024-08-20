@@ -30,7 +30,7 @@ export enum TransactionCategory {
     OtherIncomes = "Other incomes"
 }
 
-export enum approveStatuses{
+export enum ApproveStatuses{
     Approved = "Approved",
     Declined = "Declined",
     Pending = "Pending"
@@ -46,7 +46,7 @@ export interface ITransaction extends Document {
     description: string;
     type: TransactionType;
     amount: number;
-    transactionImages: string[]; // ORIGINALLY: STRING SEPARATED BY SEMICOLON ;
+    transactionImages: string[];
     payBy: string; // payment methods: cash, Momo, etc.
 
     savingGroupId: mongoose.Types.ObjectId; // MongoDB ID of the saving group that this transaction is in

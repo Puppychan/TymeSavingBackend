@@ -39,12 +39,14 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       if (filter.length > 0) query['$and'] = filter
 
       let sort = {}
-      sort['name'] = 1; //default option
       if(sortCreatedDate === 'ascending' || sortCreatedDate === 'descending'){
         sort['createdDate'] = sortCreatedDate === 'ascending' ? 1:-1;
       }
       if(sortName === 'ascending' || sortName === 'descending'){
         sort['name'] = sortName === 'ascending' ? 1:-1;
+      }
+      if (!sortName && !sortCreatedDate){
+        sort['name'] = 1; //default option
       }
 
       // Show unpublished challenges by this user as well
@@ -81,8 +83,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
             }
           },
           { $sort: sort },
-          { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize },
+          // { $skip: (pageNo - 1) * pageSize },
+          // { $limit: pageSize },
           { $project: { creator: 0}},
         ])
        
