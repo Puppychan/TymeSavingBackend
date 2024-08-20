@@ -1,4 +1,4 @@
-import { ObjectId, startSession } from "mongoose"
+import mongoose, { ObjectId, startSession } from "mongoose"
 import SharedBudget from "src/models/sharedBudget/model"
 import { GroupRole, ISharedBudgetParticipation } from "src/models/sharedBudgetParticipation/interface"
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model"
@@ -6,16 +6,12 @@ import { TransactionType } from "src/models/transaction/interface"
 import Transaction from "src/models/transaction/model"
 import { userJoinGroupChallenge } from "./financialChallengeUtils"
 import { connectMongoDB } from "src/config/connectMongoDB"
-import { Share } from "next/font/google"
 import { localDate } from "./datetime";
-
-export async function checkDeletableSharedBudget(sharedBudgetId) : Promise<boolean> {
+export async function checkDeletableSharedBudget(sharedBudgetId: string) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
     try {
-      const associated = await Transaction.aggregate([
-        { $match: { budgetGroupId: sharedBudgetId } },
-      ])
-      if (associated.length > 0) resolve(false)
+      const associated = await Transaction.find({budgetGroupId: sharedBudgetId})
+      if (associated && associated.length > 0) resolve(false)
       resolve(true)
     }
     catch (error) {
@@ -65,7 +61,6 @@ export async function joinSharedBudget(userId, sharedBudgetId) {
 
       // join existing challenges in the group
       const joinedChallenges = await userJoinGroupChallenge(userId, sharedBudgetId, "SharedBudget");
-      console.log("Joining new challenges with status " + joinedChallenges.status);
     }
     catch (error) {
       console.log(error)

@@ -112,7 +112,7 @@ export const POST = async (req:NextRequest) => {
         await dbSession.commitTransaction();  // Commit the transaction
         await dbSession.endSession();  // End the session
         
-        return NextResponse.json({response: newTransaction, status: 200});
+        return NextResponse.json({response: newTransaction}, {status: 200});
     }
     catch (error: any) {
         await dbSession.abortTransaction();  // Abort the transaction
