@@ -39,7 +39,6 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
               runValidators: true,
           }
       );
-      console.log('updatedUser:', updatedUser);
       let returnUser = updatedUser.toObject();
       delete returnUser.password;
       delete returnUser.pin;
