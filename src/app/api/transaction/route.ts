@@ -50,16 +50,6 @@ export const POST = async (req:NextRequest) => {
             return NextResponse.json({response: "Amount must be greater than 0", status: 400});
         }
 
-        let imageUrls = []
-        if (transactionImages) {
-            for (let i = 0; i < transactionImages.length; i++) {
-                let filename = transactionImages[i].name.split(' ').join('_')
-                const fileRef = `${Date.now()}_${filename}`;
-                let imageUrl = await uploadFile(transactionImages[i], fileRef)
-                imageUrls.push(imageUrl)
-            }
-        }
-
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
         if(savingGroupId){
             console.log("Creating a transaction to " + savingGroupId);
@@ -80,6 +70,16 @@ export const POST = async (req:NextRequest) => {
             }
             await checkSharedBudgetClosed(budgetGroupId);
             approveStatus = budgetGroup.defaultApproveStatus;
+        }
+
+        let imageUrls = []
+        if (transactionImages) {
+            for (let i = 0; i < transactionImages.length; i++) {
+                let filename = transactionImages[i].name.split(' ').join('_')
+                const fileRef = `${Date.now()}_${filename}`;
+                let imageUrl = await uploadFile(transactionImages[i], fileRef)
+                imageUrls.push(imageUrl)
+            }
         }
 
         const newTransaction = new Transaction({
@@ -118,6 +118,6 @@ export const POST = async (req:NextRequest) => {
         await dbSession.abortTransaction();  // Abort the transaction
         await dbSession.endSession();  // End the session
 
-        return NextResponse.json({ response: error.message}, { status: 500 });
+        return NextResponse.json({ response: 'Failed to create transaction: ' + error}, { status: 500 });
     }
 }
