@@ -39,6 +39,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
     }
 
     let filter = []
+    filter.push({"approveStatus": "Approved"});
 
     if (type) {
       filter.push({ "type": type })

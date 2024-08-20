@@ -4,7 +4,6 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyAuth } from "src/lib/authentication";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 import { localDate } from "src/lib/datetime";
-import { PipelineStage } from "mongoose";
 // import ISODate
 // GET: get shared budget list of a user
 export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
@@ -14,6 +13,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
+      const showClosedExpired = searchParams.get('showClosedExpired') ?? 'true'; // also show closed or expired groups
       const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
       const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
 
@@ -38,20 +38,31 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let query = {}
       if (filter.length > 0) query['$and'] = filter
-      const filterFutureDate = { "sharedBudget.endDate": { $gt: localDate(new Date()) }, 
-        "sharedBudget.isClosed": false };
+      if(showClosedExpired != 'true'){
+        query["sharedBudget.endDate"] = { $gt: localDate(new Date()) };
+        query["sharedBudget.isClosed"] = false ;
+      }
       
       // Only allow transactions to be made to groups that have not been closed: endDate + isClosed = false
       let list = await SharedBudgetParticipation.aggregate([
           { $match: { user: new ObjectId(params.userId) } },
           { $lookup: {from: 'sharedbudgets', localField: 'sharedBudget', foreignField: '_id', as: 'sharedBudget'} },
           { $unwind : "$sharedBudget" },
+          { 
+            $addFields: {
+              "sharedBudget.isClosedOrExpired": {
+                $or: [
+                  { $lt: ["$sharedBudget.endDate", localDate(new Date())] },
+                  "$sharedBudget.isClosed"
+                ]
+              }
+            }
+          },
           { $match: query },
-          { $match: filterFutureDate},
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$sharedBudget" } },
-          { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize }
+          // { $skip: (pageNo - 1) * pageSize },
+          // { $limit: pageSize }
         ]);
        
       return NextResponse.json({ response: list }, { status: 200 });

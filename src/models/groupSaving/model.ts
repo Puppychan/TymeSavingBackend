@@ -1,5 +1,5 @@
 import mongoose, {Schema} from 'mongoose';
-import { IGroupSaving, approveStatuses } from './interface';
+import { IGroupSaving, ApproveStatuses } from './interface';
 
 // Define the schema for the user
 const groupSavingSchema: Schema = new Schema({
@@ -16,7 +16,7 @@ const groupSavingSchema: Schema = new Schema({
     endDate: {type: Date},
     defaultApproveStatus: {
       type: String,
-      enum: approveStatuses,
+      enum: ApproveStatuses,
       required: true,
       default: "Approved"
     },

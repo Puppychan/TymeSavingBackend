@@ -34,7 +34,12 @@ export const GET = async(req: NextRequest, { params }: { params: { sharedBudgetI
     if(!sharedBudget){
       throw "SharedBudgetReport: Cannot find SharedBudget";
     }
-    var response = {categories: [], users: [], transactions: []};
+    var response = {information: {}, categories: [], users: [], transactions: []};
+    // Fetch basic information
+    ['name', 'description', 'createdDate', 'endDate', 'concurrentAmount', 'amount'].forEach(key => {
+      response.information[key] = sharedBudget[key];
+    });
+    // Call functions to get transaction summary
     response.categories = await groupReportCategories(groupType, groupId);
     response.users = await groupReportUsers(groupType, groupId);
     response.transactions = await groupReportTransactions(groupType, groupId, filter);

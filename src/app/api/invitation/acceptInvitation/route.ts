@@ -8,6 +8,9 @@ import { InvitationType } from "src/models/invitation/interface";
 import { joinSharedBudget } from "src/lib/sharedBudgetUtils";
 import { joinGroupSaving } from "src/lib/groupSavingUtils";
 import { startSession } from "mongoose";
+import SharedBudget from "src/models/sharedBudget/model";
+import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
+import { isUserInGroup } from "src/lib/invitationUtils";
 /*
 Param: userId, invitationId  
 Pre-requisite: The user must have been invited i.e. must be in the invitation's 'users' array
@@ -37,8 +40,12 @@ export const POST = async (req: NextRequest) => {
         if(!pendingUsers.includes(userId)){
             return NextResponse.json({response: `This user ${userId} is not currently invited by ${invitationId}`}, {status: 404});
         }
-        // User accepts: Deletes from Invitation.users and add to user array of Invitation.groupId
-        // Remove the user from the invitation's users array
+        // Handle: user is already in this group - TO be implemented
+        // const userInGroup = await isUserInGroup(userId, invitation.groupId, invitation.type);
+        // if(userInGroup){ // user has already joined the group
+        //     return NextResponse.json({ response: `User ${userId} has already joined ${invitation.type} with ID ${invitation.groupId}` }, { status: 200 }); 
+        // }
+        // User accepts: Remove the user from the invitation's users array
         invitation.users = pendingUsers.filter((id) => id !== userId);
 
         // Set UserInvitation.status = Accepted
@@ -57,7 +64,7 @@ export const POST = async (req: NextRequest) => {
         // Save the updated invitation
         await invitation.save();
 
-        // ADD USER TO SHARED BUDGET GROUP
+        // ADD USER TO GROUP
         if (invitation.type === InvitationType.SharedBudget) {
             await joinSharedBudget(userId, invitation.groupId)
         }

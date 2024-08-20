@@ -30,7 +30,7 @@ export enum TransactionCategory {
     OtherIncomes = "Other incomes"
 }
 
-export enum approveStatuses{
+export enum ApproveStatuses{
     Approved = "Approved",
     Declined = "Declined",
     Pending = "Pending"

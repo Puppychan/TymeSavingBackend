@@ -1,6 +1,6 @@
 import mongoose, {Document} from 'mongoose';
 
-export enum approveStatuses{
+export enum ApproveStatuses{
     Approved = "Approved",
     Pending = "Pending"
 }
