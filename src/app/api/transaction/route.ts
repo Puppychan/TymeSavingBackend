@@ -56,7 +56,9 @@ export const POST = async (req:NextRequest) => {
             await checkSharedBudgetClosed(budgetGroupId);
             approveStatus = budgetGroup.defaultApproveStatus;
         }
-
+        if (amount) amount = parseInt(amount, 10);
+        else amount = 0;
+        
         const newTransaction = new Transaction({
             userId: userId,
             createdDate: createdDate,
