@@ -65,37 +65,21 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
             foreignField: '_id',
             as: 'checkpoints',
           },
-        },
-        {
-          $unwind: {
-            path: '$savingGroup',
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $unwind: {
-            path: '$budgetGroup',
-            preserveNullAndEmptyArrays: true,
-          },
-        },
-        {
-          $addFields: {
-            groupName: {
-              $cond: {
-                if: { $gt: [{ $size: { $ifNull: ["$savingGroup", []] } }, 0] },
-                then: "$savingGroup.name",
-                else: "$budgetGroup.name",
-              },
-            },
-          },
         }
       ]);
 
       if (challenge && challenge.length < 1){
         return NextResponse.json({ response: "Challenge not found." }, { status: 404 });
       }
+      let response = challenge[0];
+      if (response.savingGroupId) {
+        response['groupName'] = response.savingGroup[0].name;
+      } else if (response.budgetGroupId) {
+        response['groupName'] = response.budgetGroup[0].name;
+      }
 
-      return NextResponse.json({ response: challenge[0] }, { status: 200 });
+
+      return NextResponse.json({ response: response }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting financial challenge info:', error);
     return NextResponse.json({ response: 'Failed to get financial challenge info: ' + error}, { status: 500 });
