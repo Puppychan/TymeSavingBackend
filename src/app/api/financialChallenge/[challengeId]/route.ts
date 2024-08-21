@@ -59,6 +59,18 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
           },
         },
         {
+          $unwind: {
+            path: '$savingGroup',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: '$budgetGroup',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
           $lookup: {
             from: 'challengecheckpoints',
             localField: 'checkpoints',
@@ -73,9 +85,9 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
       }
       let response = challenge[0];
       if (response.savingGroupId) {
-        response['groupName'] = response.savingGroup[0].name;
+        response['groupName'] = response.savingGroup.name;
       } else if (response.budgetGroupId) {
-        response['groupName'] = response.budgetGroup[0].name;
+        response['groupName'] = response.budgetGroup.name;
       }
 
 
