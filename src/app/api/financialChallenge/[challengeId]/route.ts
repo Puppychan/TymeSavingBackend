@@ -9,7 +9,9 @@ import { IFinancialChallenge } from "src/models/financialChallenge/interface";
 import FinancialChallenge from "src/models/financialChallenge/model";
 import GroupSaving from "src/models/groupSaving/model";
 import Reward from "src/models/reward/model";
+import SharedBudget from "src/models/sharedBudget/model";
 import User from "src/models/user/model";
+import mongoose from "mongoose";
 
 // GET: get challenge information
 export const GET = async (req: NextRequest, { params }: { params: { challengeId: string }}) => {
@@ -31,32 +33,53 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
       }
 
       const challenge = await FinancialChallenge
-                            .findById(params.challengeId)
-                            .populate([
-                              {
-                                path: 'members',
-                                model: User,
-                                select: '_id username fullname phone email avatar tymeReward',
-                              },
-                              {
-                                path: 'savingGroupId',
-                                model: GroupSaving,
-                              },
-                              {
-                                path: 'checkpoints',
-                                model: ChallengeCheckpoint,
-                                populate: {
-                                  path: 'reward',
-                                  model: Reward
-                                }
-                              }
-                            ])
-
+              .findById(params.challengeId)
+              .populate([
+                {
+                  path: 'members',
+                  model: User,
+                  select: '_id username fullname phone email avatar tymeReward',
+                },
+                {
+                  path: 'savingGroupId',
+                  model: GroupSaving,
+                },
+                {
+                  path: 'budgetGroupId',
+                  model: SharedBudget, // assuming you also have a reference to SharedBudget
+                },
+                {
+                  path: 'checkpoints',
+                  model: ChallengeCheckpoint,
+                  populate: {
+                    path: 'reward',
+                    model: Reward
+                  }
+                }
+              ]);
+      
+      
       if (!challenge) {
         return NextResponse.json({ response: 'Financial Challenge not found' }, { status: 404 });
       }
 
-      return NextResponse.json({ response: challenge }, { status: 200 });
+      let groupName = '';
+
+      if (challenge.savingGroupId) {
+        groupName = challenge.savingGroupId.name;
+      } else if (challenge.budgetGroupId) {
+        groupName = challenge.budgetGroupId.name;
+      }
+
+      const response = {
+        _id: challenge._id,
+        groupName, // add the groupName to the response
+        members: challenge.members,
+        checkpoints: challenge.checkpoints,
+        // add any other fields from the challenge as needed
+      };
+
+      return NextResponse.json({ response: response }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting financial challenge info:', error);
     return NextResponse.json({ response: 'Failed to get financial challenge info: ' + error}, { status: 500 });

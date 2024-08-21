@@ -29,27 +29,47 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
         }
       }
 
-      const challenge = await FinancialChallenge
-                            .findById(params.challengeId)
-                            .populate([
-                              {
-                                path: 'memberProgress',
-                                model: ChallengeProgress,
-                                match: { userId: new ObjectId(params.memberId) },
-                                populate: {
-                                  path: 'userId',
-                                  model: User,
-                                  select: '_id username fullname phone email avatar tymeReward',
-                                }
-                              }
-                            ])
-                            .select('memberProgress');
+      const challenge = await FinancialChallenge.aggregate([
+        { $match: { _id: new ObjectId(params.challengeId) } },
+        {
+          $lookup: {
+            from: 'challengeprogresses',
+            let: { challengeId: '$_id' },
+            pipeline: [
+              { $match: { $expr: 
+                { $and: 
+                  [{ $eq: ['$challengeId', '$$challengeId'] }, 
+                  { $eq: ['$userId', new ObjectId(params.memberId)] }] 
+                } 
+              } },
+              {
+                $project: {
+                  _id: 1,
+                  challengeId: 1,
+                  currentProgress: 1,
+                  reachedMilestone: { $size: '$checkpointPassed' }
+                }
+              }
+            ],
+            as: 'memberProgress'
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            'memberProgress._id': 1,
+            'memberProgress.challengeId': 1,
+            'memberProgress.currentProgress': 1,
+            'memberProgress.reachedMilestone': 1
+          }
+        }
+      ]).exec();
 
       if (!challenge) {
         return NextResponse.json({ response: 'Financial Challenge not found' }, { status: 404 });
       }
 
-      return NextResponse.json({ response: challenge }, { status: 200 });
+      return NextResponse.json({ response: challenge[0] }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting financial challenge info:', error);
     return NextResponse.json({ response: 'Failed to get financial challenge info: ' + error}, { status: 500 });
