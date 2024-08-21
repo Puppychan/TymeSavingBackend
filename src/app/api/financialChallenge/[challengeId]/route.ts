@@ -32,54 +32,70 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
         }
       }
 
-      const challenge = await FinancialChallenge
-              .findById(params.challengeId)
-              .populate([
-                {
-                  path: 'members',
-                  model: User,
-                  select: '_id username fullname phone email avatar tymeReward',
-                },
-                {
-                  path: 'savingGroupId',
-                  model: GroupSaving,
-                },
-                {
-                  path: 'budgetGroupId',
-                  model: SharedBudget, // assuming you also have a reference to SharedBudget
-                },
-                {
-                  path: 'checkpoints',
-                  model: ChallengeCheckpoint,
-                  populate: {
-                    path: 'reward',
-                    model: Reward
-                  }
-                }
-              ]);
-      
-      
-      if (!challenge) {
-        return NextResponse.json({ response: 'Financial Challenge not found' }, { status: 404 });
+      const challenge = await FinancialChallenge.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(params.challengeId) } },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'members',
+            foreignField: '_id',
+            as: 'members',
+          },
+        },
+        {
+          $lookup: {
+            from: 'groupsavings',
+            localField: 'savingGroupId',
+            foreignField: '_id',
+            as: 'savingGroup',
+          },
+        },
+        {
+          $lookup: {
+            from: 'sharedbudgets',
+            localField: 'budgetGroupId',
+            foreignField: '_id',
+            as: 'budgetGroup',
+          },
+        },
+        {
+          $lookup: {
+            from: 'challengecheckpoints',
+            localField: 'checkpoints',
+            foreignField: '_id',
+            as: 'checkpoints',
+          },
+        },
+        {
+          $unwind: {
+            path: '$savingGroup',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $unwind: {
+            path: '$budgetGroup',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            groupName: {
+              $cond: {
+                if: { $gt: [{ $size: { $ifNull: ["$savingGroup", []] } }, 0] },
+                then: "$savingGroup.name",
+                else: "$budgetGroup.name",
+              },
+            },
+          },
+        }
+      ]);
+
+      if (challenge && challenge.length < 1){
+        return NextResponse.json({ response: "Challenge not found." }, { status: 404 });
       }
 
-      let groupName = '';
-
-      if (challenge.savingGroupId) {
-        groupName = challenge.savingGroupId.name;
-      } else if (challenge.budgetGroupId) {
-        groupName = challenge.budgetGroupId.name;
-      }
-
-      const response = {
-        _id: challenge._id,
-        groupName, // add the groupName to the response
-        members: challenge.members,
-        checkpoints: challenge.checkpoints,
-        // add any other fields from the challenge as needed
-      };
-
-      return NextResponse.json({ response: response }, { status: 200 });
+      return NextResponse.json({ response: challenge[0] }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting financial challenge info:', error);
     return NextResponse.json({ response: 'Failed to get financial challenge info: ' + error}, { status: 500 });
