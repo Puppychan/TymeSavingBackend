@@ -14,6 +14,7 @@ import ChallengeCheckpoint from "src/models/challengeCheckpoint/model";
 import Reward from "src/models/reward/model";
 // Functions
 import { localDate } from "./datetime";
+import { updateUserPoints } from "./userUtils";
 
 export async function verifyMember(userId: ObjectId, challengeId: string) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
@@ -171,7 +172,7 @@ export async function createTransactionChallenge(transactionId) {
         // Update the current progress
         challengeProgress.currentProgress += transaction.amount;
         challengeProgress.lastUpdate = localDate(new Date());
-        console.log(challenge.checkpoints.length);
+        // console.log(challenge.checkpoints.length);
         // 4. Check if any checkpoints have been passed
         if(!challenge.checkpoints || challenge.checkpoints.length == 0){
           console.log("Challenge " + challenge._id + " has no checkpoints to compare progress to.");
@@ -179,24 +180,28 @@ export async function createTransactionChallenge(transactionId) {
         else {  
           const checkpoints = await ChallengeCheckpoint.find({
             challengeId: challenge._id
-          }).sort({checkpointValue: 1}).session(dbSession);
+          }).sort({_id: 1}); // Checkpoints created first will arrive first
 
-          for (const checkpoint of checkpoints) {
-            if (challengeProgress.currentProgress >= checkpoint.checkpointValue) {
+          let previousValue = 0;
+          for (let i = 0; i < checkpoints.length; i++) {
+            console.log(`Current checkpoint #${i+1} value: ${checkpoints[i].checkpointValue}`);
+            console.log(`Cumulative checkpoint #${i+1} value: ${previousValue + checkpoints[i].checkpointValue}`);
+            if (challengeProgress.currentProgress >= checkpoints[i].checkpointValue + previousValue) {
               // If the checkpoint has been passed, add it to checkpointPassed
-              if (!challengeProgress.checkpointPassed.some(cp => cp.checkpointId.equals(checkpoint._id))) {
+              if (!challengeProgress.checkpointPassed.some(cp => cp.checkpointId.equals(checkpoints[i]._id))) {
                 challengeProgress.checkpointPassed.push({
-                  checkpointId: checkpoint._id,
+                  checkpointId: checkpoints[i]._id,
                   date: localDate(new Date())
                 });
 
                 // Optionally: Give the user the reward associated with this checkpoint
-                if (checkpoint.reward) {
-                  const rewardObject = await Reward.findById(checkpoint.reward);
+                if (checkpoints[i].reward) {
+                  const rewardObject = await Reward.findById(checkpoints[i].reward);
                   user.userPoints += rewardObject.prize[0].value;
                 }
               }
             }
+            previousValue += checkpoints[i].checkpointValue;
           }
         }
 
@@ -288,7 +293,7 @@ export async function updateTransactionChallenge(transactionId: ObjectId, oldAmo
 
                 if (checkpoint.reward) {
                   const rewardObject = await Reward.findById(checkpoint.reward);
-                  user.userPoints += rewardObject.prize[0].value;
+                  await updateUserPoints(user._id, rewardObject.prize[0].value);
                 }
               }
             }

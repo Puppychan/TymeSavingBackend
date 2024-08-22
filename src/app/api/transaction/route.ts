@@ -46,14 +46,14 @@ export const POST = async (req:NextRequest) => {
         if (!amount || amount === '' || isNaN(Number(amount))) {
             return NextResponse.json({response: "Amount must be a valid number", status: 400});
         }
-        amount = Number(amount);
+        amount = parseInt(amount, 10);
         if (amount <= 0) {
             return NextResponse.json({response: "Amount must be greater than 0", status: 400});
         }
 
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
         if(savingGroupId){
-            console.log("Creating a transaction to " + savingGroupId);
+            console.log("Creating a transaction to GroupSaving " + savingGroupId);
             const savingGroup = await GroupSaving.findById(savingGroupId);
             if(!savingGroup){
                 return NextResponse.json({response: "No such Group Saving", status: 404});
@@ -64,7 +64,7 @@ export const POST = async (req:NextRequest) => {
         }
 
         if(budgetGroupId){
-            console.log("Creating a transaction to " + budgetGroupId);
+            console.log("Creating a transaction to SharedBudget " + budgetGroupId);
             const budgetGroup = await SharedBudget.findById(budgetGroupId);
             if(!budgetGroup){
                 return NextResponse.json({response: "No such Shared Budget", status: 404});

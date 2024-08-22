@@ -36,6 +36,10 @@ export const POST = async (req: NextRequest, { params }: { params: { challengeId
     if (!challenge) {
       return NextResponse.json({ response: 'Challenge not found' }, { status: 404 });
     }
+    if(challenge.checkpoints && challenge.checkpoints.length + payload.length > 5){
+      return NextResponse.json({ response: `A challenge can only has maximum of 5 checkpoints. `
+        + `This challenge has ${challenge.checkpoints.length}, you are adding ${payload.length} more.` }, { status: 500 });
+    }
 
     // create checkpoints
     let checkpoints : IChallengeCheckpoint[] = [];
