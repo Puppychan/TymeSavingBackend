@@ -46,7 +46,8 @@ export async function joinSharedBudget(userId, sharedBudgetId) {
     try {
       const exist = await verifyMember(userId, sharedBudgetId)
       if (exist) {
-        throw ("This user is already a member of the shared budget")
+        resolve ("This user is already a member of the shared budget");
+        return;
       }
 
       const sharedBudget = await SharedBudget.findById(sharedBudgetId)

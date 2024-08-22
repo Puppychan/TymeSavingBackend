@@ -61,17 +61,17 @@ export const POST = async (req: NextRequest) => {
                 status: UserInvitationStatus.Accepted,
             });
         }
-        // Save the updated invitation
-        await invitation.save();
 
         // ADD USER TO GROUP
         if (invitation.type === InvitationType.SharedBudget) {
-            await joinSharedBudget(userId, invitation.groupId)
+            console.log(await joinSharedBudget(userId, invitation.groupId));
         }
         if (invitation.type === InvitationType.GroupSaving) {
-            await joinGroupSaving(userId, invitation.groupId)
+            console.log(await joinGroupSaving(userId, invitation.groupId));
         } 
 
+        // Save the updated invitation
+        await invitation.save({session: dbSession});
         await dbSession.commitTransaction();  // Commit the transaction
         await dbSession.endSession();  // End the session
 

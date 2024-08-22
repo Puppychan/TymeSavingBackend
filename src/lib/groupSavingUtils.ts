@@ -45,7 +45,8 @@ export async function joinGroupSaving(userId, groupSavingId) {
     try {
       const exist = await verifyMember(userId, groupSavingId)
       if (exist) {
-        throw ("This user is already a member of the group saving")
+        resolve ("This user is already a member of the group saving");
+        return;
       }
 
       const groupSaving = await GroupSaving.findById(groupSavingId)
@@ -65,6 +66,7 @@ export async function joinGroupSaving(userId, groupSavingId) {
       // join existing challenges in the group
       const joinedChallenges = await userJoinGroupChallenge(userId, groupSavingId, "GroupSaving");
       console.log("Joining new challenges with status " + joinedChallenges.status);
+      return;
     }
     catch (error) {
       console.log(error)
