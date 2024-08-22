@@ -38,7 +38,7 @@ export const POST = async (req:NextRequest) => {
         }
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
         if(savingGroupId){
-            console.log("Creating a transaction to " + savingGroupId);
+            console.log("Creating a transaction to GroupSaving " + savingGroupId);
             const savingGroup = await GroupSaving.findById(savingGroupId);
             if(!savingGroup){
                 return NextResponse.json({response: "No such Group Saving", status: 404});
@@ -48,7 +48,7 @@ export const POST = async (req:NextRequest) => {
             approveStatus = savingGroup.defaultApproveStatus;
         }
         if(budgetGroupId){
-            console.log("Creating a transaction to " + budgetGroupId);
+            console.log("Creating a transaction to SharedBudget " + budgetGroupId);
             const budgetGroup = await SharedBudget.findById(budgetGroupId);
             if(!budgetGroup){
                 return NextResponse.json({response: "No such Shared Budget", status: 404});

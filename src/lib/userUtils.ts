@@ -24,7 +24,7 @@ export async function updateUserPoints(userId, points): Promise<IUser>{
 
       let userPoints = user.userPoints ?? 0
       userPoints += points
-      user.userPoints += userPoints
+      user.userPoints = userPoints
       user.tymeReward = getTymeRewardLevel(user.userPoints)
       user.save()
       resolve(user)
