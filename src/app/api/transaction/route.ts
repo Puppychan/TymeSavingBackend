@@ -41,6 +41,7 @@ export const POST = async (req:NextRequest) => {
         let approveStatus = formData.get("approveStatus");
         let createdDate = formData.get("createdDate");
         let editedDate = formData.get("editedDate");
+        console.log("Creating a transaction - form data: ", formData);
 
         if (!amount || amount === '' || isNaN(Number(amount))) {
             return NextResponse.json({response: "Amount must be a valid number", status: 400});
@@ -115,6 +116,7 @@ export const POST = async (req:NextRequest) => {
         return NextResponse.json({response: newTransaction}, {status: 200});
     }
     catch (error: any) {
+        console.log('Error creating transaction:', error);
         await dbSession.abortTransaction();  // Abort the transaction
         await dbSession.endSession();  // End the session
 
