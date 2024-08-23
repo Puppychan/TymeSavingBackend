@@ -240,8 +240,6 @@ export const fetchTransactions = async(searchParams: any, origin: any): Promise<
         }
 // Sort
         let sort = {};
-        // Default option
-        sort["createdDate"] = -1;
         if(sortAmount){
             const order = sortAmount == "ascending" ? 1:-1;
             sort["amount"] = order;
@@ -258,6 +256,9 @@ export const fetchTransactions = async(searchParams: any, origin: any): Promise<
             const order = sortUserCreated == "ascending" ? 1:-1;
             sort["user.username"] = order;
             console.log(order);
+        }
+        if (!sortAmount && !sortDateCreated && !sortDateEdited){
+            sort["createdDate"] = -1; // Default option
         }
         // execute pipeline
         let history : any = []
