@@ -39,7 +39,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
     }
 
     let filter = []
-    filter.push({"approveStatus": "Approved"});
+    // filter.push({"approveStatus": "Approved"});
 
     if (type) {
       filter.push({ "type": type })
