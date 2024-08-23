@@ -68,6 +68,6 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting shared budget list:', error);
-    return NextResponse.json({ response: 'Failed to get shared budget list'}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to get shared budget list: ' + error}, { status: 500 });
   }
 };

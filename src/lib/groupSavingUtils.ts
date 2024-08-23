@@ -3,19 +3,17 @@ import GroupSavingParticipation from "src/models/groupSavingParticipation/model"
 import GroupSaving from "src/models/groupSaving/model"
 import Transaction from "src/models/transaction/model"
 import { TransactionType } from "src/models/transaction/interface"
-import { ObjectId } from "mongoose"
+import mongoose, { ObjectId } from "mongoose"
 import { userJoinGroupChallenge } from "./financialChallengeUtils"
 import { localDate } from "./datetime";
 import { query } from "express"
 
-export async function checkDeletableGroupSaving(groupSavingId) : Promise<boolean> {
+export async function checkDeletableGroupSaving(groupSavingId: string) : Promise<boolean> {
   return new Promise(async (resolve, reject) => {
     try {
-      const associated = await Transaction.aggregate([
-        { $match: { savingGroupId: groupSavingId } },
-      ])
-      
-      if (associated.length > 0) resolve(false)
+      const associated = await Transaction.find({savingGroupId: groupSavingId})
+      if (associated && associated.length > 0) resolve(false)
+
       resolve(true)
     }
     catch (error) {

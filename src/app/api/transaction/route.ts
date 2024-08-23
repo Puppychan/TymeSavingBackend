@@ -41,23 +41,14 @@ export const POST = async (req:NextRequest) => {
         let approveStatus = formData.get("approveStatus");
         let createdDate = formData.get("createdDate");
         let editedDate = formData.get("editedDate");
+        console.log("Creating a transaction - form data: ", formData);
 
         if (!amount || amount === '' || isNaN(Number(amount))) {
             return NextResponse.json({response: "Amount must be a valid number", status: 400});
         }
-        amount = Number(amount);
+        amount = parseInt(amount, 10);
         if (amount <= 0) {
             return NextResponse.json({response: "Amount must be greater than 0", status: 400});
-        }
-
-        let imageUrls = []
-        if (transactionImages) {
-            for (let i = 0; i < transactionImages.length; i++) {
-                let filename = transactionImages[i].name.split(' ').join('_')
-                const fileRef = `${Date.now()}_${filename}`;
-                let imageUrl = await uploadFile(transactionImages[i], fileRef)
-                imageUrls.push(imageUrl)
-            }
         }
 
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
@@ -81,9 +72,17 @@ export const POST = async (req:NextRequest) => {
             await checkSharedBudgetClosed(budgetGroupId);
             approveStatus = budgetGroup.defaultApproveStatus;
         }
-        if (amount) amount = parseInt(amount, 10);
-        else amount = 0;
-        
+
+        let imageUrls = []
+        if (transactionImages) {
+            for (let i = 0; i < transactionImages.length; i++) {
+                let filename = transactionImages[i].name.split(' ').join('_')
+                const fileRef = `${Date.now()}_${filename}`;
+                let imageUrl = await uploadFile(transactionImages[i], fileRef)
+                imageUrls.push(imageUrl)
+            }
+        }
+
         const newTransaction = new Transaction({
             userId: userId,
             description: description,
@@ -114,12 +113,13 @@ export const POST = async (req:NextRequest) => {
         await dbSession.commitTransaction();  // Commit the transaction
         await dbSession.endSession();  // End the session
         
-        return NextResponse.json({response: newTransaction, status: 200});
+        return NextResponse.json({response: newTransaction}, {status: 200});
     }
     catch (error: any) {
+        console.log('Error creating transaction:', error);
         await dbSession.abortTransaction();  // Abort the transaction
         await dbSession.endSession();  // End the session
 
-        return NextResponse.json({ response: error.message}, { status: 500 });
+        return NextResponse.json({ response: 'Failed to create transaction: ' + error}, { status: 500 });
     }
 }

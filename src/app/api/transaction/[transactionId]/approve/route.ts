@@ -30,6 +30,6 @@ export const POST = async(req: NextRequest, { params }: { params: { transactionI
     catch (error: any) {
       dbSession.abortTransaction();
       dbSession.endSession();
-      return NextResponse.json({ response: error.message }, { status: 500 });
+      return NextResponse.json({ response: error.message ?? error }, { status: 500 });
     }
 }

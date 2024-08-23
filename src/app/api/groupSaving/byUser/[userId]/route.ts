@@ -68,6 +68,6 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting group saving list:', error);
-    return NextResponse.json({ response: 'Failed to get group saving list'}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to get group saving list: ' + error}, { status: 500 });
   }
 };

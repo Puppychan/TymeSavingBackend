@@ -21,7 +21,13 @@ interface MoMoResponse {
     userFee?: number;
 }
 
+const _removeTransaction = async (transactionId: string | null) => {
+    if (!transactionId) return;
+    await Transaction.deleteOne({_id: transactionId});
+}
+
 export const POST = async (req: NextRequest) => {
+    let transactionIdGlobal: string | null = null;
   try {
     await connectMongoDB();
 
@@ -34,6 +40,7 @@ export const POST = async (req: NextRequest) => {
 
     const payload = await req.json();
     const {transactionId} = payload;
+    transactionIdGlobal = transactionId;
 
     let transaction = await Transaction.findOne({_id: transactionId});
     if (!transaction) {
@@ -102,6 +109,8 @@ export const POST = async (req: NextRequest) => {
 
 
     if (!momoResponse){
+        // TODO: Handle empty response from Momo - remove transaction from database
+        await _removeTransaction(transactionId);
         return NextResponse.json({ response: "Empty response from Momo"}, {status: 502})
     }
 
@@ -109,13 +118,17 @@ export const POST = async (req: NextRequest) => {
     // 0: Success
     // Others: Failed
     if (momoResponse.resultCode !== 0) {
+        // TODO: Handle failed payment - remove transaction from database
+        await _removeTransaction(transactionId);
         return NextResponse.json({ response: `Payment failed. Momo error code ${momoResponse.resultCode} - ${momoResponse.message}`}, {status: 400})
     }
-
+    
     return NextResponse.json({response: momoResponse}, {status: 200})
     
   } catch (error) {
+    // TODO: Handle error - remove transaction from database
       console.log(error)
+      await _removeTransaction(transactionIdGlobal);
       return NextResponse.json({ response: "Failed to execute: " + error}, {status: 500})
   }
 }

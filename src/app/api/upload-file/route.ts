@@ -15,6 +15,6 @@ export const POST = async (req: NextRequest) => {
     return  NextResponse.json({ response: downloadUrl }, { status: 200 });
   } catch (error: any) {
     console.log("ERROR api/uploadFile/route.ts:21 : ", error)
-    return NextResponse.json({ response: error.message}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to upload file: ' + error}, { status: 500 });
   }
 };
