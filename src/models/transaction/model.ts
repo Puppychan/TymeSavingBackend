@@ -21,7 +21,7 @@ const transactionSchema: Schema = new Schema({
         default: TransactionType.Expense
       },
     amount: {type: Number, default: 0},
-    transactionImages: {type: [String], default: []}, // ORIGINALLY: STRING SEPARATED BY SEMICOLON ;
+    transactionImages: {type: [String], default: []},
     payBy: {type: String}, // payment methods e.g. cash
 
     // Let users manually input categories for now. Dropdown list later

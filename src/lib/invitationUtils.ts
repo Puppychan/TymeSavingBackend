@@ -23,167 +23,166 @@ import GroupSaving from "src/models/groupSaving/model";
 */
 
 export const invitationData = async (fromUser: string | null, params) => {
-    // fromUser = userId -> show invitations for one user; else: from 
-    try {
-        await connectMongoDB();
-        console.log(Object.keys(params).length, fromUser, params);
-        let aggregate = Invitation.aggregate();
-        aggregate.lookup({
-            from: 'userinvitations',
-            localField: '_id',
-            foreignField: 'invitationId',
-            as: 'userInvitations'
-        });
-        // if(fromUser || params.hasOwnProperty('getUserId') || params.hasOwnProperty('getStatus') || params.hasOwnProperty('sortStatus')){
-        //     aggregate.unwind('$userInvitations'); // unwind so that the user only sees each invitation once
-        // }
-        aggregate.unwind('$userInvitations');
-        //User: Get all the invitations for this user
-        if(fromUser){
-            aggregate.match({ 'userInvitations.userId': new mongoose.Types.ObjectId(fromUser) });
-        }
-        // //Admin: Get all the invitations for a queried user
-        if(params.hasOwnProperty('getUserId')){
-            const userId:string = params['getUserId'];
-            console.log(userId);
-            if(mongoose.Types.ObjectId.isValid(userId)){
-                console.log("Valid");
-                aggregate.match({ 'userInvitations.userId': new mongoose.Types.ObjectId(userId) });
-            }
-        }
+  // fromUser = userId -> show invitations for one user; else: from 
+  try {
+      await connectMongoDB();
+      console.log(Object.keys(params).length, fromUser, params);
+      let aggregate = Invitation.aggregate();
+      aggregate.lookup({
+          from: 'userinvitations',
+          localField: '_id',
+          foreignField: 'invitationId',
+          as: 'userInvitations'
+      });
+      // if(fromUser || params.hasOwnProperty('getUserId') || params.hasOwnProperty('getStatus') || params.hasOwnProperty('sortStatus')){
+      //     aggregate.unwind('$userInvitations'); // unwind so that the user only sees each invitation once
+      // }
+      aggregate.unwind('$userInvitations');
+      //User: Get all the invitations for this user
+      if(fromUser){
+          aggregate.match({ 'userInvitations.userId': new mongoose.Types.ObjectId(fromUser) });
+      }
+      // //Admin: Get all the invitations for a queried user
+      if(params.hasOwnProperty('getUserId')){
+          const userId:string = params['getUserId'];
+          console.log(userId);
+          if(mongoose.Types.ObjectId.isValid(userId)){
+              console.log("Valid");
+              aggregate.match({ 'userInvitations.userId': new mongoose.Types.ObjectId(userId) });
+          }
+      }
 
-        // Match groupId
-        if (params.hasOwnProperty('getGroupId')) {
-            const groupId:string = params['getGroupId'];
-            aggregate.match({ groupId: new mongoose.Types.ObjectId(groupId) });
-        }
+      // Match groupId
+      if (params.hasOwnProperty('getGroupId')) {
+          const groupId:string = params['getGroupId'];
+          aggregate.match({ groupId: new mongoose.Types.ObjectId(groupId) });
+      }
 
-        // Match group type
-        if (params.hasOwnProperty('getGroupType')) {
-            const groupType = params['getGroupType'];
-            aggregate.match({ type: groupType });
-        }
+      // Match group type
+      if (params.hasOwnProperty('getGroupType')) {
+          const groupType = params['getGroupType'];
+          aggregate.match({ type: groupType });
+      }
 
-        // Match invitation code
-        if (params.hasOwnProperty('getCode')) {
-            const code = params['getCode'];
-            aggregate.match({ code: code });
-        }
+      // Match invitation code
+      if (params.hasOwnProperty('getCode')) {
+          const code = params['getCode'];
+          aggregate.match({ code: code });
+      }
 
-        // Match invitation status
-        if (params.hasOwnProperty('getStatus')) {
-            const invitationStatus = params['getStatus'];
-            aggregate.match({ 'userInvitations.status': invitationStatus });
-        }
+      // Match invitation status
+      if (params.hasOwnProperty('getStatus')) {
+          const invitationStatus = params['getStatus'];
+          aggregate.match({ 'userInvitations.status': invitationStatus });
+      }
 
 // Default sorting
-        if (Object.keys(params).length == 0) {
-            aggregate.sort({ _id: 1 }); //sort by invitation._id -> by time created
-        }
+      if (Object.keys(params).length == 0) {
+          aggregate.sort({ _id: 1 }); //sort by invitation._id -> by time created
+      }
 
-        // Sort by groupId
-        if (params.hasOwnProperty('sortGroupId')) {
-            const sortOrder = params['sortGroupId'] === 'ascending' ? 1 : -1;
-            aggregate.sort({ groupId: sortOrder });
-        }
+      // Sort by groupId
+      if (params.hasOwnProperty('sortGroupId')) {
+          const sortOrder = params['sortGroupId'] === 'ascending' ? 1 : -1;
+          aggregate.sort({ groupId: sortOrder });
+      }
 
-        // Sort by group type
-        if (params.hasOwnProperty('sortGroupType')) {
-            const sortOrder = params['sortGroupType'] === 'ascending' ? 1 : -1;
-            aggregate.sort({ type: sortOrder });
-        }
+      // Sort by group type
+      if (params.hasOwnProperty('sortGroupType')) {
+          const sortOrder = params['sortGroupType'] === 'ascending' ? 1 : -1;
+          aggregate.sort({ type: sortOrder });
+      }
 
-        // Sort by invitation status - in UserInvitation
-        if (params.hasOwnProperty('sortStatus')) {
-            const sortOrder = params['sortStatus'] === 'ascending' ? 1 : -1;
-            aggregate.sort({ 'userInvitations.status': sortOrder });
-        }
+      // Sort by invitation status - in UserInvitation
+      if (params.hasOwnProperty('sortStatus')) {
+          const sortOrder = params['sortStatus'] === 'ascending' ? 1 : -1;
+          aggregate.sort({ 'userInvitations.status': sortOrder });
+      }
 
-        // Execute the aggregation pipeline
-        let result = await aggregate.exec();
+      // Execute the aggregation pipeline
+      let result = await aggregate.exec();
 
-        // Filter fields for user
-        if (fromUser) {
-            result = result.map((invitation: any) => ({
-                invitationId: invitation._id,
-                userId: fromUser,
-                code: invitation.code,
-                description: invitation.description,
-                type: invitation.type,
-                groupId: invitation.groupId,
-                status: invitation.userInvitations.status
-            }));
-        }
-        else{
-            result = result.map((invitation: any) => ({
-                invitationId: invitation._id,
-                userId: invitation.userInvitations.userId,
-                status: invitation.userInvitations.status,
-                code: invitation.code,
-                description: invitation.description,
-                type: invitation.type,
-                groupId: invitation.groupId
-                // // user list: show this to admin?
-                // users: invitation.users,
-                // cancelledUsers: invitation.cancelledUsers
-            }));
-        }
-        console.log(result);
+      // Filter fields for user
+      if (fromUser) {
+          result = result.map((invitation: any) => ({
+              invitationId: invitation._id,
+              userId: fromUser,
+              code: invitation.code,
+              description: invitation.description,
+              type: invitation.type,
+              groupId: invitation.groupId,
+              status: invitation.userInvitations.status
+          }));
+      }
+      else{
+          result = result.map((invitation: any) => ({
+              invitationId: invitation._id,
+              userId: invitation.userInvitations.userId,
+              status: invitation.userInvitations.status,
+              code: invitation.code,
+              description: invitation.description,
+              type: invitation.type,
+              groupId: invitation.groupId
+              // // user list: show this to admin?
+              // users: invitation.users,
+              // cancelledUsers: invitation.cancelledUsers
+          }));
+      }
+      console.log(result);
 
-        return { response: result, status: 200 };
-    } catch (error: any) {
-        return { response: error.message , status: 500 };
-    }
+      return { response: result, status: 200 };
+  } catch (error: any) {
+      return { response: error.message , status: 500 };
+  }
 }
-
 // When the user accepts/declines an invitation to a group, 
 // returns true if the user is already in said group, false otherwise
 export const isUserInGroup = async (userId: string, groupId: string, groupType) => {
-    return new Promise(async(resolve, reject) => {    
-        await connectMongoDB();
-        try{
-            const user = await User.findById(userId);
-            if (!user){
-                throw("CheckInvitation: User not found");
-            }
-            if(groupType == 'SharedBudget'){
-                const budgetGroup = await SharedBudget.findById(groupId);
-                if(!budgetGroup){
-                    throw("CheckInvitation: SharedBudget not found");
-                }
-                const existSBP = await SharedBudgetParticipation.find({
-                    userId: userId,
-                    sharedBudget: groupId
-                });
-                if(existSBP){
-                    console.log("CheckInvitation: User is already in this SharedBudget");
-                    resolve(true);
-                    return;
-                }
-                console.log("CheckInvitation:User is not in this SharedBudget and can be invited.");
-                resolve(false);
-                return;
-            } else if (groupType == 'GroupSaving'){
-                const savingGroup = await GroupSaving.findById(groupId);
-                if(!savingGroup){
-                    throw("CheckInvitation: GroupSaving not found");
-                }
-                const existSBP = await GroupSavingParticipation.find({
-                    userId: userId,
-                    sharedBudget: groupId
-                });
-                if(existSBP){
-                    console.log("CheckInvitation: User is already in this GroupSaving");
-                    resolve(true);
-                    return;
-                }
-                console.log("CheckInvitation: User is not in this GroupSaving and can be invited.");
-                resolve(false);
-                return;
-            }
-        }
-        catch (error){
-            reject(error);
-        }
-    });
+  return new Promise(async(resolve, reject) => {    
+      await connectMongoDB();
+      try{
+          const user = await User.findById(userId);
+          if (!user){
+              throw("CheckInvitation: User not found");
+          }
+          if(groupType == 'SharedBudget'){
+              const budgetGroup = await SharedBudget.findById(groupId);
+              if(!budgetGroup){
+                  throw("CheckInvitation: SharedBudget not found");
+              }
+              const existSBP = await SharedBudgetParticipation.find({
+                  userId: userId,
+                  sharedBudget: groupId
+              });
+              if(existSBP){
+                  console.log("CheckInvitation: User is already in this SharedBudget");
+                  resolve(true);
+                  return;
+              }
+              console.log("CheckInvitation:User is not in this SharedBudget and can be invited.");
+              resolve(false);
+              return;
+          } else if (groupType == 'GroupSaving'){
+              const savingGroup = await GroupSaving.findById(groupId);
+              if(!savingGroup){
+                  throw("CheckInvitation: GroupSaving not found");
+              }
+              const existSBP = await GroupSavingParticipation.find({
+                  userId: userId,
+                  sharedBudget: groupId
+              });
+              if(existSBP){
+                  console.log("CheckInvitation: User is already in this GroupSaving");
+                  resolve(true);
+                  return;
+              }
+              console.log("CheckInvitation: User is not in this GroupSaving and can be invited.");
+              resolve(false);
+              return;
+          }
+      }
+      catch (error){
+          reject(error);
+      }
+  });
 }

@@ -15,8 +15,7 @@ export async function checkDeletableSharedBudget(sharedBudgetId) : Promise<boole
       const associated = await Transaction.aggregate([
         { $match: { budgetGroupId: sharedBudgetId } },
       ])
-      
-      if (associated.length >= 0) resolve(false)
+      if (associated.length > 0) resolve(false)
       resolve(true)
     }
     catch (error) {
@@ -233,4 +232,32 @@ export async function checkSharedBudgetClosed(budgetGroupId){
       return;
     }
   });
+}
+
+export async function removeTransactionFromSharedBudget(transactionId) {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const transaction = await Transaction.findById(transactionId)
+      if (!transaction) {
+        throw ("Transaction not found")
+      }
+
+      const group = await SharedBudget.findById(transaction.budgetGroupId)
+      if (!group) {
+        throw ("Shared Budget not found")
+      }
+
+      if (transaction.type === TransactionType.Income) 
+        group.concurrentAmount -= transaction.amount
+      else if (transaction.type === TransactionType.Expense) 
+        group.concurrentAmount += transaction.amount
+
+      group.save()
+      resolve(group)
+    }
+    catch (error) {
+      console.log(error)
+      reject(error)
+    }
+  })
 }
