@@ -4,7 +4,7 @@ export const payment_config_momo = {
   secretkey: process.env.MOMO_SECRET_KEY,
   domain: process.env.MOMO_DOMAIN_SANDBOX,
   // domain: process.env.MOMO_DOMAIN_PRODUCTION,
-  redirectUrl: "https://momo.vn/return",
+  redirectUrl: "tyme_saving://payment/momo",
   ipnUrl: "https://callback.url/notify",
   requestType: "captureWallet",
   extraData: ""
