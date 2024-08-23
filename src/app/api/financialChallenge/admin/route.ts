@@ -51,12 +51,14 @@ export const GET = async (req: NextRequest) => {
       if (filter.length > 0) query['$and'] = filter
 
       let sort = {}
-      sort['name'] = 1; //default option
       if(sortCreatedDate === 'ascending' || sortCreatedDate === 'descending'){
         sort['createdDate'] = sortCreatedDate === 'ascending' ? 1:-1;
       }
       if(sortName === 'ascending' || sortName === 'descending'){
         sort['name'] = sortName === 'ascending' ? 1:-1;
+      }
+      if(!sortName && sortCreatedDate){
+        sort['name'] = 1; //default option
       }
 
       let list = [];
