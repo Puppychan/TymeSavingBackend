@@ -81,8 +81,8 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
             }
           },
           { $sort: sort },
-          { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize },
+          // { $skip: (pageNo - 1) * pageSize },
+          // { $limit: pageSize },
           { $project: { creator: 0}},
         ])
        
