@@ -14,6 +14,7 @@ import mongoose from "mongoose";
   When a group ID and 'query' is provided: return information for users who
 - is not currently in this group (look into SharedBudgetParticipation, GroupSavingParticipation)
 - does not have a pending invitation to this group (look into UserInvitation)
+  When no 'query' is provided: return all matching users
 */
 export const GET = async (
   req: NextRequest,
@@ -21,23 +22,26 @@ export const GET = async (
 ) => {
   try {
     await connectMongoDB();
-    const searchQuery = params.query;
     const urlSearchParams = req.nextUrl.searchParams;
     let searchParams: { [key: string]: string } = {};
     urlSearchParams.forEach((value, key) => {
       searchParams[key] = value;
     });
+    const searchQuery = searchParams['query'];
     // Use a regular expression to perform a case-insensitive search for any records containing the searchQuery in username, fullname, or email
     const regex = new RegExp("^" + searchQuery, "i");
-    let query: any = {
-      $or: [{ username: regex }, { fullname: regex }, { email: regex }],
+    let query: any = {};
+    if(searchQuery){
+      query = { 
+        $or: [{ username: regex }, { fullname: regex }, { email: regex }],
+      }
     };
     var users = [];
 
     // Add the exclusion condition if exceptSavingId is provided
     const exceptSavingId = searchParams["exceptSavingId"];
     const exceptBudgetId = searchParams["exceptBudgetId"];
-    console.log(exceptSavingId, exceptBudgetId);
+    console.log("Searching with queries: " + searchQuery, exceptSavingId, exceptBudgetId);
     // 1. Only 'query' is provided -> return the list of matching users
     if (exceptBudgetId == null && exceptSavingId == null){
       users = await User.find(query);
@@ -47,6 +51,9 @@ export const GET = async (
       // Get the IDs of the users matching this query
       const projection = { _id: 1};
       var userIdList = (await User.find(query, projection)).map(item => item._id);
+      if (!searchQuery) {
+        userIdList = (await User.find({}, projection)).map((item) => item._id);
+      }
       if(!userIdList){
         return NextResponse.json({ response: "No users found" }, { status: 404 });
       }
@@ -119,6 +126,7 @@ export const GET = async (
     if (!users.length) {
       return NextResponse.json({ response: "No users found" }, { status: 404 });
     }
+    console.log(users.length);
 
     // Convert each user document to a plain JavaScript object and remove sensitive fields
     const returnUsers = users.map((user) => {
