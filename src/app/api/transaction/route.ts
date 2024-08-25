@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import Transaction from "src/models/transaction/model";
 import {TransactionType} from "src/models/transaction/interface"
-import { localDate } from 'src/lib/datetime';
+import { handleDateFromFE, localDate } from 'src/lib/datetime';
 import { changeSavingGroupBalance, checkGroupSavingClosed } from "src/lib/groupSavingUtils";
 import { changeBudgetGroupBalance, checkSharedBudgetClosed } from "src/lib/sharedBudgetUtils";
 import { updateUserPoints } from "src/lib/userUtils";
@@ -94,8 +94,8 @@ export const POST = async (req:NextRequest) => {
             savingGroupId: savingGroupId,
             budgetGroupId: budgetGroupId,
             approveStatus: approveStatus,
-            createdDate: createdDate ? localDate(new Date(createdDate as string)) : localDate(new Date()),
-            editedDate: editedDate ? localDate(new Date(editedDate as string)) : localDate(new Date()),
+            createdDate: createdDate ? new Date(createdDate as string) : localDate(new Date()),
+            editedDate: editedDate ? new Date(editedDate as string) : localDate(new Date()),
         });
         await newTransaction.save();
         // Update SharedBudget, GroupSaving, and corresponding challenges
