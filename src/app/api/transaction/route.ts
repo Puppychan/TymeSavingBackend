@@ -41,6 +41,7 @@ export const POST = async (req:NextRequest) => {
         let approveStatus = formData.get("approveStatus");
         let createdDate = formData.get("createdDate");
         let editedDate = formData.get("editedDate");
+        let isMomo = formData.get("isMomo");
         console.log("Creating a transaction - form data: ", formData);
 
         if (!amount || amount === '' || isNaN(Number(amount))) {
@@ -96,6 +97,7 @@ export const POST = async (req:NextRequest) => {
             approveStatus: approveStatus,
             createdDate: createdDate ? new Date(createdDate as string) : localDate(new Date()),
             editedDate: editedDate ? new Date(editedDate as string) : localDate(new Date()),
+            isMomo: isMomo === 'true' ? true : false
         });
         await newTransaction.save();
         // Update SharedBudget, GroupSaving, and corresponding challenges

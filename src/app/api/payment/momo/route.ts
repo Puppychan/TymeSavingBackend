@@ -55,6 +55,7 @@ export const POST = async (req: NextRequest) => {
     
     var requestId = partnerCode + new Date().getTime();
     var amount = transaction.amount;
+    var userId = transaction.userId;
     var orderId = transactionId;
     var orderInfo = `Pay with MoMo ${transactionId} ${transaction.description ?? ""}`;
 
@@ -65,6 +66,7 @@ export const POST = async (req: NextRequest) => {
                     + "&ipnUrl=" + ipnUrl
                     + "&orderId=" + orderId
                     + "&orderInfo=" + orderInfo
+                    // + "&partnerClientId=" + userId
                     + "&partnerCode=" + partnerCode
                     + "&redirectUrl=" + redirectUrl
                     + "&requestId=" + requestId
@@ -86,6 +88,7 @@ export const POST = async (req: NextRequest) => {
         orderInfo : orderInfo,
         redirectUrl : redirectUrl,
         ipnUrl : ipnUrl,
+        // partnerClientId: userId,
         requestType : requestType,
         extraData : extraData,
         lang: 'en',
@@ -98,7 +101,8 @@ export const POST = async (req: NextRequest) => {
     const options = {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            // 'Content-Length': String(Buffer.byteLength(JSON.stringify(requestBody)))
         },
         body: JSON.stringify(requestBody)
     }
