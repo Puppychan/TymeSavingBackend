@@ -5,7 +5,7 @@ export const payment_config_momo = {
   domain: process.env.MOMO_DOMAIN_SANDBOX,
   // domain: process.env.MOMO_DOMAIN_PRODUCTION,
   redirectUrl: "tymesaving://payment/momo",
-  ipnUrl: "https://6396-42-115-92-28.ngrok-free.app/api/payment/momo/ipn",
+  ipnUrl: `${process.env.BACKEND_URL}/api/payment/momo/ipn`,
   requestType: "payWithMethod",
   extraData: ""
 }
