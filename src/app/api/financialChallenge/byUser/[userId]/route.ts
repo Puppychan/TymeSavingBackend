@@ -133,8 +133,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
         }
       },
       { $sort: sort },
-      { $skip: (pageNo - 1) * pageSize },
-      { $limit: pageSize },
+      // { $skip: (pageNo - 1) * pageSize },
+      // { $limit: pageSize },
       { $project: { creator: 0, groupSaving: 0, sharedBudget: 0, groupExists: 0 } }
     ]);
 
