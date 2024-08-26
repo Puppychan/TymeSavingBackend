@@ -4,8 +4,8 @@ export const payment_config_momo = {
   secretkey: process.env.MOMO_SECRET_KEY,
   domain: process.env.MOMO_DOMAIN_SANDBOX,
   // domain: process.env.MOMO_DOMAIN_PRODUCTION,
-  redirectUrl: "tyme_saving://payment/momo",
-  ipnUrl: "https://callback.url/notify",
-  requestType: "captureWallet",
+  redirectUrl: "tymesaving://payment/momo",
+  ipnUrl: "https://6396-42-115-92-28.ngrok-free.app/api/payment/momo/ipn",
+  requestType: "payWithMethod",
   extraData: ""
 }
