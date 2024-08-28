@@ -5,6 +5,7 @@ import { verifyMember } from "src/lib/groupSavingUtils";
 import GroupSaving from "src/models/groupSaving/model";
 import { UserRole } from "src/models/user/interface";
 import { localDate } from "src/lib/datetime";
+import mongoose from "mongoose";
 
 // GET: get group saving information
 export const GET = async (req: NextRequest, { params }: { params: { groupId: string }}) => {
@@ -24,8 +25,28 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
           return NextResponse.json({ response: 'This user is neither an admin nor a member of the group saving' }, { status: 401 });
       }
       
-      const group = await GroupSaving.findById(params.groupId)
-      if (!group) {
+      const group = await GroupSaving.aggregate([
+        {
+          $match: { _id: new mongoose.Types.ObjectId(params.groupId) }
+        },
+        {
+          $lookup: {
+            from: 'users', // Name of the users collection
+            localField: 'hostedBy', // Field in GroupSaving that references the user's _id
+            foreignField: '_id', // Field in User that is the _id
+            as: 'hostedBy'
+          }
+        },
+        {
+          $unwind: '$hostedBy' // Unwind the hostedBy array to make it an object
+        },
+        {
+          $addFields: {
+            hostedBy: '$hostedBy.fullname', // Replace hostedBy with the fullname
+          }
+        }
+      ]);
+      if (!group || group.length < 1) {
         return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
       }
       // if(group.endDate <= localDate(new Date()) || group.isClosed){
