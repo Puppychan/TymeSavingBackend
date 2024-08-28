@@ -40,7 +40,49 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
             localField: 'members',
             foreignField: '_id',
             as: 'members',
-          },
+            pipeline: [
+              {
+                $lookup: {
+                  from: 'challengeprogresses', // Collection for ChallengeProgress
+                  localField: '_id', // User ID in the users collection
+                  foreignField: 'userId', // User ID in the ChallengeProgress collection
+                  as: 'progress', // Merged field
+                  pipeline: [
+                    {
+                      $match: {
+                        challengeId: new mongoose.Types.ObjectId(params.challengeId)
+                      }
+                    },
+                    {
+                      $addFields: {
+                        checkpointPassed: { $ifNull: ['$checkpointPassed', []] },
+                        numCheckpointPassed: { $size: { $ifNull: ['$checkpointPassed', []] } }
+                      }
+                    },
+                    {
+                      $project:{
+                        numCheckpointPassed: 1,
+                        currentProgress: 1,
+                        _id: 0
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                $addFields: {
+                  numCheckpointPassed: { $arrayElemAt: ['$progress.numCheckpointPassed', 0] },
+                  currentProgress: { $arrayElemAt: ['$progress.currentProgress', 0] }
+                }
+              },
+              {
+                $project: {
+                  password: 0,
+                  progress: 0
+                }
+              }
+            ]
+          }
         },
         {
           $lookup: {
@@ -78,7 +120,7 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
             as: 'checkpoints',
           },
         }
-      ]);
+      ]);      
 
       if (challenge && challenge.length < 1){
         return NextResponse.json({ response: "Challenge not found." }, { status: 404 });
