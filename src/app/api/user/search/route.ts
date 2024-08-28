@@ -27,11 +27,12 @@ export const GET = async (
     urlSearchParams.forEach((value, key) => {
       searchParams[key] = value;
     });
-    const searchQuery = searchParams['query'];
+    
+    const searchQuery = searchParams['query'] || "";
     // Use a regular expression to perform a case-insensitive search for any records containing the searchQuery in username, fullname, or email
-    const regex = new RegExp("^" + searchQuery, "i");
     let query: any = {};
-    if(searchQuery){
+    if(searchQuery && searchQuery.length > 0) {
+      const regex = new RegExp("^" + searchQuery, "i");
       query = { 
         $or: [{ username: regex }, { fullname: regex }, { email: regex }],
       }
@@ -51,7 +52,8 @@ export const GET = async (
       // Get the IDs of the users matching this query
       const projection = { _id: 1};
       var userIdList = (await User.find(query, projection)).map(item => item._id);
-      if (!searchQuery) {
+      if (!searchQuery || searchQuery.length == 0) {
+        // if no query is provided, get all users
         userIdList = (await User.find({}, projection)).map((item) => item._id);
       }
       if(!userIdList){

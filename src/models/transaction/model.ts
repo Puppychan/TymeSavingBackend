@@ -43,7 +43,8 @@ const transactionSchema: Schema = new Schema({
     approveStatus:{ // Has this transaction been approved by the group's host?
       type: String,
       enum: ApproveStatuses
-    }
+    },
+    isMomo: {type: Boolean, default: false},
 });
 
 const Transaction = mongoose.models.Transaction || mongoose.model<ITransaction>('Transaction', transactionSchema);
