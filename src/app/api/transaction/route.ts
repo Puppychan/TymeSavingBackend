@@ -52,6 +52,7 @@ export const POST = async (req:NextRequest) => {
         }
 
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
+        // If the transaction is created by the group's host, approveStatus = "Approved" instead
         if(savingGroupId){
             console.log("Creating a transaction to GroupSaving " + savingGroupId);
             const savingGroup = await GroupSaving.findById(savingGroupId);
@@ -60,7 +61,12 @@ export const POST = async (req:NextRequest) => {
             }
             // Check if the group has been closed or expired
             await checkGroupSavingClosed(savingGroupId);
-            approveStatus = savingGroup.defaultApproveStatus;
+            if(userId == savingGroup.hostedBy){
+                approveStatus = "Approved";
+            }
+            else {
+                approveStatus = savingGroup.defaultApproveStatus;
+            }
         }
 
         if(budgetGroupId){
@@ -70,7 +76,12 @@ export const POST = async (req:NextRequest) => {
                 return NextResponse.json({response: "No such Shared Budget", status: 404});
             }
             await checkSharedBudgetClosed(budgetGroupId);
-            approveStatus = budgetGroup.defaultApproveStatus;
+            if(userId == budgetGroup.hostedBy){
+                approveStatus = "Approved";
+            }
+            else{
+                approveStatus = budgetGroup.defaultApproveStatus;
+            }
         }
 
         let imageUrls = []
