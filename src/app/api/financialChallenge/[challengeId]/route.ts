@@ -119,6 +119,30 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
             foreignField: '_id',
             as: 'checkpoints',
           },
+        },
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'createdBy',
+            foreignField: '_id',
+            as: 'creator',
+          },
+        },
+        {
+          $unwind: {
+            path: '$creator',
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $addFields: {
+            createdBy: '$creator.fullname'
+          }
+        },
+        {
+          $project:{
+            creator: 0
+          }
         }
       ]);      
 
