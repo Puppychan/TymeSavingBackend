@@ -49,16 +49,17 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
       if (!group || group.length < 1) {
         return NextResponse.json({ response: 'Group Saving not found' }, { status: 404 });
       }
-      if(group[0].endDate <= localDate(new Date()) || group[0].isClosed){
-        // // Handle time-based expiration with logic. 
-        // // isClosed indicates if the host manually closed the group.
-        // if(!group.isClosed){
-        //   group.isClosed = true;
-        //   await group.save();
-        // }
-        return NextResponse.json({ response: 'CLOSED: GroupSaving has ended, or is closed by the host'}, {status: 500});
-      }
-      return NextResponse.json({ response: group[0] }, { status: 200 });
+      // if(group.endDate <= localDate(new Date()) || group.isClosed){
+      //   // // Handle time-based expiration with logic. 
+      //   // // isClosed indicates if the host manually closed the group.
+      //   // if(!group.isClosed){
+      //   //   group.isClosed = true;
+      //   //   await group.save();
+      //   // }
+      //   return NextResponse.json({ response: 'CLOSED: GroupSaving has ended, or is closed by the host'}, {status: 500});
+      // }
+
+      return NextResponse.json({ response: group }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting group saving:', error);
     return NextResponse.json({ response: 'Failed to get group saving'}, { status: 500 });
