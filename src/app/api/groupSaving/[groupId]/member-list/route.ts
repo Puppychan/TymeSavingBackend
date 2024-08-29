@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
                             .find(
                               { groupSaving: params.groupId }, 
                               {_id: 0, group: 0})
-                            .populate('user', '_id username fullname phone email avatar tymeReward')
+                            .populate('user', '_id username fullname phone email avatar tymeReward userPoints')
       // const members = await GroupSavingParticipation
       //                       .aggregate([
       //                         { $match: { groupSaving: new mongoose.Types.ObjectId(params.groupId) } },
