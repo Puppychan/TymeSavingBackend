@@ -9,7 +9,7 @@ import { localDate } from "src/lib/datetime";
 export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
   try {
       const searchParams = req.nextUrl.searchParams
-      const name = searchParams.get('name')
+      const name = searchParams.get('name') // the search box
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
@@ -26,7 +26,10 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let filter = []
       if (name) {
-        filter.push({ "sharedBudget.name":{ $regex:'.*' + name + '.*', $options: 'i' } })
+        filter.push({$or: [
+          { "sharedBudget.name":{ $regex:'.*' + name + '.*', $options: 'i' } },
+          { "user.fullname": { $regex:'.*' + name + '.*', $options: 'i' } }
+        ]});
       }
 
       if (from || to ) {
@@ -48,6 +51,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $match: { user: new ObjectId(params.userId) } },
           { $lookup: {from: 'sharedbudgets', localField: 'sharedBudget', foreignField: '_id', as: 'sharedBudget'} },
           { $unwind : "$sharedBudget" },
+          { $lookup: {from: 'users', localField: 'sharedBudget.hostedBy', foreignField: '_id', as: 'user'} },
+          { $unwind : "$user" },
           { 
             $addFields: {
               "sharedBudget.isClosedOrExpired": {
@@ -55,7 +60,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                   { $lt: ["$sharedBudget.endDate", localDate(new Date())] },
                   "$sharedBudget.isClosed"
                 ]
-              }
+              },
+              "sharedBudget.hostedByFullName": "$user.fullname"
             }
           },
           { $match: query },

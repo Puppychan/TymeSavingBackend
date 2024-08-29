@@ -25,7 +25,10 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
       let filter = []
       if (name) {
-        filter.push({ "groupSaving.name":{ $regex:'.*' + name + '.*', $options: 'i' } })
+        filter.push({$or: [
+          { "groupSaving.name":{ $regex:'.*' + name + '.*', $options: 'i' } },
+          { "user.fullname": { $regex:'.*' + name + '.*', $options: 'i' } }
+        ]});
       }
 
       if (from || to ) {
@@ -47,6 +50,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $match: { user: new ObjectId(params.userId) } },
           { $lookup: {from: 'groupsavings', localField: 'groupSaving', foreignField: '_id', as: 'groupSaving'} },
           { $unwind : "$groupSaving" },
+          { $lookup: {from: 'users', localField: 'groupSaving.hostedBy', foreignField: '_id', as: 'user'} },
+          { $unwind : "$user" },
           { 
             $addFields: {
               "groupSaving.isClosedOrExpired": {
@@ -54,7 +59,8 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
                   { $lt: ["$groupSaving.endDate", localDate(new Date())] },
                   "$groupSaving.isClosed"
                 ]
-              }
+              },
+              "groupSaving.hostedByFullName": "$user.fullname"
             }
           },
           { $match: query },

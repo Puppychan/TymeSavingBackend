@@ -35,7 +35,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
                               { sharedBudget: params.sharedBudgetId }, 
                               {_id: 0, sharedBudget: 0},
                             )
-                            .populate('user', '_id username fullname phone email avatar tymeReward');
+                            .populate('user', '_id username fullname phone email avatar tymeReward userPoints');
 
       // const members = await SharedBudgetParticipation
       //                       .aggregate([
