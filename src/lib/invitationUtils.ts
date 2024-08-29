@@ -13,6 +13,7 @@ import GroupSaving from "src/models/groupSaving/model";
         sortGroupType
         sortStatus
     Match: 
+        getUserFullName
         getGroupId
         getGroupType
         getCode
@@ -26,7 +27,7 @@ export const invitationData = async (fromUser: string | null, params) => {
   // fromUser = userId -> show invitations for one user; else: from
   try {
     await connectMongoDB();
-    console.log(Object.keys(params).length, fromUser, params);
+    // console.log(Object.keys(params).length, fromUser, params);
     let aggregate = Invitation.aggregate();
     aggregate.lookup({
       from: "userinvitations",
@@ -133,6 +134,11 @@ export const invitationData = async (fromUser: string | null, params) => {
         });
       }
     }
+    // Match user full name
+    if (params.hasOwnProperty("getUserFullName")) {
+      const fullname: string = params["getUserFullName"];
+      aggregate.match({ "hostedByUserDetails.fullname":{ $regex:'.*' + fullname + '.*', $options: 'i' } },);
+    }
 
     // Match groupId
     if (params.hasOwnProperty("getGroupId")) {
@@ -224,7 +230,6 @@ export const invitationData = async (fromUser: string | null, params) => {
         // cancelledUsers: invitation.cancelledUsers
       }));
     }
-    console.log(result);
 
     return { response: result, status: 200 };
   } catch (error: any) {
