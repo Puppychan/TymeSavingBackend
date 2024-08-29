@@ -136,7 +136,8 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
         },
         {
           $addFields: {
-            createdBy: '$creator.fullname'
+            createdByFullname: '$creator.fullname',
+            // createdBy: '$creator._id'
           }
         },
         {
