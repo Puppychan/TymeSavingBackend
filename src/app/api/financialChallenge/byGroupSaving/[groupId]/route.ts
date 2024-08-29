@@ -26,7 +26,10 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
 
       let filter = []
       if (name) {
-        filter.push({ "name":{ $regex:'.*' + name + '.*', $options: 'i' } })
+        filter.push({$or: [
+          { "name":{ $regex:'.*' + name + '.*', $options: 'i' } },
+          { "creator.fullname": { $regex:'.*' + name + '.*', $options: 'i' } }
+        ]});
       }
 
       if (from || to ) {
@@ -62,7 +65,6 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
               ]
             }
           },
-          { $match: query },
           { $lookup: {
             from: 'users', // Collection to join with
             localField: 'createdBy', // Field from FinancialChallenge
@@ -74,9 +76,10 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
             }
           },
           { $unwind: '$creator'},
+          { $match: query },
           { $addFields: {
-            createdBy: '$creator.fullname', // Show the fullname instead of user ID
-            createdBy_id: '$creator._id',
+            createdByFullName: '$creator.fullname', // Show the fullname instead of user ID
+            createdBy: '$creator._id',
             totalCheckPointCount: { $size: '$checkpoints' } // Count the number of checkpoints
             }
           },

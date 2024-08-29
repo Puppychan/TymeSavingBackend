@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
                                 populate: {
                                   path: 'userId',
                                   model: User,
-                                  select: '_id username fullname phone email avatar tymeReward',
+                                  select: '_id username fullname phone email avatar tymeReward userPoints',
                                 }
                               }
                             ])

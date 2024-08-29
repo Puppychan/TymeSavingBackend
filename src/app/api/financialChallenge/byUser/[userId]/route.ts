@@ -26,7 +26,10 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
 
     let filter = [];
     if (name) {
-      filter.push({ "name":{ $regex:'.*' + name + '.*', $options: 'i' } });
+      filter.push({$or: [
+        { "name":{ $regex:'.*' + name + '.*', $options: 'i' } },
+        { "creator.fullname": { $regex:'.*' + name + '.*', $options: 'i' } }
+      ]});
     }
 
     if (from || to ) {
@@ -64,7 +67,6 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           ]
         }
       },
-      { $match: query },
       {
         $lookup: {
           from: 'users', // Collection to join with
@@ -77,6 +79,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
         }
       },
       { $unwind: '$creator' },
+      { $match: query },
       {
         $lookup: {
           from: 'groupsavings',
@@ -123,12 +126,12 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
       },
       {
         $match: {
-          groupExists: true // Only include challenges where the group exists
+          groupExists: true // Only include challenges where the group exists/not expired/not closed
         }
       },
       {
         $addFields: {
-          createdBy: '$creator.fullname', // Show the fullname instead of user ID
+          createdByFullName: '$creator.fullname', // Show the fullname instead of user ID
           totalCheckPointCount: { $size: '$checkpoints' } // Count the number of checkpoints
         }
       },
