@@ -196,8 +196,7 @@ export async function groupReportTransactions(groupType, groupId, filter) {
 
     // Fetch transactions with the specified filter
     const transactions = await Transaction.find(matchGroup)
-      .sort(sortCondition)
-      .limit(10); // Adjust the limit as needed
+      .sort(sortCondition);
 
     return transactions;
   } catch (error) {

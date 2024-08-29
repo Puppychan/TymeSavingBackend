@@ -57,7 +57,7 @@ export const GET = async (
         userId: new ObjectId(userId),
         type: 'Expense'
       })
-      .populate('userId', '_id username fullname')
+      .populate('userId', '_id username fullname userPoints tymeReward')
       .sort({ createdDate: -1 });
 
       // Calculate the total amount and number of transactions
@@ -78,7 +78,7 @@ export const GET = async (
         userId: new ObjectId(userId),
         type: 'Income'
       })
-      .populate('userId', '_id username fullname')
+      .populate('userId', '_id username fullname userPoints tymeReward')
       .sort({ createdDate: -1 });
 
       // Calculate the total amount and number of transactions
