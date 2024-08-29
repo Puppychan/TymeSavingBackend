@@ -42,7 +42,8 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
         },
         {
           $addFields: {
-            hostedBy: '$hostedBy.fullname', // Replace hostedBy with the fullname
+            hostedByFullName: '$hostedBy.fullname', // only show hostedBy with the fullname and id
+            hostedBy: '$hostedBy._id'
           }
         }
       ]);

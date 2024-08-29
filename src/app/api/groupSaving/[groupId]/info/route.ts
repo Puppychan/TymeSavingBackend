@@ -42,7 +42,8 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
         },
         {
           $addFields: {
-            hostedBy: '$hostedBy.fullname', // Replace hostedBy with the fullname
+            hostedByFullName: '$hostedBy.fullname', // only show hostedBy with the fullname and id
+            hostedBy: '$hostedBy._id'
           }
         }
       ]);
@@ -59,7 +60,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
       //   return NextResponse.json({ response: 'CLOSED: GroupSaving has ended, or is closed by the host'}, {status: 500});
       // }
 
-      return NextResponse.json({ response: group }, { status: 200 });
+      return NextResponse.json({ response: group[0] }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting group saving:', error);
     return NextResponse.json({ response: 'Failed to get group saving'}, { status: 500 });
