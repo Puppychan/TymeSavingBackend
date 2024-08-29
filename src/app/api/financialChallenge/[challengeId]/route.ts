@@ -118,7 +118,12 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
             localField: 'checkpoints',
             foreignField: '_id',
             as: 'checkpoints',
-          },
+            pipeline: [
+              {
+                $sort: { name: 1 } // Sort by 'name' field in ascending order (use -1 for descending order)
+              }
+            ]
+          }
         },
         {
           $lookup: {
