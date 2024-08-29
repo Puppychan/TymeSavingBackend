@@ -3,19 +3,18 @@ import { invitationData } from "src/lib/invitationUtils";
 import { connectMongoDB } from "src/config/connectMongoDB";
 export const dynamic = 'force-dynamic';
 
-/* 
+
+/* See all invitations, with the following Sorts/Filters:
     Sort: 
-        sortGroupId
-        sortGroupType
-        sortStatus
+        groupId
+        group type
+        invitation status
     Match: 
-        getUserFullName
-        getGroupId
-        getGroupType
-        getCode
-        getStatus  : Accepted, Cancelled, Pending
-    Handle user:
-        Admin: getUserId to match User Id
+        groupId
+        group type
+        code
+        invitation status: accepted, cancelled, pending
+        userId
 */
 export const GET = async (req: NextRequest) => {
     try {
