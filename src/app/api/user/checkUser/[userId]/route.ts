@@ -18,10 +18,6 @@ export const GET = async (
 ) => {
   try {
     await connectMongoDB();
-    const verification = await verifyUserById(req.headers, params.userId)
-    if (verification.status !== 200) {
-      return NextResponse.json({ response: verification.response }, { status: verification.status });
-    }
 
     const userId = params.userId;
     let urlSearchParams = req.nextUrl.searchParams;
