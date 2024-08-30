@@ -22,7 +22,7 @@ import { currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories, 
 //      return: [{ category, total amount, percentage }]
 // 5) netSpend: total income - total expense for this month
 //      params: userId
-// req format: {transactionType: Income | Expense, userId}
+// req format: {userId}
 export const GET = async (req: NextRequest) => {
     try {
         await connectMongoDB();
@@ -33,17 +33,24 @@ export const GET = async (req: NextRequest) => {
         });
         console.log(vnpParams);
         var response = {
-            transactionType: vnpParams["transactionType"], 
-            currentMonthTotal, pastMonthsTotal, compareToLastMonth, topCategories, netSpend
+            currentMonthIncomeTotal: {}, currentMonthExpenseTotal: {},
+            pastMonthsExpenseTotal: {}, pastMonthsIncomeTotal: {}, 
+            compareToLastMonth: {}, topIncomeCategories: [], topExpenseCategories: [], netSpend: {}
         };
-        response.currentMonthTotal = 
-            (await currentMonthTotal(vnpParams["transactionType"], vnpParams["userId"])).response;
-        response.pastMonthsTotal = 
-            (await pastMonthsTotal(vnpParams["transactionType"], vnpParams["userId"])).response;
+        response.currentMonthExpenseTotal = 
+            (await currentMonthTotal("Expense", vnpParams["userId"])).response;
+        response.currentMonthIncomeTotal = 
+            (await currentMonthTotal("Income", vnpParams["userId"])).response;
+        response.pastMonthsExpenseTotal = 
+            (await pastMonthsTotal("Expense", vnpParams["userId"])).response;
+        response.pastMonthsIncomeTotal = 
+            (await pastMonthsTotal("Income", vnpParams["userId"])).response;
         response.compareToLastMonth =
             (await compareToLastMonth(vnpParams["userId"])).response;
-        response.topCategories = 
-            (await topCategories(vnpParams["transactionType"], vnpParams["userId"])).response;
+        response.topIncomeCategories = 
+            (await topCategories("Income", vnpParams["userId"])).response;
+        response.topExpenseCategories = 
+            (await topCategories("Expense", vnpParams["userId"])).response;
         response.netSpend = (await netSpend(vnpParams["userId"])).response;
         console.log(response);
         return NextResponse.json({response: response}, {status: 200});
