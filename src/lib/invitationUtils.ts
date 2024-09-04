@@ -28,17 +28,20 @@ export const invitationData = async (fromUser: string | null, params) => {
     await connectMongoDB();
     // console.log(Object.keys(params).length, fromUser, params);
     let aggregate = Invitation.aggregate();
-    aggregate.lookup({
-      from: "userinvitations",
-      localField: "_id",
-      foreignField: "invitationId",
-      as: "userInvitations",
-    });
-    // if(fromUser || params.hasOwnProperty('getUserId') || params.hasOwnProperty('getStatus') || params.hasOwnProperty('sortStatus')){
-    //     aggregate.unwind('$userInvitations'); // unwind so that the user only sees each invitation once
-    // }
-    aggregate.unwind("$userInvitations");
-    // Lookup from GroupSaving
+    // First lookup: user invitations
+    // Lookup for user invitations
+    aggregate
+      .lookup({
+        from: "userinvitations",
+        localField: "_id",
+        foreignField: "invitationId",
+        as: "userInvitations",
+      })
+      .unwind({
+        path: "$userInvitations",
+        preserveNullAndEmptyArrays: true, // Keep documents even if there are no invitations
+      });
+
     // Combined lookup for both GroupSaving and SharedBudget
     aggregate
       .lookup({
@@ -71,18 +74,11 @@ export const invitationData = async (fromUser: string | null, params) => {
         foreignField: "_id",
         as: "hostedByUserDetails",
       })
-      .unwind("$hostedByUserDetails");
-    // Lookup invited user details
-    aggregate
-      .lookup({
-        from: "users",
-        localField: "userInvitations.userId",
-        foreignField: "_id",
-        as: "invitedUserDetails",
-      })
-      .unwind("$invitedUserDetails");
+      .addFields({
+        hostedByUserDetails: { $arrayElemAt: ["$hostedByUserDetails", 0] },
+      });
 
-    // Efficient lookup with conditional logic for participation
+    // Lookup for participation and counting members
     aggregate
       .lookup({
         from: "groupsavingparticipations",
@@ -109,7 +105,7 @@ export const invitationData = async (fromUser: string | null, params) => {
             },
           },
           {
-            $project: { role: 1 }, // Only retrieve the role field to minimize data load
+            $project: { role: 1 },
           },
         ],
         as: "groupMembers",
@@ -124,8 +120,18 @@ export const invitationData = async (fromUser: string | null, params) => {
             },
           },
         },
-        invitedUserFullName: "$invitedUserDetails.fullname",
-        invitedUsername: "$invitedUserDetails.username"
+      });
+
+    // Lookup invited user details
+    aggregate
+      .lookup({
+        from: "users",
+        localField: "userInvitations.userId",
+        foreignField: "_id",
+        as: "invitedUserDetails",
+      })
+      .addFields({
+        invitedUserDetails: { $arrayElemAt: ["$invitedUserDetails", 0] },
       });
     //User: Get all the invitations for this user
     if (fromUser) {
@@ -193,52 +199,27 @@ export const invitationData = async (fromUser: string | null, params) => {
     }
 
     // Execute the aggregation pipeline
+    aggregate.project({
+      invitationId: "$_id",
+      userId: fromUser ? fromUser : "$userInvitations.userId",
+      invitedUserFullName: "$invitedUserDetails.fullname",
+      invitedUsername: "$invitedUserDetails.username",
+      code: 1,
+      description: 1,
+      type: 1,
+      groupId: 1,
+      status: "$userInvitations.status",
+      summaryGroup: {
+        name: "$groupDetails.name",
+        description: "$groupDetails.description",
+        hostUsername: "$hostedByUserDetails.username",
+        hostFullName: "$hostedByUserDetails.fullname",
+        memberCount: "$memberCount",
+        createdDate: "$groupDetails.createdDate",
+      },
+    });
     let result = await aggregate.exec();
-
-    // Filter fields for user
-    if (fromUser) {
-      result = result.map((invitation: any) => ({
-        invitationId: invitation._id,
-        userId: fromUser,
-        invitedUserFullName: invitation.invitedUserFullName,
-        invitedUsername: invitation.invitedUsername,
-        code: invitation.code,
-        description: invitation.description,
-        type: invitation.type,
-        groupId: invitation.groupId,
-        status: invitation.userInvitations.status,
-        summaryGroup: {
-          name: invitation.groupDetails.name,
-          description: invitation.groupDetails.description,
-          hostUsername: invitation.hostedByUserDetails.username,
-          memberCount: invitation.memberCount,
-          createdDate: invitation.groupDetails.createdDate,
-        },
-      }));
-    } else {
-      result = result.map((invitation: any) => ({
-        invitationId: invitation._id,
-        userId: invitation.userInvitations.userId,
-        invitedUserFullName: invitation.invitedUserFullName,
-        invitedUsername: invitation.invitedUsername,
-        status: invitation.userInvitations.status,
-        code: invitation.code,
-        description: invitation.description,
-        type: invitation.type,
-        groupId: invitation.groupId,
-        summaryGroup: {
-          name: invitation.groupDetails.name,
-          description: invitation.groupDetails.description,
-          hostUsername: invitation.hostedByUserDetails.username,
-          memberCount: invitation.memberCount,
-          createdDate: invitation.groupDetails.createdDate,
-        },
-
-        // // user list: show this to admin?
-        // users: invitation.users,
-        // cancelledUsers: invitation.cancelledUsers
-      }));
-    }
+    console.log("Invitation Data: ", result[0]);
 
     return { response: result, status: 200 };
   } catch (error: any) {
