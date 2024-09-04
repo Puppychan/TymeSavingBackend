@@ -72,15 +72,6 @@ export const invitationData = async (fromUser: string | null, params) => {
         as: "hostedByUserDetails",
       })
       .unwind("$hostedByUserDetails");
-    // Lookup invited user details
-    aggregate
-      .lookup({
-        from: "users",
-        localField: "userInvitations.userId",
-        foreignField: "_id",
-        as: "invitedUserDetails",
-      })
-      .unwind("$invitedUserDetails");
 
     // Efficient lookup with conditional logic for participation
     aggregate
@@ -124,9 +115,16 @@ export const invitationData = async (fromUser: string | null, params) => {
             },
           },
         },
-        invitedUserFullName: "$invitedUserDetails.fullname",
-        invitedUsername: "$invitedUserDetails.username"
       });
+          // Lookup invited user details
+    aggregate
+    .lookup({
+      from: "users",
+      localField: "userInvitations.userId",
+      foreignField: "_id",
+      as: "invitedUserDetails",
+    })
+    .unwind("$invitedUserDetails");
     //User: Get all the invitations for this user
     if (fromUser) {
       aggregate.match({
@@ -200,8 +198,8 @@ export const invitationData = async (fromUser: string | null, params) => {
       result = result.map((invitation: any) => ({
         invitationId: invitation._id,
         userId: fromUser,
-        invitedUserFullName: invitation.invitedUserFullName,
-        invitedUsername: invitation.invitedUsername,
+        invitedUserFullName: invitation.invitedUserDetails.fullname,
+        invitedUsername: invitation.invitedUserDetails.username,
         code: invitation.code,
         description: invitation.description,
         type: invitation.type,
@@ -219,8 +217,8 @@ export const invitationData = async (fromUser: string | null, params) => {
       result = result.map((invitation: any) => ({
         invitationId: invitation._id,
         userId: invitation.userInvitations.userId,
-        invitedUserFullName: invitation.invitedUserFullName,
-        invitedUsername: invitation.invitedUsername,
+        invitedUserFullName: invitation.invitedUserDetails.fullname,
+        invitedUsername: invitation.invitedUserDetails.username,
         status: invitation.userInvitations.status,
         code: invitation.code,
         description: invitation.description,
@@ -239,6 +237,8 @@ export const invitationData = async (fromUser: string | null, params) => {
         // cancelledUsers: invitation.cancelledUsers
       }));
     }
+
+    console.log("Invitation Data: ", result[0]);
 
     return { response: result, status: 200 };
   } catch (error: any) {
