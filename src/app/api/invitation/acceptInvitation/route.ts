@@ -10,7 +10,7 @@ import { joinGroupSaving } from "src/lib/groupSavingUtils";
 import { startSession } from "mongoose";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
-import { isUserInGroup } from "src/lib/invitationUtils";
+import { isUserInGroup, removeUserInvitation } from "src/lib/invitationUtils";
 /*
 Param: userId, invitationId  
 Pre-requisite: The user must have been invited i.e. must be in the invitation's 'users' array
@@ -35,16 +35,17 @@ export const POST = async (req: NextRequest) => {
         if(!user){
             return NextResponse.json({response: "No such user with id: " + userId}, {status: 404});
         }
+        // Handle: user is already in this group - TO be implemented
+        const userInGroup = await isUserInGroup(userId, invitation.groupId, invitation.type);
+        if(userInGroup){ // user has already joined the group
+            await removeUserInvitation(userId, invitationId);
+            return NextResponse.json({ response: `User ${userId} has already joined ${invitation.type} with ID ${invitation.groupId}` }, { status: 200 }); 
+        }
         // Handle: userId is not in Invitation.users
         var pendingUsers: string[] = invitation.users;
         if(!pendingUsers.includes(userId)){
             return NextResponse.json({response: `This user ${userId} is not currently invited by ${invitationId}`}, {status: 404});
         }
-        // Handle: user is already in this group - TO be implemented
-        // const userInGroup = await isUserInGroup(userId, invitation.groupId, invitation.type);
-        // if(userInGroup){ // user has already joined the group
-        //     return NextResponse.json({ response: `User ${userId} has already joined ${invitation.type} with ID ${invitation.groupId}` }, { status: 200 }); 
-        // }
         // User accepts: Remove the user from the invitation's users array
         invitation.users = pendingUsers.filter((id) => id !== userId);
 
