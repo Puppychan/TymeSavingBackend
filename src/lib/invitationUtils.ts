@@ -29,7 +29,6 @@ export const invitationData = async (fromUser: string | null, params) => {
     await connectMongoDB();
     // console.log(Object.keys(params).length, fromUser, params);
     let aggregate = Invitation.aggregate();
-    // First lookup: user invitations
     // Lookup for user invitations
     aggregate
       .lookup({
@@ -79,45 +78,65 @@ export const invitationData = async (fromUser: string | null, params) => {
         hostedByUserDetails: { $arrayElemAt: ["$hostedByUserDetails", 0] },
       });
 
-    // Lookup for participation and counting members
+    // Perform separate lookups for `groupsavingparticipations` and `sharedbudgetparticipations`
     aggregate
+      // Lookup for GroupSaving participations
       .lookup({
         from: "groupsavingparticipations",
-        let: { groupId: "$groupId", groupType: "$type" },
+        let: { groupId: "$groupId" },
         pipeline: [
           {
             $match: {
               $expr: {
-                $or: [
-                  {
-                    $and: [
-                      { $eq: ["$groupSaving", "$$groupId"] },
-                      { $eq: ["$$groupType", "GroupSaving"] },
-                    ],
-                  },
-                  {
-                    $and: [
-                      { $eq: ["$sharedBudget", "$$groupId"] },
-                      { $eq: ["$$groupType", "SharedBudget"] },
-                    ],
-                  },
-                ],
+                $eq: ["$groupSaving", "$$groupId"], // Match the groupSavingId
               },
             },
           },
           {
-            $project: { role: 1 },
+            $project: { role: 1 }, // Only project the role field
           },
         ],
-        as: "groupMembers",
+        as: "groupSavingMembers",
       })
+
+      // Lookup for SharedBudget participations
+      .lookup({
+        from: "sharedbudgetparticipations",
+        let: { groupId: "$groupId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$sharedBudget", "$$groupId"], // Match the sharedBudgetId
+              },
+            },
+          },
+          {
+            $project: { role: 1 }, // Only project the role field
+          },
+        ],
+        as: "sharedBudgetMembers",
+      })
+
+      // Use $cond to select groupMembers based on the type (GroupSaving or SharedBudget)
+      .addFields({
+        groupMembers: {
+          $cond: {
+            if: { $eq: ["$type", "GroupSaving"] },
+            then: "$groupSavingMembers",
+            else: "$sharedBudgetMembers",
+          },
+        },
+      })
+
+      // Filter groupMembers to calculate the memberCount
       .addFields({
         memberCount: {
           $size: {
             $filter: {
               input: "$groupMembers",
               as: "member",
-              cond: { $eq: ["$$member.role", "Member"] },
+              cond: { $eq: ["$$member.role", "Member"] }, // Count only the "Member" role
             },
           },
         },
@@ -220,7 +239,7 @@ export const invitationData = async (fromUser: string | null, params) => {
       },
     });
     let result = await aggregate.exec();
-    console.log("Invitation Data: ", result[0]);
+    console.log("Invitation Data: ", result[18], result[2]);
 
     return { response: result, status: 200 };
   } catch (error: any) {
