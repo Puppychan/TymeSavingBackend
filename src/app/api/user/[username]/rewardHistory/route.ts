@@ -11,11 +11,32 @@ export const GET = async (
 ) => {
   try {
     await connectMongoDB();
+    let urlSearchParams = req.nextUrl.searchParams;
+    let vnpParams: { [key: string]: string } = {};
+    urlSearchParams.forEach((value, key) => {
+        vnpParams[key] = value;
+    });
+    // Sort date and challenge name from search parameters
+    const sortDatePassed = vnpParams['sortDatePassed'];
+    const sortChallengeName = vnpParams['sortChallengeName'];
+    let sort = {};
+    if(sortDatePassed){
+        const order = sortDatePassed == "ascending" ? 1:-1;
+        sort["checkpointPassedDate"] = order;
+    }
+    if(sortChallengeName){
+        const order = sortChallengeName == "ascending" ? 1:-1;
+        sort["challengeName"] = order;
+    }
+    if (!sortChallengeName && !sortDatePassed){
+        sort["checkpointPassedDate"] = -1; // Default option: most recent reward
+    }
+    // Verify logged in user
     const verification = await verifyUser(req.headers, params.username)
     if (verification.status !== 200) {
       return NextResponse.json({ response: verification.response }, { status: verification.status });
     }
-
+    // Check existing user and get their id
     const user = await User.findOne({ username: params.username });
     if (!user) {
       return NextResponse.json({ response: "User not found" }, { status: 404 });
@@ -84,7 +105,7 @@ export const GET = async (
         }
       },
       {
-        $sort: { checkpointPassedDate: -1}
+        $sort: sort
       }
     ]);
 
