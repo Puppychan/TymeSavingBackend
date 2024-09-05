@@ -1,0 +1,95 @@
+import { NextRequest, NextResponse } from "next/server";
+import { connectMongoDB } from "src/config/connectMongoDB";
+import { verifyUser } from "src/lib/authentication";
+import User from "src/models/user/model";
+import ChallengeProgress from "src/models/challengeProgress/model";
+
+// GET: Read the user information
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: { username: string } }
+) => {
+  try {
+    await connectMongoDB();
+    const verification = await verifyUser(req.headers, params.username)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }
+
+    const user = await User.findOne({ username: params.username });
+    if (!user) {
+      return NextResponse.json({ response: "User not found" }, { status: 404 });
+    }
+    const userId = user._id;
+    let rewardHistory = await ChallengeProgress.aggregate([
+    // 1. Match userId
+      {
+        $match: { "userId": userId }
+      }, 
+    // 2. Separate checkpoint passed
+      {
+        $unwind: { "path": "$checkpointPassed" }
+      }, 
+      {
+        $lookup: {
+          from: "challengecheckpoints", 
+          localField: "checkpointPassed.checkpointId", 
+          foreignField: "_id", 
+          as: "cp"
+        }
+      }, 
+      {
+        $unwind: { path: "$cp" }
+      }, 
+    // 3. Get reward information for each checkpoint passed
+      {
+        $lookup: {
+          from: "rewards", 
+          localField: "cp.reward", 
+          foreignField: "_id", 
+          as: "reward"
+        }
+      }, 
+      {
+        $unwind: { path: "$reward" }
+      }, 
+    // 4. Get challenge name
+      {
+        $lookup: {
+          from: "financialchallenges", 
+          localField: "challengeId", 
+          foreignField: "_id", 
+          as: "challenge"
+        }
+      }, 
+      {
+        $unwind: { path: "$challenge" }
+      }, 
+    // 5. Show passed date, challenge name, checkpoint name, prize
+      {
+        $addFields: {
+          checkpointPassedDate: "$checkpointPassed.date",
+          checkpointName: "$cp.name",
+          challengeName: "$challenge.name",
+          prize: "$reward.prize"
+        }
+      },
+      {
+        $project:{
+          _id: 0,
+          checkpointPassedDate: 1,
+          challengeName: 1,
+          checkpointName: 1,
+          prize: 1
+        }
+      },
+      {
+        $sort: { checkpointPassedDate: -1}
+      }
+    ]);
+
+    return NextResponse.json({ response: rewardHistory }, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ response: error.message }, { status: 500 });
+  }
+};
