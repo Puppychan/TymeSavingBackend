@@ -162,7 +162,6 @@ export const invitationData = async (fromUser: string | null, params) => {
     // //Admin: Get all the invitations for a queried user
     if (params.hasOwnProperty("getUserId")) {
       const userId: string = params["getUserId"];
-      console.log(userId);
       if (mongoose.Types.ObjectId.isValid(userId)) {
         console.log("Valid");
         aggregate.match({
@@ -239,7 +238,6 @@ export const invitationData = async (fromUser: string | null, params) => {
       },
     });
     let result = await aggregate.exec();
-    console.log("Invitation Data: ", result[18], result[2]);
 
     return { response: result, status: 200 };
   } catch (error: any) {
