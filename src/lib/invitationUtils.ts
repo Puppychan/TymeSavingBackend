@@ -1,11 +1,12 @@
 import Invitation from "src/models/invitation/model";
 import User from "src/models/user/model";
 import { connectMongoDB } from "src/config/connectMongoDB";
-import mongoose from "mongoose";
+import mongoose, { startSession } from "mongoose";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 import GroupSaving from "src/models/groupSaving/model";
+import UserInvitation from "src/models/userInvitation/model";
 // Queries for invitation/admin and invitation/byUser/[userId]
 /* 
     Sort: 
@@ -284,3 +285,34 @@ export const isUserInGroup = async (
     }
   });
 };
+
+// Delete UserInvitation entry of userId-invitationId. Also remove userId from invitation.users
+export const removeUserInvitation = async (userId: string, invitationId: string) => {
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
+  return new Promise(async (resolve, reject) => {
+    try{
+      const invitation = await Invitation.findById(invitationId);
+      if(!invitation){
+        reject("REMOVE: Cannot find invitation with id " + invitationId);
+      }
+      // Remove userId from invitation.users
+      var pendingUsers: string[] = invitation.users;
+      invitation.users = pendingUsers.filter((id) => id !== userId);
+      // Update the Pending UserInvitation object to Accepted
+      const userInvitationObject = await UserInvitation.findOneAndUpdate(
+        { userId: userId, invitationId: invitationId}, 
+        { status: 'Accepted' }
+      );
+      await invitation.save();
+      await dbSession.commitTransaction();
+      await dbSession.endSession();
+      resolve("Remove UserInvitation: Success");
+    } catch (error){
+      await dbSession.abortTransaction();
+      await dbSession.endSession();
+      reject("Error removing UserInvitation: " + error);
+    }
+  });
+}
