@@ -102,11 +102,8 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
                 let imageUrl = await uploadFile(transactionImages[i], fileRef)
                 imageUrls.push(imageUrl)
             }
-
-            if (imageUrls.length > 0) {
-                updateQuery.transactionImages = imageUrls;
-            }
         }
+        updateQuery.transactionImages = imageUrls;
   
         const updatedTransaction = await Transaction.findOneAndUpdate(
             { _id: params.transactionId },
