@@ -7,6 +7,7 @@ import { localDate } from "src/lib/datetime";
 import { revertTransactionSharedBudget, updateTransactionSharedBudget } from "src/lib/sharedBudgetUtils";
 import { updateTransactionGroupSaving, revertTransactionGroupSaving } from "src/lib/groupSavingUtils";
 import { updateTransactionChallenge } from "src/lib/financialChallengeUtils";
+import { uploadFile } from "src/lib/firebase/storage";
 
 // IMPORTANT: transactionId here is the transaction's assigned MongoDB ID
 
@@ -38,7 +39,24 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
     const dbSession = await startSession();
     dbSession.startTransaction();
     try {
-        const payload = await req.json() as Partial<ITransaction> //payload = newUser
+        // const payload = await req.json() as Partial<ITransaction> //payload = newUser
+        const formData = await req.formData(); // Assuming you're receiving formData in the PUT request
+        
+        const transactionImages = formData.getAll("image") as File[];
+        let userId = formData.get("userId");
+        let description = formData.get("description");
+        let type = formData.get("type");
+        let amount: any = formData.get("amount");
+        let payBy = formData.get("payBy");
+        let category = formData.get("category");
+        let savingGroupId = formData.get("savingGroupId");
+        let budgetGroupId = formData.get("budgetGroupId");
+        let approveStatus = formData.get("approveStatus");
+        let createdDate = formData.get("createdDate");
+        let editedDate = formData.get("editedDate");
+        let isMomo = formData.get("isMomo");
+        let isUpdateImage = formData.get("isUpdateImage");
+
         const transaction = await Transaction.findOne({ _id: params.transactionId });
         if (!transaction) {
           return NextResponse.json({ response: 'Transaction not found' }, { status: 404 });
@@ -46,9 +64,22 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
         const oldAmount = transaction.amount; // get the amount before update
 
         const updateQuery: any = {};
-        Object.keys(payload).forEach(key => {
-            updateQuery[`${key}`] = payload[key as keyof ITransaction];
-        });
+        // Object.keys(payload).forEach(key => {
+        //     updateQuery[`${key}`] = payload[key as keyof ITransaction];
+        // });
+        // const updateFields: any = {};
+        if (userId) updateQuery.userId = userId;
+        if (description) updateQuery.description = description;
+        if (type) updateQuery.type = type;
+        if (amount) updateQuery.amount = amount;
+        if (payBy) updateQuery.payBy = payBy;
+        if (category) updateQuery.category = category;
+        if (savingGroupId) updateQuery.savingGroupId = savingGroupId;
+        if (budgetGroupId) updateQuery.budgetGroupId = budgetGroupId;
+        if (approveStatus) updateQuery.approveStatus = approveStatus;
+        if (createdDate) updateQuery.createdDate = createdDate;
+        if (editedDate) updateQuery.editedDate = editedDate;
+        if (isMomo) updateQuery.isMomo = isMomo;
 
         // If the type changes while this transaction belongs to a Shared Budget or a Group Saving
         if((transaction.budgetGroupId || updateQuery.budgetGroupId) && updateQuery.type && updateQuery.type === 'Income'){
@@ -63,7 +94,21 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
                 { status: 400 }
             );
         }
-  
+
+        let imageUrls = []
+        // check if not null
+        if (transactionImages.length > 0) {
+            for (let i = 0; i < transactionImages.length; i++) {
+                let filename = transactionImages[i].name.split(' ').join('_')
+                const fileRef = `${Date.now()}_${filename}`;
+                let imageUrl = await uploadFile(transactionImages[i], fileRef)
+                imageUrls.push(imageUrl)
+            }
+            updateQuery.transactionImages = imageUrls;
+        } else if (isUpdateImage && isUpdateImage === 'true') {
+            updateQuery.transactionImages = imageUrls;
+        } 
+
         const updatedTransaction = await Transaction.findOneAndUpdate(
             { _id: params.transactionId },
             { 
