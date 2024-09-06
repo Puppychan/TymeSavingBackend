@@ -55,6 +55,7 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
         let createdDate = formData.get("createdDate");
         let editedDate = formData.get("editedDate");
         let isMomo = formData.get("isMomo");
+        let isUpdateImage = formData.get("isUpdateImage");
 
         const transaction = await Transaction.findOne({ _id: params.transactionId });
         if (!transaction) {
@@ -95,16 +96,19 @@ export const PUT = async(req: NextRequest, { params }: { params: {transactionId:
         }
 
         let imageUrls = []
-        if (transactionImages) {
+        // check if not null
+        if (transactionImages.length > 0) {
             for (let i = 0; i < transactionImages.length; i++) {
                 let filename = transactionImages[i].name.split(' ').join('_')
                 const fileRef = `${Date.now()}_${filename}`;
                 let imageUrl = await uploadFile(transactionImages[i], fileRef)
                 imageUrls.push(imageUrl)
             }
-        }
-        updateQuery.transactionImages = imageUrls;
-  
+            updateQuery.transactionImages = imageUrls;
+        } else if (isUpdateImage && isUpdateImage === 'true') {
+            updateQuery.transactionImages = imageUrls;
+        } 
+
         const updatedTransaction = await Transaction.findOneAndUpdate(
             { _id: params.transactionId },
             { 
