@@ -1,31 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import { defaultUser } from "../support-data";
 import { exist_email, exist_username } from "src/lib/checkExist";
 import User from "src/models/user/model";
 
-jest.mock("src/config/connectMongoDB", () => ({
-  connectMongoDB: jest.fn().mockResolvedValue(null),
-  disconnectDB: jest.fn().mockResolvedValue(null),
-}));
-
-// jest.mock("src/models/user/model");
-
 describe("Check Exist", () => {
-  beforeAll(async () => {
-    await connectMongoDB();
-  });
-
   beforeEach(() => {
     jest.resetAllMocks();
   });
   
   afterEach(async () => {
     jest.clearAllMocks();
-  });
-
-  afterAll(async () => {  
-    await disconnectDB();
   });
 
   describe("exist_username", () => {

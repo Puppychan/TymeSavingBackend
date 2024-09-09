@@ -4,20 +4,11 @@ import { hashPassword, checkPassword, newToken, verifyToken, verifyUser, verifyA
 import { defaultUser } from '../support-data';
 import User from 'src/models/user/model';
 import { UserRole } from 'src/models/user/interface';
-import { connectMongoDB, disconnectDB } from 'src/config/connectMongoDB';
-
-jest.mock("src/config/connectMongoDB", () => ({
-  connectMongoDB: jest.fn().mockResolvedValue(null),
-  disconnectDB: jest.fn().mockResolvedValue(null),
-}));
 
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 
 describe('authentication', () => {
-  beforeAll(async () => {
-    await connectMongoDB();
-  });
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -25,10 +16,6 @@ describe('authentication', () => {
   
   afterEach(async () => {
     jest.clearAllMocks();
-  });
-
-  afterAll(async () => {  
-    await disconnectDB();
   });
 
   describe('hashPassword', () => {
