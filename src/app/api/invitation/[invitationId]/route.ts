@@ -3,6 +3,8 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { IInvitation } from "src/models/invitation/interface";
 import Invitation from "src/models/invitation/model";
 import { startSession } from "mongoose";
+import UserInvitation from "src/models/userInvitation/model";
+import mongoose from "mongoose";
 // IMPORTANT: invitationId here is the invitation's assigned MongoDB ID
 
 /*
@@ -90,20 +92,33 @@ export const DELETE = async(req: NextRequest, { params }: { params: { invitation
     try {
         const query_invitation = await Invitation.findOne({ _id: invitationId });
         if (query_invitation) {
+            // If any user has accepted/canceled this invitation, it cannot be deleted
+            const checkUserInteracted = await UserInvitation.findOne({ 
+                invitationId: new mongoose.Types.ObjectId(invitationId),
+                $or: [
+                    { status: 'Accepted' },
+                    { status: 'Cancelled' }
+                  ]
+            });
+            if(checkUserInteracted){
+                throw "User has Accepted/Canceled this invitation.";
+            }
             await Invitation.deleteOne({ _id: invitationId });
+            await UserInvitation.deleteMany({ invitationId: invitationId});
+            dbSession.commitTransaction();
             return NextResponse.json(
                 { response: "Invitation deleted successfully." },
                 { status: 200 }
             );
         } else {
-            return NextResponse.json({ response: "No such invitation." }, { status: 400 });
+            return NextResponse.json({ response: "No such invitation." }, { status: 404 });
         }
     } catch (error) {
         await dbSession.abortTransaction();  // Abort the transaction
         await dbSession.endSession();  // End the session
         console.log(error);
         return NextResponse.json(
-        { response: "Invitation with id " + invitationId + " could not be deleted." },
+        { response: "Invitation with id " + invitationId + " could not be deleted: " + error },
         { status: 500 }
         );
     }

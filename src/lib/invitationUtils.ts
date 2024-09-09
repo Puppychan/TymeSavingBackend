@@ -1,11 +1,12 @@
 import Invitation from "src/models/invitation/model";
 import User from "src/models/user/model";
 import { connectMongoDB } from "src/config/connectMongoDB";
-import mongoose from "mongoose";
+import mongoose, { startSession } from "mongoose";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
 import GroupSaving from "src/models/groupSaving/model";
+import UserInvitation from "src/models/userInvitation/model";
 // Queries for invitation/admin and invitation/byUser/[userId]
 /* 
     Sort: 
@@ -28,17 +29,19 @@ export const invitationData = async (fromUser: string | null, params) => {
     await connectMongoDB();
     // console.log(Object.keys(params).length, fromUser, params);
     let aggregate = Invitation.aggregate();
-    aggregate.lookup({
-      from: "userinvitations",
-      localField: "_id",
-      foreignField: "invitationId",
-      as: "userInvitations",
-    });
-    // if(fromUser || params.hasOwnProperty('getUserId') || params.hasOwnProperty('getStatus') || params.hasOwnProperty('sortStatus')){
-    //     aggregate.unwind('$userInvitations'); // unwind so that the user only sees each invitation once
-    // }
-    aggregate.unwind("$userInvitations");
-    // Lookup from GroupSaving
+    // Lookup for user invitations
+    aggregate
+      .lookup({
+        from: "userinvitations",
+        localField: "_id",
+        foreignField: "invitationId",
+        as: "userInvitations",
+      })
+      .unwind({
+        path: "$userInvitations",
+        preserveNullAndEmptyArrays: true, // Keep documents even if there are no invitations
+      });
+
     // Combined lookup for both GroupSaving and SharedBudget
     aggregate
       .lookup({
@@ -71,7 +74,74 @@ export const invitationData = async (fromUser: string | null, params) => {
         foreignField: "_id",
         as: "hostedByUserDetails",
       })
-      .unwind("$hostedByUserDetails");
+      .addFields({
+        hostedByUserDetails: { $arrayElemAt: ["$hostedByUserDetails", 0] },
+      });
+
+    // Perform separate lookups for `groupsavingparticipations` and `sharedbudgetparticipations`
+    aggregate
+      // Lookup for GroupSaving participations
+      .lookup({
+        from: "groupsavingparticipations",
+        let: { groupId: "$groupId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$groupSaving", "$$groupId"], // Match the groupSavingId
+              },
+            },
+          },
+          {
+            $project: { role: 1 }, // Only project the role field
+          },
+        ],
+        as: "groupSavingMembers",
+      })
+
+      // Lookup for SharedBudget participations
+      .lookup({
+        from: "sharedbudgetparticipations",
+        let: { groupId: "$groupId" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$sharedBudget", "$$groupId"], // Match the sharedBudgetId
+              },
+            },
+          },
+          {
+            $project: { role: 1 }, // Only project the role field
+          },
+        ],
+        as: "sharedBudgetMembers",
+      })
+
+      // Use $cond to select groupMembers based on the type (GroupSaving or SharedBudget)
+      .addFields({
+        groupMembers: {
+          $cond: {
+            if: { $eq: ["$type", "GroupSaving"] },
+            then: "$groupSavingMembers",
+            else: "$sharedBudgetMembers",
+          },
+        },
+      })
+
+      // Filter groupMembers to calculate the memberCount
+      .addFields({
+        memberCount: {
+          $size: {
+            $filter: {
+              input: "$groupMembers",
+              as: "member",
+              cond: { $eq: ["$$member.role", "Member"] }, // Count only the "Member" role
+            },
+          },
+        },
+      });
+
     // Lookup invited user details
     aggregate
       .lookup({
@@ -80,52 +150,8 @@ export const invitationData = async (fromUser: string | null, params) => {
         foreignField: "_id",
         as: "invitedUserDetails",
       })
-      .unwind("$invitedUserDetails");
-
-    // Efficient lookup with conditional logic for participation
-    aggregate
-      .lookup({
-        from: "groupsavingparticipations",
-        let: { groupId: "$groupId", groupType: "$type" },
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $or: [
-                  {
-                    $and: [
-                      { $eq: ["$groupSaving", "$$groupId"] },
-                      { $eq: ["$$groupType", "GroupSaving"] },
-                    ],
-                  },
-                  {
-                    $and: [
-                      { $eq: ["$sharedBudget", "$$groupId"] },
-                      { $eq: ["$$groupType", "SharedBudget"] },
-                    ],
-                  },
-                ],
-              },
-            },
-          },
-          {
-            $project: { role: 1 }, // Only retrieve the role field to minimize data load
-          },
-        ],
-        as: "groupMembers",
-      })
       .addFields({
-        memberCount: {
-          $size: {
-            $filter: {
-              input: "$groupMembers",
-              as: "member",
-              cond: { $eq: ["$$member.role", "Member"] },
-            },
-          },
-        },
-        invitedUserFullName: "$invitedUserDetails.fullname",
-        invitedUsername: "$invitedUserDetails.username"
+        invitedUserDetails: { $arrayElemAt: ["$invitedUserDetails", 0] },
       });
     //User: Get all the invitations for this user
     if (fromUser) {
@@ -136,7 +162,6 @@ export const invitationData = async (fromUser: string | null, params) => {
     // //Admin: Get all the invitations for a queried user
     if (params.hasOwnProperty("getUserId")) {
       const userId: string = params["getUserId"];
-      console.log(userId);
       if (mongoose.Types.ObjectId.isValid(userId)) {
         console.log("Valid");
         aggregate.match({
@@ -193,52 +218,26 @@ export const invitationData = async (fromUser: string | null, params) => {
     }
 
     // Execute the aggregation pipeline
+    aggregate.project({
+      invitationId: "$_id",
+      userId: fromUser ? fromUser : "$userInvitations.userId",
+      invitedUserFullName: "$invitedUserDetails.fullname",
+      invitedUsername: "$invitedUserDetails.username",
+      code: 1,
+      description: 1,
+      type: 1,
+      groupId: 1,
+      status: "$userInvitations.status",
+      summaryGroup: {
+        name: "$groupDetails.name",
+        description: "$groupDetails.description",
+        hostUsername: "$hostedByUserDetails.username",
+        hostFullName: "$hostedByUserDetails.fullname",
+        memberCount: "$memberCount",
+        createdDate: "$groupDetails.createdDate",
+      },
+    });
     let result = await aggregate.exec();
-
-    // Filter fields for user
-    if (fromUser) {
-      result = result.map((invitation: any) => ({
-        invitationId: invitation._id,
-        userId: fromUser,
-        invitedUserFullName: invitation.invitedUserFullName,
-        invitedUsername: invitation.invitedUsername,
-        code: invitation.code,
-        description: invitation.description,
-        type: invitation.type,
-        groupId: invitation.groupId,
-        status: invitation.userInvitations.status,
-        summaryGroup: {
-          name: invitation.groupDetails.name,
-          description: invitation.groupDetails.description,
-          hostUsername: invitation.hostedByUserDetails.username,
-          memberCount: invitation.memberCount,
-          createdDate: invitation.groupDetails.createdDate,
-        },
-      }));
-    } else {
-      result = result.map((invitation: any) => ({
-        invitationId: invitation._id,
-        userId: invitation.userInvitations.userId,
-        invitedUserFullName: invitation.invitedUserFullName,
-        invitedUsername: invitation.invitedUsername,
-        status: invitation.userInvitations.status,
-        code: invitation.code,
-        description: invitation.description,
-        type: invitation.type,
-        groupId: invitation.groupId,
-        summaryGroup: {
-          name: invitation.groupDetails.name,
-          description: invitation.groupDetails.description,
-          hostUsername: invitation.hostedByUserDetails.username,
-          memberCount: invitation.memberCount,
-          createdDate: invitation.groupDetails.createdDate,
-        },
-
-        // // user list: show this to admin?
-        // users: invitation.users,
-        // cancelledUsers: invitation.cancelledUsers
-      }));
-    }
 
     return { response: result, status: 200 };
   } catch (error: any) {
@@ -303,3 +302,34 @@ export const isUserInGroup = async (
     }
   });
 };
+
+// Delete UserInvitation entry of userId-invitationId. Also remove userId from invitation.users
+export const removeUserInvitation = async (userId: string, invitationId: string) => {
+  await connectMongoDB();
+  const dbSession = await startSession();
+  dbSession.startTransaction();
+  return new Promise(async (resolve, reject) => {
+    try{
+      const invitation = await Invitation.findById(invitationId);
+      if(!invitation){
+        reject("REMOVE: Cannot find invitation with id " + invitationId);
+      }
+      // Remove userId from invitation.users
+      var pendingUsers: string[] = invitation.users;
+      invitation.users = pendingUsers.filter((id) => id !== userId);
+      // Update the Pending UserInvitation object to Accepted
+      const userInvitationObject = await UserInvitation.findOneAndUpdate(
+        { userId: userId, invitationId: invitationId}, 
+        { status: 'Accepted' }
+      );
+      await invitation.save();
+      await dbSession.commitTransaction();
+      await dbSession.endSession();
+      resolve("Remove UserInvitation: Success");
+    } catch (error){
+      await dbSession.abortTransaction();
+      await dbSession.endSession();
+      reject("Error removing UserInvitation: " + error);
+    }
+  });
+}
