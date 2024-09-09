@@ -6,6 +6,14 @@ import { defaultUser } from "../support-data";
 import * as AuthLib from "src/lib/authentication"
 import mongoose from "mongoose";
 
+const userDocumentMock = {
+  ...defaultUser,
+  _v: 1,
+  save: jest.fn(),
+  toObject: jest.fn(),
+  exec: jest.fn(),
+}
+
 // Mock the dependencies
 jest.mock("src/models/user/model", () => ({
   findOne: jest.fn(),
@@ -31,10 +39,8 @@ describe("User Handlers", () => {
 
   describe("GET", () => {
     it("verification PASSED and user exists -> should return user information", async () => {
-      jest.spyOn(User, "findOne").mockReturnValue({
-        select: jest.fn().mockResolvedValue(defaultUser),
-        exec: jest.fn().mockResolvedValue(defaultUser),
-      } as any);
+      jest.spyOn(User, "findOne").mockResolvedValue(userDocumentMock);
+      userDocumentMock.toObject = jest.fn().mockReturnValue(defaultUser);
 
       const req = {} as NextRequest;
       const params = { username: defaultUser.username };
@@ -58,10 +64,7 @@ describe("User Handlers", () => {
     });
 
     it('verification PASSED and user not found -> should return 404 ', async () => {
-      jest.spyOn(User, "findOne").mockReturnValue({
-        select: jest.fn().mockResolvedValue(null),
-        exec: jest.fn().mockResolvedValue(null),
-      } as any);
+      jest.spyOn(User, "findOne").mockResolvedValue(null);
 
       const req = {} as NextRequest;
       const params = { username: 'unknown_user' };
