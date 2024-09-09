@@ -1,16 +1,30 @@
 // tests/user.test.js
-import { createMocks } from "node-mocks-http";
 import { POST } from "../../app/api/user/signin/route";
-import { NextRequest } from "next/server";
-import { disconnectDB } from "src/config/connectMongoDB";
+import { NextRequest, NextResponse } from "next/server";
+import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
 import { defaultUser } from "../support-data";
-import { UserRole } from "src/models/user/interface";
-import bcrypt from 'bcrypt';
+import * as AuthLib from "src/lib/authentication";
 
-jest.mock('bcrypt');
+// jest.mock("src/config/connectMongoDB", () => ({
+//   connectMongoDB: jest.fn().mockResolvedValue(null),
+//   disconnectDB: jest.fn().mockResolvedValue(null),
+// }));
+jest.mock("src/lib/authentication", () => ({
+  newToken: jest.fn().mockReturnValue("token"),
+  checkPassword: jest.fn(),
+}));
+
+const userDocumentMock = {
+  ...defaultUser,
+  _v: 1,
+  save: jest.fn(),
+  toObject: jest.fn(),
+  exec: jest.fn(),
+}
 
 describe("/api/user/signin", () => {
+
   beforeEach(() => {
     jest.resetAllMocks();
   });
@@ -19,16 +33,12 @@ describe("/api/user/signin", () => {
     jest.clearAllMocks();
   });
 
-  afterAll(async () => {  
-    await disconnectDB();
-  });
-
   test("SIGN IN: Success", async () => {
-    jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-    (bcrypt.compare as jest.Mock).mockImplementation((password, hash, callback) => {
-      callback(null, true);
-    });
+    jest.spyOn(User, "findOne").mockResolvedValue(userDocumentMock);
+    jest.spyOn(AuthLib, "checkPassword").mockResolvedValue(true);
+    jest.spyOn(AuthLib, "newToken").mockReturnValue("token");
 
+    userDocumentMock.toObject = jest.fn().mockReturnValue(defaultUser);
     const body = {username: defaultUser.username, password: defaultUser.password}
     // simulate the request body
     let req = {
@@ -38,31 +48,11 @@ describe("/api/user/signin", () => {
     // simulate the POST request
     const res = await POST(req);
     const json = await res.json();
-    console.log(json.response)
+
+    const expectedRes = {user: defaultUser, token: "token"}
 
     expect(res.status).toBe(200);
-    expect(json.response.role).toEqual(UserRole.Admin);
-  });
-
-  test("SIGN IN: Success (role not found -> auto assume Customer)", async () => {
-    jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, role: undefined});
-    (bcrypt.compare as jest.Mock).mockImplementation((password, hash, callback) => {
-      callback(null, true);
-    });
-
-    const body = {username: defaultUser.username, password: defaultUser.password}
-    // simulate the request body
-    let req = {
-      json: async () => (body),
-    } as NextRequest;
-
-    // simulate the POST request
-    const res = await POST(req);
-    const json = await res.json();
-    console.log(json.response)
-
-    expect(res.status).toBe(200);
-    expect(json.response.role).toEqual(UserRole.Customer);
+    expect(json.response).toEqual(expectedRes);
   });
 
   test("SIGN IN: not found username", async () => {
@@ -85,10 +75,8 @@ describe("/api/user/signin", () => {
   });
 
   test("SIGN IN: wrong password", async () => {
-    jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-    (bcrypt.compare as jest.Mock).mockImplementation((password, hash, callback) => {
-      callback(null, false);
-    });
+    jest.spyOn(User, "findOne").mockResolvedValue(userDocumentMock);
+    jest.spyOn(AuthLib, "checkPassword").mockResolvedValue(false);
 
     // simulate the request body
     let req = {
@@ -104,7 +92,6 @@ describe("/api/user/signin", () => {
   });
 
   test("Internal server error", async () => {
-    // Mock the functions
     jest.spyOn(User, "findOne").mockImplementationOnce(() => {
       throw new Error("Internal error");
     })

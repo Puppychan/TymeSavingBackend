@@ -13,10 +13,11 @@ export const POST = async (req: NextRequest) => {
   try {
     const payload = await req.json()
     const {username, password, email, fullname, phone } = payload;
+
     const existingUsername = await User.findOne({'username': username });
     const existingMail = await User.findOne({'email': email });
     if (existingUsername) {
-      return NextResponse.json({response: `This username is already used ${existingUsername._id}${existingUsername.username}  `}, { status: 400 });
+      return NextResponse.json({response: `This username is already used ${existingUsername._id}${existingUsername.username}`}, { status: 400 });
     }
     if (existingMail) {
       return NextResponse.json({response: 'This email is already used'}, { status: 400 });
@@ -32,7 +33,7 @@ export const POST = async (req: NextRequest) => {
 
     const hashPw = await hashPassword(password)
     // Create a new user document
-    const newUser = new User({ 
+    const newUser = await User.create([{
       role: UserRole.Customer,
       username: username, 
       phone: phone,
@@ -41,12 +42,16 @@ export const POST = async (req: NextRequest) => {
       fullname: fullname,
       userPoints: 0,
       tymeReward: TymeRewardLevel.Classic,
-    });
-    await newUser.save(); // Save the new user to the database
+    }], {session: dbSession});
+
+    let returnUser = newUser[0].toObject();
+    delete returnUser.password;
+
     await dbSession.commitTransaction();  // Commit the transaction
     await dbSession.endSession();  // End the session
-    return NextResponse.json({ response: newUser }, { status: 200 });
+    return NextResponse.json({ response: returnUser }, { status: 200 });
   } catch (error: any) {
+    console.log("signup error", error)
     await dbSession.abortTransaction();  // Commit the transaction
     await dbSession.endSession();  // End the session
     return NextResponse.json({ response: error.message}, { status: 500 });

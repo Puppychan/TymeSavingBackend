@@ -21,7 +21,6 @@ export const GET = async (
     if (!user) {
       return NextResponse.json({ response: "User not found" }, { status: 404 });
     }
-    let token = newToken(user)
     // Convert the user document to a plain JavaScript object and remove the password field
     let returnUser = user.toObject();
     delete returnUser.password;

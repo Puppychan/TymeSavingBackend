@@ -56,6 +56,6 @@ export const POST = async (req: NextRequest) => {
     await dbSession.endSession();  // End the session
 
     console.log("Error creating group saving: ", error);
-    return NextResponse.json({ response: 'Failed to create group saving'}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to create group saving: ' + error}, { status: 500 });
   }
 };

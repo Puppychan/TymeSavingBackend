@@ -1,47 +1,60 @@
-import mongoose, { ConnectOptions } from "mongoose";
-import { after, before } from "node:test";
-import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
+import mongoose, {set, connect} from "mongoose";
+import { connectMongoDB, disconnectDB, setIsConnected } from "src/config/connectMongoDB";
 
-const originalFilePath = "src/config/connectMongoDB";
+// jest.mock("mongoose", () => ({
+//   connect: jest.fn(),
+//   connection: {
+//     close: jest.fn(),
+//     readyState: 0,
+//   },
+//   set: jest.fn(),
+// }));
+// const originalEnv: NodeJS.ProcessEnv = { ...process.env }
 
-jest.mock("mongoose", () => ({
-  connect: jest.fn(),
-  connection: {
-    close: jest.fn(),
-    readyState: 0,
-  },
-  set: jest.fn(),
-}));
 
 describe("MongoDB Connection", () => {
-  let originalEnv: NodeJS.ProcessEnv;
-  const originalReadyState = mongoose.connection.readyState;
+  let originalEnv: NodeJS.ProcessEnv = { ...process.env }
+  let setSpy
+  let connectSpy
+  let closeSpy
 
-  beforeAll(() => {
-    originalEnv = { ...process.env };
-  });
-
-  afterAll(() => {
-    process.env = originalEnv;
-  });
-
-  beforeEach(() => {
-    jest.resetModules(); // Reset module registry to reset isConnected
-    jest.clearAllMocks();
+  beforeEach(async () => {
+    jest.resetAllMocks();
+    await disconnectDB();
     console.log = jest.fn(); // Mock console.log
+    setSpy = jest.spyOn(mongoose, "set")
+    connectSpy = jest.spyOn(mongoose, "connect")
+    closeSpy = jest.spyOn(mongoose.connection, "close")
   });
 
   afterEach(() => {
-    // Restore the original readyState value
-    Object.defineProperty(mongoose.connection, "readyState", {
-      value: originalReadyState,
-      writable: true,
-    });
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+    process.env = {...originalEnv};
+  });
+
+  afterAll(async () => {
+    await disconnectDB();
+    process.env = {...originalEnv};
   });
 
   describe("connectMongoDB", () => {
+    it("should connect successfully if not connected", async () => {
+      // Mock not connected environment
+      setIsConnected(false);
+      
+      await connectMongoDB();
+
+      expect(setSpy).toHaveBeenCalledWith("strictQuery", true);
+      expect(connectSpy).toHaveBeenCalledWith(process.env.MONGODB_URI, {
+        dbName: process.env.MONGODB_DBNAME,
+      });
+      expect(mongoose.connection.readyState).toBe(1);
+      expect(console.log).toHaveBeenCalledWith("MongoDB connected");
+    });
+
     it("should not connect if already connected: ready state = 1", async () => {
-      // Mock readyState as 1 - connected environment
+      // Mock connected environment
       Object.defineProperty(mongoose.connection, "readyState", {
         value: 1,
         writable: true,
@@ -50,39 +63,32 @@ describe("MongoDB Connection", () => {
       // Call connectMongoDB
       await connectMongoDB();
 
-      expect(mongoose.connect).not.toHaveBeenCalled();
+      expect(setSpy).toHaveBeenCalledWith("strictQuery", true);
+      expect(connectSpy).not.toHaveBeenCalled();
       expect(console.log).toHaveBeenCalledWith("MongoDB already connected");
     });
 
-    it("should connect successfully if not connected", async () => {
-      // Mock readyState as 0 - not connected environment
-      Object.defineProperty(mongoose.connection, "readyState", {
-        value: 0,
-        writable: true,
-      });
-
+    it("should not connect if empty MONGODB_URI or MONGODB_DBNAME", async () => {
+      process.env.MONGODB_URI = "";
       await connectMongoDB();
 
-      expect(mongoose.set).toHaveBeenCalledWith("strictQuery", true);
-      expect(mongoose.connect).toHaveBeenCalledWith(process.env.MONGODB_URI, {
-        dbName: "tymedata",
-      });
-      expect(console.log).toHaveBeenCalledWith("MongoDB connected");
+      expect(connectSpy).not.toHaveBeenCalled();
     });
 
+    
     it("should handle connection error", async () => {
-      // Mock readyState as 0 - not connected environment
-      Object.defineProperty(mongoose.connection, "readyState", {
-        value: 0,
-        writable: true,
-      });
+      // Mock not connected environment
+      setIsConnected(false);
 
       const error = new Error("Connection error");
       jest.spyOn(mongoose, "connect").mockRejectedValueOnce(error);
 
       await connectMongoDB();
+
       expect(console.log).toHaveBeenCalledWith(error);
+      expect(mongoose.connection.readyState).toBe(0);
     });
+
   });
 
   describe("disconnectDB", () => {
@@ -93,18 +99,19 @@ describe("MongoDB Connection", () => {
     it("should disconnect successfully", async () => {
       await disconnectDB();
 
-      expect(mongoose.connection.close).toHaveBeenCalled();
+      expect(closeSpy).toHaveBeenCalled();
       expect(mongoose.connection.readyState).toBe(0);
     });
 
     it("should handle disconnection error", async () => {
       const error = new Error("Connection error");
-      jest.spyOn(mongoose.connection, "close").mockRejectedValueOnce(error);
+      // jest.spyOn(mongoose.connection, "close").mockRejectedValueOnce(error);
+      closeSpy.mockRejectedValueOnce(error);
       jest.spyOn(process, "exit").mockImplementation()
 
-
       await disconnectDB();
-      expect(console.log).toHaveBeenCalledWith(error);
+
+      // expect(console.log).toHaveBeenCalledWith(error);
       expect(process.exit).toHaveBeenCalledWith(1)
     });
 

@@ -1,4 +1,3 @@
-import { MongoServerError } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyUser, newToken } from "src/lib/authentication";
@@ -51,7 +50,6 @@ export const PUT = async (req: NextRequest, { params }: { params: { username: st
               runValidators: true,
           }
       );
-      console.log('updatedUser:', updatedUser);
 
       // Convert the user document to a plain JavaScript object and remove the password field
       let returnUser = updatedUser.toObject();

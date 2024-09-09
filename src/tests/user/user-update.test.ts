@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
 import { PUT } from "src/app/api/user/[username]/update/route";
@@ -14,6 +14,10 @@ jest.mock("src/config/connectMongoDB");
 jest.mock("src/models/user/model");
 
 describe("Update User api/user/[username]/update/", () => {
+  beforeAll(async () => {
+    await connectMongoDB();
+  });
+
   beforeEach(() => {
     jest.resetAllMocks();
   });

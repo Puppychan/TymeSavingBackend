@@ -1,16 +1,34 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { hashPassword, checkPassword, newToken, verifyToken, verifyUser } from 'src/lib/authentication';
+import { hashPassword, checkPassword, newToken, verifyToken, verifyUser, verifyAuth } from 'src/lib/authentication';
 import { defaultUser } from '../support-data';
 import User from 'src/models/user/model';
 import { UserRole } from 'src/models/user/interface';
+import { connectMongoDB, disconnectDB } from 'src/config/connectMongoDB';
+
+jest.mock("src/config/connectMongoDB", () => ({
+  connectMongoDB: jest.fn().mockResolvedValue(null),
+  disconnectDB: jest.fn().mockResolvedValue(null),
+}));
 
 jest.mock('bcrypt');
 jest.mock('jsonwebtoken');
 
 describe('authentication', () => {
+  beforeAll(async () => {
+    await connectMongoDB();
+  });
+
   beforeEach(() => {
+    jest.resetAllMocks();
+  });
+  
+  afterEach(async () => {
     jest.clearAllMocks();
+  });
+
+  afterAll(async () => {  
+    await disconnectDB();
   });
 
   describe('hashPassword', () => {
@@ -110,7 +128,7 @@ describe('authentication', () => {
       headers.append("Authorization", "Bear valid_token")
       const result = await verifyUser(headers, defaultUser.username);
       expect(result.status).toBe(200)
-      expect(result.response).toEqual({...defaultUser, password: undefined})
+      expect(result.response).toEqual(defaultUser)
     });
 
     test('no authorization header', async () => {
@@ -143,7 +161,6 @@ describe('authentication', () => {
       const headers = new Headers()
       headers.append("Authorization", "Bear valid_token")
       const result = await verifyUser(headers, "someuser");
-      console.log(result)
       expect(result.status).toBe(403)
       expect(result.response).toBe("Forbidden action")
     });
@@ -157,6 +174,68 @@ describe('authentication', () => {
       const headers = new Headers()
       headers.append("Authorization", "Bear invalid_token")
       const result = await verifyUser(headers, defaultUser.username);
+      expect(result.status).toBe(401)
+      expect(result.response).toBe('Unauthorized: invalid token')
+    });
+  });
+
+  describe('verifyAuth', () => {
+    test('should verify user successfully', async () => {
+      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
+        callback(null, { id: 'userId' });
+      });
+      jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
+
+      const headers = new Headers()
+      headers.append("Authorization", "Bear valid_token")
+      const result = await verifyAuth(headers, defaultUser._id);
+      expect(result.status).toBe(200)
+      expect(result.response).toEqual(defaultUser)
+    });
+
+    test('no authorization header', async () => {
+      const headers = new Headers()
+      const result = await verifyAuth(headers, defaultUser._id);
+      expect(result.status).toBe(401)
+      expect(result.response).toBe("Unauthorized: Token is required in request header")
+    });
+
+    test('user not found with given token', async () => {
+      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
+        callback(null, { id: 'userId' });
+      });
+      jest.spyOn(User, "findOne").mockResolvedValue(null);
+
+      const headers = new Headers()
+      headers.append("Authorization", "Bear valid_token")
+      const result = await verifyAuth(headers, defaultUser._id);
+      expect(result.status).toBe(401)
+      expect(result.response).toBe("Unauthorized: User not found")
+    });
+
+
+    test('forbidden action', async () => {
+      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
+        callback(null, { id: 'userId' });
+      });
+      jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, role: UserRole.Customer});
+
+      const headers = new Headers()
+      headers.append("Authorization", "Bear valid_token")
+      const result = await verifyAuth(headers, "someuser");
+      expect(result.status).toBe(403)
+      expect(result.response).toBe("Forbidden action")
+    });
+
+    test('should handle errors in verify', async () => {
+      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
+        callback(new Error('invalid token'), null);
+      });
+      // jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
+
+      const headers = new Headers()
+      headers.append("Authorization", "Bear invalid_token")
+      const result = await verifyAuth(headers, defaultUser._id);
       expect(result.status).toBe(401)
       expect(result.response).toBe('Unauthorized: invalid token')
     });
