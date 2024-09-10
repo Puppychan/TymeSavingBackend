@@ -7,11 +7,12 @@ import User from "src/models/user/model";
 import { startSession } from "mongoose";
 /*
 Param: userId, invitationId  
-Pre-requisite: The user must have been invited i.e. must be in the invitation's 'users' array
+Pre-requisite: The user must have been invited i.e. 
+- must be in the invitation's 'users' array
+- must have an UserInvitation object
 Outcome: 
-- Set UserInvitation.status = Cancelled
+- REmove UserInvitation
 - Remove userId from Invitation.users
-- Add userId to Invitation.cancelledUsers
 */
 export const POST = async (req: NextRequest) => {
     const payload = await req.json();
@@ -33,32 +34,27 @@ export const POST = async (req: NextRequest) => {
         if(!pendingUsers.includes(userId)){
             return NextResponse.json({response: `This user ${userId} is not currently invited by ${invitationId}`}, {status: 404});
         }
-        // User cancels: Deletes from Invitation.users and add to user array of Invitation.groupId
+        // Deletes from Invitation.users and add to user array of Invitation.groupId
         // Remove the user from the invitation's users array
         invitation.users = pendingUsers.filter((id) => id !== userId);
-        // Add the user to the invitation's cancelledUsers array
-        if(!invitation.cancelledUsers.includes(userId)){
-            invitation.cancelledUsers.push(userId);
-        }
-        // Set UserInvitation.status = Cancelled
+        
+        // Delete UserInvitation object
         const userInvitation = await UserInvitation.findOne({ userId: userId, invitationId: invitationId });
         if (userInvitation) {
-            userInvitation.status = UserInvitationStatus.Cancelled;
-            await userInvitation.save();
+          // Cannot recall an invitation that has been Accepted or Cancelled
+          if (userInvitation.status != 'Pending'){
+            throw "Cannot recall Accepted or Cancelled invitation";
+          }
+          await UserInvitation.deleteOne({ _id: userInvitation._id });
         } else {
-            // Create a new UserInvitation if it doesn't exist
-            await UserInvitation.create({
-                userId: userId,
-                invitationId: invitationId,
-                status: UserInvitationStatus.Cancelled,
-            });
+          return NextResponse.json({response: `UserInvitation not found for user ${userId} and invitation ${invitationId}`}, {status: 404});
         }
         // Save the updated invitation
         await invitation.save();
 
         await dbSession.commitTransaction();  // Commit the transaction
         await dbSession.endSession();  // End the session
-        return NextResponse.json({ response: `User ${userId} cancelled invitation ${invitationId}` }, { status: 200 });
+        return NextResponse.json({ response: `Invitation ${invitationId} recalled for user ${userId}` }, { status: 200 });
     } catch (error){
         await dbSession.abortTransaction();  // Abort the transaction
         await dbSession.endSession();  // End the session
