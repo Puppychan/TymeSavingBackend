@@ -52,6 +52,8 @@ describe("/api/user/signup", () => {
   });
 
   test("SIGN UP: Success", async () => {
+    const password = defaultUser.password;
+    
     jest.spyOn(User, "findOne").mockResolvedValue(null);
     jest.spyOn(User, "create").mockResolvedValue([userDocumentMock]);
     userDocumentMock.toObject = jest.fn().mockReturnValue(defaultUser);
@@ -66,9 +68,9 @@ describe("/api/user/signup", () => {
     expect(res.status).toBe(200);
     expect(json.response.username).toEqual(defaultUser.username);
     expect(json.response.password).toBeUndefined();
-    expect(usernameValidatorSpy).toHaveBeenCalled();
-    expect(passwordValidatorSpy).toHaveBeenCalled();
-    expect(hashPassword).toHaveBeenCalled();
+    expect(usernameValidatorSpy).toHaveBeenCalledWith(defaultUser.username);
+    expect(passwordValidatorSpy).toHaveBeenCalledWith(password);
+    expect(hashPassword).toHaveBeenCalledWith(password);
     expect(User.create).toHaveBeenCalled();
   });
 
@@ -142,11 +144,30 @@ describe("/api/user/signup", () => {
 
     expect(res.status).toBe(400);
     expect(json.response).toEqual("Password must be at least 8 characters and at most 20 characters");
-    expect(usernameValidatorSpy).toHaveBeenCalled();
-    expect(passwordValidatorSpy).toHaveBeenCalled();
+    expect(usernameValidatorSpy).toHaveBeenCalledWith(defaultUser.username);
+    expect(passwordValidatorSpy).toHaveBeenCalledWith("123123");
     expect(User.create).not.toHaveBeenCalled();
   });
 
+  it('should handle errors: 11000 DUPLICATE KEY', async () => {
+    const error = {
+                    message: "MongoServerError: E11000 duplicate key error collection: tymedata.users index: phone_1 dup key: { phone: \"0938881145\"}",
+                    code: 11000
+                  };
+    (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
+
+    const req = {
+      json: async () => (defaultUser),
+    } as NextRequest;
+
+    const res = await POST(req);
+    const json = await res.json();
+
+    expect(res.status).toBe(400);
+    expect(json.response).toBe("This phone is used by another account");
+    expect(User.create).not.toHaveBeenCalled();
+
+  });
 
   test("SIGN UP: Internal server error", async () => {
     // Mock the functions

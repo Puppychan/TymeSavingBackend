@@ -1,424 +1,264 @@
-// import { NextRequest } from "next/server";
-// import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
-// import User from "src/models/user/model";
-// import { PUT } from "src/app/api/user/[username]/update/route";
-// import { defaultUser } from "../support-data";
-// import * as AuthLib from "src/lib/authentication"
-// import * as CheckExistLib from "src/lib/checkExist"
-// import { POST as POSTPassword } from "src/app/api/user/[username]/update/password/route";
-// import { POST as POSTPin} from "src/app/api/user/[username]/update/pin/route";
-// import bcrypt from 'bcrypt';
+import { NextRequest } from "next/server";
+import User from "src/models/user/model";
+import { defaultUser } from "../support-data";
+import * as AuthLib from "src/lib/authentication"
+import * as CheckExistLib from "src/lib/checkExist"
+import mongoose from "mongoose";
+import { PUT } from "src/app/api/user/[username]/update/route";
+import * as ValidationLib from "src/lib/validator";
 
-// // Mock the dependencies
-// jest.mock("src/config/connectMongoDB");
-// jest.mock("src/models/user/model");
+const userDocumentMock = {
+  ...defaultUser,
+  _v: 1,
+  save: jest.fn(),
+  toObject: jest.fn(),
+  exec: jest.fn(),
+}
 
-// describe("Update User api/user/[username]/update/", () => {
-//   beforeAll(async () => {
-//     await connectMongoDB();
-//   });
+// Mock the dependencies
+jest.mock("src/models/user/model", () => ({
+  findOne: jest.fn(),
+  findOneAndUpdate: jest.fn(),
+}));
+jest.mock("src/lib/authentication", () => ({
+  verifyUser: jest.fn(),
+}));
+jest.mock("src/lib/checkExist", () => ({
+  exist_email: jest.fn(),
+  exist_username: jest.fn(),
+}));
+jest.mock('mongoose', () => ({
+  startSession: jest.fn(),
+}));
 
-//   beforeEach(() => {
-//     jest.resetAllMocks();
-//   });
 
-//   afterEach(() => {
-//     jest.clearAllMocks();
-//   });
+describe("User Handlers", () => {
+  let dbSession
+  let checkExistEmail
+  let checkExistUsername
+  let usernameValidatorSpy
 
-//   afterAll(async () => {  
-//     await disconnectDB();
-//   });
+  beforeEach(() => {
+    jest.resetAllMocks();
+    
+    dbSession = jest.spyOn(mongoose, 'startSession').mockResolvedValueOnce({ 
+      startTransaction: jest.fn().mockResolvedValue(null),
+      commitTransaction: jest.fn().mockResolvedValue(null),
+      abortTransaction: jest.fn().mockResolvedValue(null),
+      endSession: jest.fn().mockResolvedValue(null),
+    } as any);
 
-//   describe("Update User: api/user/[username]/update/route.ts", () => {
-//     it("success", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser)
-//       const updated = {...defaultUser, fullname: "Khanh"}
-//       jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updated)
-      
-//       const req = {
-//         json: async () => ({
-//           fullname: "Khanh" 
-//         }),
-//       } as NextRequest;
+    checkExistEmail = jest.spyOn(CheckExistLib, 'exist_email');
+    checkExistUsername = jest.spyOn(CheckExistLib, 'exist_username');
+    usernameValidatorSpy = jest.spyOn(ValidationLib, "usernameValidator")
+  });
 
-//       const params = { username: defaultUser.username };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+  afterEach(() => {
+    jest.clearAllMocks();
+    jest.restoreAllMocks();
+  });
 
-//       expect(res.status).toBe(200);
-//       expect(json.response).toEqual(updated);
-//     });
+  describe("PUT: api/user/[username]/update/route.ts", () => {
+    it("success: no update username/email", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: '', status: 200 })
+      jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
 
-//     it("verification FAILED -> should return unauthorized", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: 'Unauthorized: Token is required in request header', status: 401 })
-//       const req = {
-//         json: async () => ({
-//           fullname: "Khanh" 
-//         }),
-//       } as NextRequest;
+      const payload = { fullname: "Khanh"}
+      const updatedDoc = {...userDocumentMock, ...payload}
+      const updated = {...defaultUser, ...payload}
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updatedDoc)
+      updatedDoc.toObject = jest.fn().mockReturnValue(updated);
 
-//       const params = { username: defaultUser.username };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+      const req = {
+        json: async () => ({
+          ...payload 
+        }),
+      } as NextRequest;
 
-//       expect(res.status).toBe(401);
-//       expect(json.response).toEqual('Unauthorized: Token is required in request header');
-//     });
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
 
-//     it('verification PASSED and user not found -> should return 404 ', async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       jest.spyOn(User, "findOne").mockResolvedValue(null)
+      expect(res.status).toBe(200);
+      expect(json.response).toEqual(updated);
+      expect(updated).not.toHaveProperty('password');
+      expect(checkExistEmail).not.toHaveBeenCalled();
+      expect(checkExistUsername).not.toHaveBeenCalled();
+      expect(usernameValidatorSpy).not.toHaveBeenCalled();
+    });
 
-//       const req = {
-//         json: async () => ({
-//           fullname: "Khanh" 
-//         }),
-//       } as NextRequest;
-//       const params = { username: 'unknown_user' };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+    it("success: update username/email", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: '', status: 200 })
+      jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
 
-//       expect(res.status).toBe(404);
-//       expect(json.response).toBe('User not found');
-//     });
+      const payload = { fullname: "Khanh", username: "new_username", email: "new_email" }
+      const updatedDoc = {...userDocumentMock, ...payload}
+      const updated = {...defaultUser, ...payload}
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updatedDoc)
+      updatedDoc.toObject = jest.fn().mockReturnValue(updated);
 
-//     it('should handle errors', async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       const error = new Error('Database error');
-//       (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
+      checkExistUsername.mockResolvedValue(false);
+      checkExistEmail.mockResolvedValue(false);
+      // usernameValidatorSpy.mockReturnValue({ status: true });
 
-//       const req = {
-//         json: async () => ({
-//           fullname: "Khanh" 
-//         }),
-//       } as NextRequest;
-//       const username = defaultUser.username
-//       const params = { username: username };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+      const req = {
+        json: async () => ({
+          ...payload
+        }),
+      } as NextRequest;
 
-//       expect(res.status).toBe(500);
-//       expect(json.response).toBe(`Cannot update user ${username}`);
-//     });
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
 
-//     it("failed: update with exist username", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser)
-//       jest.spyOn(CheckExistLib, "exist_username").mockResolvedValue(true)
-      
-//       const req = {
-//         json: async () => ({
-//           username: 'existusername'
-//         }),
-//       } as NextRequest;
+      expect(res.status).toBe(200);
+      expect(json.response).toEqual(updated);
+      expect(updated).not.toHaveProperty('password');
+      expect(checkExistEmail).toHaveBeenCalledWith("new_email");
+      expect(checkExistUsername).toHaveBeenCalledWith("new_username");
+      expect(usernameValidatorSpy).toHaveBeenCalled();
+    });
 
-//       const params = { username: defaultUser.username };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+    it("failed: update with exist username", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: '', status: 200 })
+      jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
 
-//       expect(res.status).toBe(400);
-//       expect(json.response).toEqual('This username is used by another account');
-//     });
+      const payload = { fullname: "Khanh", username: "new_username", email: "new_email" }
+      const updatedDoc = {...userDocumentMock, ...payload}
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updatedDoc)
 
-//     it("failed: update with invalid username", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser)
-//       jest.spyOn(CheckExistLib, "exist_username").mockResolvedValue(false)
-      
-//       const req = {
-//         json: async () => ({
-//           username: 'hi;'
-//         }),
-//       } as NextRequest;
+      checkExistUsername.mockResolvedValue(true);
 
-//       const params = { username: defaultUser.username };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+      const req = {
+        json: async () => ({
+          ...payload
+        }),
+      } as NextRequest;
 
-//       expect(res.status).toBe(400);
-//       expect(json.response).toEqual('Username must be at least 5 characters and at most 15 characters');
-//     });
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
+
+      expect(res.status).toBe(400);
+      expect(json.response).toEqual("This username is used by another account");
+      expect(checkExistUsername).toHaveBeenCalledWith("new_username");
+      expect(checkExistEmail).not.toHaveBeenCalled();
+      expect(User.findOneAndUpdate).not.toHaveBeenCalled();
+    });
+
+    it("failed: update with invalid username", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: '', status: 200 })
+      jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
+
+      const payload = { fullname: "Khanh", username: "exceed-length-username!!", email: "new_email" }
+      const updatedDoc = {...userDocumentMock, ...payload}
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updatedDoc)
+
+      checkExistUsername.mockResolvedValue(false);
+
+      const req = {
+        json: async () => ({
+          ...payload
+        }),
+      } as NextRequest;
+
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
+
+      expect(res.status).toBe(400);
+      expect(json.response).toEqual("Username must be at least 5 characters and at most 15 characters");
+      expect(checkExistUsername).toHaveBeenCalledWith("exceed-length-username!!");
+      expect(checkExistEmail).not.toHaveBeenCalled();
+      expect(User.findOneAndUpdate).not.toHaveBeenCalled();
+    });
 
     
-//     it("failed: update with exist username", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser)
-//       jest.spyOn(CheckExistLib, "exist_email").mockResolvedValue(true)
-      
-//       const req = {
-//         json: async () => ({
-//           email: 'existemail'
-//         }),
-//       } as NextRequest;
+    it("failed: update with exist email", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: '', status: 200 })
+      jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
 
-//       const params = { username: defaultUser.username };
-//       const res = await PUT(req, { params });
-//       const json = await res.json();
+      const payload = { fullname: "Khanh", username: "new_username", email: "new_email" }
+      const updatedDoc = {...userDocumentMock, ...payload}
+      jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updatedDoc);
 
-//       expect(res.status).toBe(400);
-//       expect(json.response).toEqual('This email is used by another account');
-//     });
-//   });
+      checkExistUsername.mockResolvedValue(false);
+      checkExistEmail.mockResolvedValue(true);
 
-//   describe("Change password", () => {
-//     it("success", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-//       jest.spyOn(AuthLib, "checkPassword").mockResolvedValue(true)
-//       jest.spyOn(User, "findOneAndUpdate").mockImplementation();
-      
-//       const req = {
-//         json: async () => ({
-//           newPassword: "Rmit123@new",
-//           currentPassword: "Rmit123@" 
-//         }),
-//       } as NextRequest;
+      const req = {
+        json: async () => ({
+          ...payload
+        }),
+      } as NextRequest;
 
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPassword(req, { params });
-//       const json = await res.json();
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
 
-//       expect(res.status).toBe(200);
-//       expect(json.response).toEqual("Password is updated successfully");
-//     });
+      expect(res.status).toBe(400);
+      expect(json.response).toEqual("This email is used by another account");
+      expect(checkExistUsername).toHaveBeenCalledWith("new_username");
+      expect(checkExistEmail).toHaveBeenCalledWith("new_email");
+      expect(User.findOneAndUpdate).not.toHaveBeenCalled();
 
-//     it("fail: wrong password", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-//       jest.spyOn(AuthLib, "checkPassword").mockResolvedValue(false)
-      
-//       const req = {
-//         json: async () => ({
-//           newPassword: "Rmit123@new",
-//           currentPassword: "Rmit123@" 
-//         }),
-//       } as NextRequest;
+    });
 
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPassword(req, { params });
-//       const json = await res.json();
+    it("verification FAILED -> should return unauthorized", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: 'Unauthorized: Token is required in request header', status: 401 })
 
-//       expect(res.status).toBe(401);
-//       expect(json.response).toEqual("Cannot update: Password is incorrect");
-//     });
+      const req = { json: async () => {}} as NextRequest;
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
 
-//     it("fail: invalid password", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-//       jest.spyOn(AuthLib, "checkPassword").mockResolvedValue(false)
-      
-//       const req = {
-//         json: async () => ({
-//           newPassword: "invalid",
-//           currentPassword: "Rmit123@" 
-//         }),
-//       } as NextRequest;
+      expect(res.status).toBe(401);
+      expect(json.response).toEqual('Unauthorized: Token is required in request header');
+    });
 
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPassword(req, { params });
-//       const json = await res.json();
+    it('user not found -> should return 404 ', async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
+      jest.spyOn(User, "findOne").mockResolvedValue(null);
 
-//       expect(res.status).toBe(400);
-//       expect(json.response).toEqual("Password must be at least 8 characters and at most 20 characters");
-//     });
+      const req = { json: async () => {}} as NextRequest;
+      const params = { username: 'unknown_user' };
+      const res = await PUT(req, { params });
+      const json = await res.json();
+      console.log(json)
 
-//     it("fail: verification FAILED -> should return unauthorized", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: 'Unauthorized: Token is required in request header', status: 401 })
-//       const req = {
-//         json: async () => ({
-//           newPassword: "Rmit123@new",
-//           currentPassword: "Rmit123@" 
-//         }),
-//       } as NextRequest;
+      expect(res.status).toBe(404);
+      expect(json.response).toBe('User not found');
+    });
 
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPassword(req, { params });
-//       const json = await res.json();
+    it('should handle errors: 11000 DUPLICATE KEY', async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
+      const error = {
+        message: "MongoServerError: E11000 duplicate key error collection: tymedata.users index: phone_1 dup key: { phone: \"0938881145\"}",
+        code: 11000
+      };
+      (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
 
-//       expect(res.status).toBe(401);
-//       expect(json.response).toEqual('Unauthorized: Token is required in request header');
-//     });
+      const req = { json: async () => {}} as NextRequest;
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
 
-//     it("fail: user not found", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(null);
-      
-//       const req = {
-//         json: async () => ({
-//           newPassword: "Rmit123@new",
-//           currentPassword: "Rmit123@" 
-//         }),
-//       } as NextRequest;
+      expect(res.status).toBe(400);
+      expect(json.response).toBe("This phone is used by another account");
+    });
 
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPassword(req, { params });
-//       const json = await res.json();
+    it('should handle errors: other errors', async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
+      const error = new Error('Database error');
+      (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
 
-//       expect(res.status).toBe(404);
-//       expect(json.response).toBe('User not found');
-//     });
+      const req = { json: async () => {}} as NextRequest;
+      const params = { username: defaultUser.username };
+      const res = await PUT(req, { params });
+      const json = await res.json();
 
-//     it('should handle errors', async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       const error = new Error('Database error');
-//       (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
-
-//       const req = {
-//         json: async () => ({
-//           newPassword: "Rmit123@new",
-//           currentPassword: "Rmit123@" 
-//         }),
-//       } as NextRequest;
-//       const username = defaultUser.username
-//       const params = { username: username };
-//       const res = await POSTPassword(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(500);
-//       expect(json.response).toBe(`Database error`);
-//     });
-//   });
-
-//   describe("Set/update pin", () => {
-//     it("success: update pin", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-//       const newPIN = '2345'
-//       const updated = {...defaultUser, pin: newPIN}
-//       jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updated);
-      
-//       const req = {
-//         json: async () => ({
-//           newPIN: newPIN,
-//           currentPIN: defaultUser.pin
-//         }),
-//       } as NextRequest;
-
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(200);
-//       expect(json.response).toEqual(`New PIN is set successfully: ${newPIN}`);
-//     });
-
-//     it("success: set pin", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, pin: undefined});
-//       const newPIN = '2345'
-//       const updated = {...defaultUser, pin: newPIN}
-//       jest.spyOn(User, "findOneAndUpdate").mockResolvedValue(updated);
-      
-//       const req = {
-//         json: async () => ({
-//           newPIN: newPIN
-//         }),
-//       } as NextRequest;
-
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(200);
-//       expect(json.response).toEqual(`New PIN is set successfully: ${newPIN}`);
-//     });
-
-//     it("fail: wrong pin", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-      
-//       const req = {
-//         json: async () => ({
-//           newPIN: '2345',
-//           currentPIN: '0123'
-//         }),
-//       } as NextRequest;
-
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(401);
-//       expect(json.response).toEqual(`Cannot update: PIN is incorrect`);
-//     });
-
-//     it("fail: invalid pin", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
-      
-//       const req = {
-//         json: async () => ({
-//           newPIN: '012',
-//           currentPIN: defaultUser.pin
-//         }),
-//       } as NextRequest;
-
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(400);
-//       expect(json.response).toEqual(`PIN must have 4 digits`);
-//     });
-
-//     it("fail: verification FAILED -> should return unauthorized", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response: 'Unauthorized: Token is required in request header', status: 401 })
-//       const req = {
-//         json: async () => ({
-//           newPIN: '0123',
-//           currentPIN: defaultUser.pin
-//         }),
-//       } as NextRequest;
-
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(401);
-//       expect(json.response).toEqual('Unauthorized: Token is required in request header');
-//     });
-
-//     it("fail: user not found", async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 });
-//       jest.spyOn(User, "findOne").mockResolvedValue(null);
-      
-//       const req = {
-//         json: async () => ({
-//           newPIN: '0123',
-//           currentPIN: defaultUser.pin
-//         }),
-//       } as NextRequest;
-
-//       const params = { username: defaultUser.username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(404);
-//       expect(json.response).toBe('User not found');
-//     });
-
-//     it('should handle errors', async () => {
-//       jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
-//       const error = new Error('Database error');
-//       (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
-
-//       const req = {
-//         json: async () => ({
-//           newPIN: '0123',
-//           currentPIN: defaultUser.pin 
-//         }),
-//       } as NextRequest;
-//       const username = defaultUser.username
-//       const params = { username: username };
-//       const res = await POSTPin(req, { params });
-//       const json = await res.json();
-
-//       expect(res.status).toBe(500);
-//       expect(json.response).toBe(`Database error`);
-//     });
-//   });
+      expect(res.status).toBe(500);
+      expect(json.response).toBe("Cannot update user " + defaultUser.username);
+    });
+  });
   
-
-// });
+});

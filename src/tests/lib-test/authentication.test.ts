@@ -105,7 +105,7 @@ describe('authentication', () => {
   });
 
   describe('verifyUser', () => {
-    test('should verify user successfully', async () => {
+    test('should verify user successfully: token & username is of same user', async () => {
       (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
         callback(null, { id: 'userId' });
       });
@@ -116,6 +116,32 @@ describe('authentication', () => {
       const result = await verifyUser(headers, defaultUser.username);
       expect(result.status).toBe(200)
       expect(result.response).toEqual(defaultUser)
+    });
+
+    test('should verify user successfully: admin try to access to another username ', async () => {
+      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
+        callback(null, { id: 'userId' });
+      });
+      jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, role: UserRole.Admin});
+
+      const headers = new Headers()
+      headers.append("Authorization", "Bear valid_token")
+      const result = await verifyUser(headers, "someone_else_username");
+      expect(result.status).toBe(200)
+      expect(result.response).toBe({...defaultUser, role: UserRole.Admin})
+    });
+
+    test('forbidden action: customer role try to access to another username ', async () => {
+      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
+        callback(null, { id: 'userId' });
+      });
+      jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, role: UserRole.Customer});
+
+      const headers = new Headers()
+      headers.append("Authorization", "Bear valid_token")
+      const result = await verifyUser(headers, "someone_else_username");
+      expect(result.status).toBe(403)
+      expect(result.response).toBe("Forbidden action")
     });
 
     test('no authorization header', async () => {
@@ -136,20 +162,6 @@ describe('authentication', () => {
       const result = await verifyUser(headers, defaultUser.username);
       expect(result.status).toBe(401)
       expect(result.response).toBe("Unauthorized: User not found")
-    });
-
-
-    test('forbidden action', async () => {
-      (jwt.verify as jest.Mock).mockImplementation((token, secret, callback) => {
-        callback(null, { id: 'userId' });
-      });
-      jest.spyOn(User, "findOne").mockResolvedValue({...defaultUser, role: UserRole.Customer});
-
-      const headers = new Headers()
-      headers.append("Authorization", "Bear valid_token")
-      const result = await verifyUser(headers, "someuser");
-      expect(result.status).toBe(403)
-      expect(result.response).toBe("Forbidden action")
     });
 
     test('should handle errors in verify', async () => {

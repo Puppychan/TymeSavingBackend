@@ -39,9 +39,10 @@ describe("User Handlers", () => {
 
   describe("GET", () => {
     it("verification PASSED and user exists -> should return user information", async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
       jest.spyOn(User, "findOne").mockResolvedValue(userDocumentMock);
       userDocumentMock.toObject = jest.fn().mockReturnValue(defaultUser);
-
+      
       const req = {} as NextRequest;
       const params = { username: defaultUser.username };
       const res = await GET(req, { params });
@@ -64,6 +65,7 @@ describe("User Handlers", () => {
     });
 
     it('verification PASSED and user not found -> should return 404 ', async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
       jest.spyOn(User, "findOne").mockResolvedValue(null);
 
       const req = {} as NextRequest;
@@ -76,6 +78,7 @@ describe("User Handlers", () => {
     });
 
     it('should handle errors', async () => {
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
       const error = new Error('Database error');
       (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
 
@@ -91,7 +94,6 @@ describe("User Handlers", () => {
 
 
   describe('DELETE', () => {
-
     it('verification PASSED and user exists -> should delete user', async () => {
       jest.spyOn(mongoose, 'startSession').mockResolvedValueOnce({ 
         startTransaction: jest.fn().mockResolvedValue(null),
@@ -99,6 +101,7 @@ describe("User Handlers", () => {
         abortTransaction: jest.fn().mockResolvedValue(null),
         endSession: jest.fn().mockResolvedValue(null),
       } as any);
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
       jest.spyOn(User, "findOne").mockResolvedValue(defaultUser);
       jest.spyOn(User, "deleteOne").mockResolvedValue({ username: defaultUser.username } as any);
 
@@ -138,6 +141,7 @@ describe("User Handlers", () => {
         abortTransaction: jest.fn().mockResolvedValue(null),
         endSession: jest.fn().mockResolvedValue(null),
       } as any);
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
       jest.spyOn(User, "findOne").mockResolvedValue(null);
       const req = {} as NextRequest;
       const params = { username: defaultUser.username };
@@ -154,6 +158,7 @@ describe("User Handlers", () => {
         abortTransaction: jest.fn().mockResolvedValue(null),
         endSession: jest.fn().mockResolvedValue(null),
       } as any);
+      jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })
       const error = new Error('Database error');
       (User.findOne as jest.Mock).mockImplementationOnce(() => { throw error; });
 

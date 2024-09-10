@@ -54,6 +54,17 @@ export const POST = async (req: NextRequest) => {
     console.log("signup error", error)
     await dbSession.abortTransaction();  // Commit the transaction
     await dbSession.endSession();  // End the session
-    return NextResponse.json({ response: error.message}, { status: 500 });
+    // return NextResponse.json({ response: error.message}, { status: 500 });
+    if (error.code === 11000) {
+      // Extract the field name causing the duplicate key error
+      const fieldMatch = error.message.match(/index: (\w+)_1/);
+      const fieldName = fieldMatch ? fieldMatch[1] : "field";
+      const errorMessage = `This ${fieldName} is used by another account`;
+  
+      // Return a custom error message and a 400 status code
+      return NextResponse.json({ response: errorMessage }, { status: 400 });
+    } else {
+      return NextResponse.json({ response: error.message }, { status: 500 });
+    }
   }
 };
