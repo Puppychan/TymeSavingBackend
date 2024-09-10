@@ -1,3 +1,5 @@
+import { ApproveStatuses, IGroupSaving } from "src/models/groupSaving/interface";
+import { GroupRole, IGroupSavingParticipation } from "src/models/groupSavingParticipation/interface";
 import { IUser, TymeRewardLevel, UserRole } from "src/models/user/interface";
 
 export const defaultUser = {
@@ -13,3 +15,23 @@ export const defaultUser = {
   avatar: "",
   tymeReward: TymeRewardLevel.Classic,
 } as IUser;
+
+export const mockGroupSaving = {
+  _id: "07d1be44c0380f3696e83722",
+  name: "Group - Test",
+  description: "Group - Test",
+  amount: 10000000,
+  hostedBy: defaultUser._id,
+  concurrentAmount: 0,
+  defaultApproveStatus: ApproveStatuses.Approved,
+  isClosed: false,
+  endDate: new Date("2024-12-30"),
+} as IGroupSaving;
+
+export const mockGroupSavingParticipation = {
+  _id: "07d1be44c0380f3696e83722",
+  groupSaving: mockGroupSaving._id,
+  user: defaultUser._id,
+  joinedDate: new Date(),
+  role: GroupRole.Host,
+} as IGroupSavingParticipation
