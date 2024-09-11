@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import User from "src/models/user/model";
-import { defaultUser } from "../support-data";
+import { defaultUser } from "src/tests/support-data";
 import * as AuthLib from "src/lib/authentication"
 import * as CheckExistLib from "src/lib/checkExist"
 import mongoose from "mongoose";
@@ -32,7 +32,7 @@ jest.mock('mongoose', () => ({
 }));
 
 
-describe("User Handlers", () => {
+describe("Test UPDATE User", () => {
   let dbSession
   let checkExistEmail
   let checkExistUsername

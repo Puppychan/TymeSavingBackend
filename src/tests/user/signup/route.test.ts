@@ -1,8 +1,8 @@
 // tests/user.test.js
-import { POST } from "../../app/api/user/signup/route";
+import { POST } from "../../../app/api/user/signup/route";
 import { NextRequest, NextResponse } from "next/server";
 import User from "src/models/user/model";
-import { defaultUser } from "../support-data";
+import { defaultUser } from "../../support-data";
 import mongoose from "mongoose";
 import * as ValidationLib from "src/lib/validator";
 import {hashPassword} from "src/lib/authentication";
@@ -28,7 +28,7 @@ jest.mock('mongoose', () => ({
   startSession: jest.fn()
 }));
 
-describe("/api/user/signup", () => {
+describe("Test Sign Up", () => {
   let dbSession
   let usernameValidatorSpy
   let passwordValidatorSpy

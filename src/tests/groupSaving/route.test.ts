@@ -23,7 +23,7 @@ jest.mock('mongoose', () => ({
 }));
 
 
-describe("POST: api/groupSaving/route.ts", () => {
+describe("Test CREATE Group", () => {
   let dbSession
 
   beforeEach(() => {
@@ -64,7 +64,7 @@ describe("POST: api/groupSaving/route.ts", () => {
     expect(GroupSavingParticipation.create).toHaveBeenCalled();
   });
 
-  it("success: some missing input", async () => {
+  it("success: missing input is replaced with default", async () => {
     jest.spyOn(AuthLib, "verifyAuth").mockResolvedValue({ response: defaultUser, status: 200 })
 
     let expectedEndDate = localDate(new Date());

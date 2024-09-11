@@ -1,9 +1,9 @@
 // tests/user.test.js
-import { POST } from "../../app/api/user/signin/route";
+import { POST } from "../../../app/api/user/signin/route";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
-import { defaultUser } from "../support-data";
+import { defaultUser } from "../../support-data";
 import * as AuthLib from "src/lib/authentication";
 
 // jest.mock("src/config/connectMongoDB", () => ({
@@ -23,7 +23,7 @@ const userDocumentMock = {
   exec: jest.fn(),
 }
 
-describe("/api/user/signin", () => {
+describe("Test Sign In", () => {
 
   beforeEach(() => {
     jest.resetAllMocks();

@@ -2,9 +2,9 @@ import { NextRequest } from "next/server";
 import { connectMongoDB, disconnectDB } from "src/config/connectMongoDB";
 import User from "src/models/user/model";
 import { GET, DELETE } from "src/app/api/user/[username]/route";
-import { defaultUser } from "../support-data";
 import * as AuthLib from "src/lib/authentication"
 import mongoose from "mongoose";
+import { defaultUser } from "src/tests/support-data";
 
 const userDocumentMock = {
   ...defaultUser,
@@ -27,7 +27,7 @@ jest.mock('mongoose', () => ({
 }));
 
 
-describe("User Handlers", () => {
+describe("Test GET & DELETE User", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     jest.spyOn(AuthLib, "verifyUser").mockResolvedValue({ response:'', status: 200 })

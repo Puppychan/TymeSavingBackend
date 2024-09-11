@@ -128,7 +128,7 @@ describe('authentication', () => {
       headers.append("Authorization", "Bear valid_token")
       const result = await verifyUser(headers, "someone_else_username");
       expect(result.status).toBe(200)
-      expect(result.response).toBe({...defaultUser, role: UserRole.Admin})
+      expect(result.response).toEqual({...defaultUser, role: UserRole.Admin})
     });
 
     test('forbidden action: customer role try to access to another username ', async () => {

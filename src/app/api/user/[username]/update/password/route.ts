@@ -5,7 +5,7 @@ import { passwordValidator } from "src/lib/validator";
 import User from "src/models/user/model";
 import { startSession } from "mongoose";
 
-// Set/update PIN
+// Set/update password
 export const POST = async (req: NextRequest, { params }: { params: { username: string } }) => {
   await connectMongoDB();
   const dbSession = await startSession();
