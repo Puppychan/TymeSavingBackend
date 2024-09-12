@@ -17,7 +17,7 @@ export const defaultUser = {
 } as IUser;
 
 export const mockGroupSaving = {
-  _id: "07d1be44c0380f3696e83722",
+  _id: "07d1be44c0380f3696e83721",
   name: "Group - Test",
   description: "Group - Test",
   amount: 10000000,
@@ -35,3 +35,11 @@ export const mockGroupSavingParticipation = {
   joinedDate: new Date(),
   role: GroupRole.Host,
 } as IGroupSavingParticipation
+
+export const mockGroupSavingParticipation2 = {
+  _id: "07d1be44c0380f3696e83723",
+  groupSaving: mockGroupSaving._id,
+  user: "07d1be44c0380f3696e83723",
+  joinedDate: new Date(),
+  role: GroupRole.Member,
+} as unknown as IGroupSavingParticipation
