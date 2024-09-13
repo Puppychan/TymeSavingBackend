@@ -71,7 +71,7 @@ describe("Test Sign In", () => {
     const json = await res.json();
 
     expect(res.status).toBe(401);
-    expect(json.response).toEqual('Login credentials invalid. No account with username something');
+    expect(json.response).toEqual('No account with provided username');
   });
 
   test("SIGN IN: wrong password", async () => {
@@ -88,7 +88,7 @@ describe("Test Sign In", () => {
     const json = await res.json();
 
     expect(res.status).toBe(401);
-    expect(json.response).toEqual('Login credentials invalid. Wrong password');
+    expect(json.response).toEqual('Invalid password');
   });
 
   test("Internal server error", async () => {
