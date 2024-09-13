@@ -27,13 +27,10 @@ jest.mock("src/lib/groupSavingUtils", () => ({
   checkDeletableGroupSaving: jest.fn(),
 }));
 jest.mock('mongoose', () => ({
-  startSession: jest.fn(),
-  Types: {
-    ObjectId: jest.fn().mockReturnValue('mockedObjectId'),
-  },
+  startSession: jest.fn()
 }));
 
-describe("Test DELETE group", () => {
+describe("Test REMOVE member", () => {
   let dbSession
 
   beforeEach(() => {
