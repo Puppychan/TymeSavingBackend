@@ -45,11 +45,11 @@ export const POST = async (req:NextRequest) => {
         console.log("Creating a transaction - form data: ", formData);
 
         if (!amount || amount === '' || isNaN(Number(amount))) {
-            return NextResponse.json({response: "Amount must be a valid number", status: 400});
+            return NextResponse.json({response: "Amount must be a valid number"}, {status: 400});
         }
         amount = parseInt(amount, 10);
         if (amount <= 0) {
-            return NextResponse.json({response: "Amount must be greater than 0", status: 400});
+            return NextResponse.json({response: "Amount must be greater than 0"}, {status: 400});
         }
 
         // Check group ID; Fetch the group's default approve status ("Approved" vs "Declined")
@@ -58,7 +58,7 @@ export const POST = async (req:NextRequest) => {
             console.log("Creating a transaction to GroupSaving " + savingGroupId);
             const savingGroup = await GroupSaving.findById(savingGroupId);
             if(!savingGroup){
-                return NextResponse.json({response: "No such Group Saving", status: 404});
+                return NextResponse.json({response: "No such Group Saving"}, {status: 404});
             }
             // Check if the group has been closed or expired
             await checkGroupSavingClosed(savingGroupId);
@@ -74,7 +74,7 @@ export const POST = async (req:NextRequest) => {
             console.log("Creating a transaction to SharedBudget " + budgetGroupId);
             const budgetGroup = await SharedBudget.findById(budgetGroupId);
             if(!budgetGroup){
-                return NextResponse.json({response: "No such Shared Budget", status: 404});
+                return NextResponse.json({response: "No such Shared Budget"}, {status: 404});
             }
             await checkSharedBudgetClosed(budgetGroupId);
             if(userId == budgetGroup.hostedBy){
