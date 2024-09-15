@@ -43,3 +43,21 @@ export const mockGroupSavingParticipation2 = {
   joinedDate: new Date(),
   role: GroupRole.Member,
 } as unknown as IGroupSavingParticipation
+
+// Default transaction data
+export const defaultTransaction = {
+  _id: '666a4e3b82c9937c90738290',
+  userId: '567cedea6bd680f6d9fac54a',
+  description: 'Test transaction',
+  type: 'Expense',
+  amount: 100,
+  transactionImages: [], 
+  payBy: 'Card',
+  category: 'Dine out',
+  savingGroupId: 'b63f324fe62991060d8cc1e7',
+  budgetGroupId: '532e2438f582396ecc77399f',
+  approveStatus: 'Pending',
+  createdDate: new Date().toISOString(),
+  editedDate: new Date().toISOString(),
+  isMomo: false
+};

@@ -39,11 +39,22 @@ describe("/api/transaction", () => {
   // tests/transaction.test.ts
 
   test('UPDATE: Invalid transaction ID', async () => {
-    const req = {
-      json: async () => ({ ...defaultTransaction, description: 'Updated Description' }),
-      nextUrl: { pathname: `/api/transaction/${invalidMongoID}` },
-    } as unknown as NextRequest;
+    const invalidTransaction = {
+      ...defaultTransaction,
+      _id: invalidMongoID
+    };
 
+    const mockFormData = async () => ({
+      getAll: () => [],
+      get: (key: string) => {
+        return invalidTransaction[key as keyof typeof invalidTransaction] || '';
+      }
+    });
+
+    const req = {
+      formData: mockFormData,
+      nextUrl: { pathname: `/api/transaction/${invalidMongoID}` }
+    } as unknown as NextRequest;
     const res = await PUT(req, { params: { transactionId: invalidMongoID } });
     const json = await res.json();
 
@@ -52,20 +63,27 @@ describe("/api/transaction", () => {
   });
 
   test("UPDATE TRANSACTION: In Group Saving but Income -> Expense", async () => {
-    const transaction = {
+    const invalidTransaction = {
       ...defaultTransaction,
+      'budgetGroupId': '',
       type: "Expense"
     };
 
-    jest.spyOn(Transaction, "findOne").mockResolvedValue(transaction as any);
+    jest.spyOn(Transaction, "findOne").mockResolvedValue(invalidTransaction as any);
     jest.spyOn(GroupSaving, "findById").mockResolvedValue({ hostedBy: "user-id" } as any);
 
-    const req = {
-      json: async () => ({ ...transaction, description: 'Updated Description' }),
-      nextUrl: { pathname: `/api/transaction/${defaultTransaction._id}` },
-    } as unknown as NextRequest;
+    const mockFormData = async () => ({
+      getAll: () => [],
+      get: (key: string) => {
+        return invalidTransaction[key as keyof typeof invalidTransaction] || '';
+      }
+    });
 
-    const res = await PUT(req, { params: { transactionId: defaultTransaction._id } });
+    const req = {
+      formData: mockFormData,
+      nextUrl: { pathname: `/api/transaction/${invalidMongoID}` }
+    } as unknown as NextRequest;
+    const res = await PUT(req, { params: { transactionId: invalidMongoID } });
     const json = await res.json();
 
     expect(res.status).toBe(400);
@@ -73,20 +91,27 @@ describe("/api/transaction", () => {
   });
 
   test("UPDATE TRANSACTION: In Shared Budget but Expense -> Income", async () => {
-    const transaction = {
+    const invalidTransaction = {
       ...defaultTransaction,
+      'savingGroupId': '',
       type: "Income",
     };
 
-    jest.spyOn(Transaction, "findOne").mockResolvedValue(transaction as any);
+    jest.spyOn(Transaction, "findOne").mockResolvedValue(invalidTransaction as any);
     jest.spyOn(SharedBudget, "findById").mockResolvedValue({ hostedBy: "user-id" } as any);
 
-    const req = {
-      json: async () => ({ ...transaction, description: 'Updated Description' }),
-      nextUrl: { pathname: `/api/transaction/${defaultTransaction._id}` },
-    } as unknown as NextRequest;
+    const mockFormData = async () => ({
+      getAll: () => [],
+      get: (key: string) => {
+        return invalidTransaction[key as keyof typeof invalidTransaction] || '';
+      }
+    });
 
-    const res = await PUT(req, { params: { transactionId: defaultTransaction._id } });
+    const req = {
+      formData: mockFormData,
+      nextUrl: { pathname: `/api/transaction/${invalidMongoID}` }
+    } as unknown as NextRequest;
+    const res = await PUT(req, { params: { transactionId: invalidMongoID } });
     const json = await res.json();
 
     expect(res.status).toBe(400);
@@ -94,7 +119,9 @@ describe("/api/transaction", () => {
   });
 
   test("DELETE TRANSACTION: Invalid transaction ID", async () => {
-    jest.spyOn(Transaction, "findOne").mockResolvedValue(null);
+    const transaction = { ...defaultTransaction, _id: invalidMongoID,
+      'savingGroupId':'', 'budgetGroupId': ''
+     };
 
     const req = {
       query: { transactionId: invalidMongoID }
@@ -124,19 +151,27 @@ describe("/api/transaction", () => {
 
   test('UPDATE TRANSACTION: Success', async () => {
     // Mock the existing transaction
-    const transaction = { ...defaultTransaction, description: "OLD" };
+    const transaction = { ...defaultTransaction, description: "NEW", 
+      'savingGroupId': '', 'budgetGroupId': ''
+     };
     jest.spyOn(Transaction, "findOne").mockResolvedValue(transaction as any);
     jest.spyOn(Transaction, "findOneAndUpdate").mockResolvedValue({
         ...transaction,
-        description: 'Updated Description'
+        description: 'Updated Description',
+        'savingGroupId': '', 'budgetGroupId': ''
     } as any);
 
     // Create a mock request object
-    const req = {
-        json: async () => ({ description: 'Updated Description' }),
-    } as unknown as NextRequest;
+    const mockFormData = async () => ({
+      getAll: () => [],
+      get: (key: string) => {
+        return transaction[key as keyof typeof transaction] || '';
+      }
+    });
 
-    // Call the PUT handler
+    const req = {
+      formData: mockFormData,
+    } as unknown as NextRequest;
     const res = await PUT(req, { params: { transactionId: defaultTransaction._id.toString() } });
     const json = await res.json();
 
@@ -144,7 +179,6 @@ describe("/api/transaction", () => {
     expect(res.status).toBe(200);
     expect(json.response.description).toBe('Updated Description');
   });
-
 
   test('DELETE TRANSACTION: Success', async () => {
     // Mock the existing transaction

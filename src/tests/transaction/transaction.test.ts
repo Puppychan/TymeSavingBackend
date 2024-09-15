@@ -5,7 +5,7 @@ import Transaction from 'src/models/transaction/model';
 import GroupSaving from 'src/models/groupSaving/model';
 import SharedBudget from 'src/models/sharedBudget/model';
 import { NextRequest } from 'next/server';
-import { defaultTransaction, defaultGroupSaving, defaultSharedBudget } from '../support-data';
+import { defaultTransaction } from '../support-data';
 
 describe('POST /api/transaction', () => {
   let req: Partial<NextRequest>;
@@ -80,8 +80,32 @@ describe('POST /api/transaction', () => {
 
   test("CREATE TRANSACTION: Invalid shared budget id", async () => {
     jest.spyOn(Transaction.prototype, "save").mockResolvedValue(defaultTransaction as any);
+    jest.spyOn(SharedBudget, "findById").mockResolvedValue(null);
+    // jest.spyOn(SharedBudget, "findById").mockResolvedValue(defaultSharedBudget as any);
+
+    const mockFormData = async () => ({
+      getAll: () => [],
+      get: (key: string) => {
+        if (key === 'budgetGroupId') return 'invalidGroupId';
+        return defaultTransaction[key as keyof typeof defaultTransaction] || '';
+      }
+    });
+
+    const req = {
+      formData: mockFormData,
+    } as unknown as NextRequest;
+
+    const res = await POST(req);
+    const json = await res.json();
+
+    expect(res.status).toBe(404);
+    expect(json.response).toEqual("No such Shared Budget");
+  });
+
+  test("CREATE TRANSACTION: Invalid group saving id", async () => {
+    jest.spyOn(Transaction.prototype, "save").mockResolvedValue(defaultTransaction as any);
+    // jest.spyOn(GroupSaving, "findById").mockResolvedValue(defaultGroupSaving as any);
     jest.spyOn(GroupSaving, "findById").mockResolvedValue(null);
-    jest.spyOn(SharedBudget, "findById").mockResolvedValue(defaultSharedBudget as any);
 
     const mockFormData = async () => ({
       getAll: () => [],
@@ -100,30 +124,6 @@ describe('POST /api/transaction', () => {
 
     expect(res.status).toBe(404);
     expect(json.response).toEqual("No such Group Saving");
-  });
-
-  test("CREATE TRANSACTION: Invalid group saving id", async () => {
-    jest.spyOn(Transaction.prototype, "save").mockResolvedValue(defaultTransaction as any);
-    jest.spyOn(GroupSaving, "findById").mockResolvedValue(defaultGroupSaving as any);
-    jest.spyOn(SharedBudget, "findById").mockResolvedValue(null);
-
-    const mockFormData = async () => ({
-      getAll: () => [],
-      get: (key: string) => {
-        if (key === 'budgetGroupId') return 'invalidBudgetGroupId';
-        return defaultTransaction[key as keyof typeof defaultTransaction] || '';
-      }
-    });
-
-    const req = {
-      formData: mockFormData,
-    } as unknown as NextRequest;
-
-    const res = await POST(req);
-    const json = await res.json();
-
-    expect(res.status).toBe(404);
-    expect(json.response).toEqual("No such Shared Budget");
   });
 
   test("CREATE TRANSACTION: Internal server error", async () => {
