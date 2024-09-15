@@ -155,4 +155,3 @@ describe('POST /api/transaction', () => {
     expect(json.response).toEqual("Failed to create transaction: Error: Internal error");
   });
 });
-

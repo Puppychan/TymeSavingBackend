@@ -14,6 +14,7 @@ export const defaultUser = {
 
 // Default transaction data
 export const defaultTransaction = {
+  _id: '666a4e3b82c9937c90738290',
   userId: '567cedea6bd680f6d9fac54a',
   description: 'Test transaction',
   type: 'Expense',

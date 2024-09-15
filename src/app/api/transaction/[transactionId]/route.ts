@@ -109,12 +109,13 @@ export const DELETE = async(req: NextRequest, { params }: { params: { transactio
             // Add the amount back to the budget group
             if (query_transaction.budgetGroupId){
                 await revertTransactionSharedBudget(params.transactionId, query_transaction.amount);
+                await updateTransactionChallenge(query_transaction._id);
             }          
             // Deduct the amount from the saving group
             else if (query_transaction.savingGroupId){
                 await revertTransactionGroupSaving(params.transactionId, query_transaction.amount);
+                await updateTransactionChallenge(query_transaction._id);
             }
-            await updateTransactionChallenge(query_transaction._id);
 
             // Delete the transaction
             await Transaction.deleteOne({ _id: transactionId });
