@@ -3,28 +3,49 @@ import { connectMongoDB } from "src/config/connectMongoDB";
 import { verifyUser } from "src/lib/authentication";
 import User from "src/models/user/model";
 import ChallengeProgress from "src/models/challengeProgress/model";
+import mongoose from "mongoose";
 
 // GET: Read the user information
 export const GET = async (
   req: NextRequest,
-  { params }: { params: { username: string } }
+  { params }: { params: { userId: string } }
 ) => {
   try {
     await connectMongoDB();
-    const verification = await verifyUser(req.headers, params.username)
-    if (verification.status !== 200) {
-      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    let urlSearchParams = req.nextUrl.searchParams;
+    let vnpParams: { [key: string]: string } = {};
+    urlSearchParams.forEach((value, key) => {
+        vnpParams[key] = value;
+    });
+    // Sort date and challenge name from search parameters
+    const sortDatePassed = vnpParams['sortDatePassed'];
+    const sortChallengeName = vnpParams['sortChallengeName'];
+    let sort = {};
+    if(sortDatePassed){
+        const order = sortDatePassed == "ascending" ? 1:-1;
+        sort["checkpointPassedDate"] = order;
     }
-
-    const user = await User.findOne({ username: params.username });
+    if(sortChallengeName){
+        const order = sortChallengeName == "ascending" ? 1:-1;
+        sort["challengeName"] = order;
+    }
+    if (!sortChallengeName && !sortDatePassed){
+        sort["checkpointPassedDate"] = -1; // Default option: most recent reward
+    }
+    const user = await User.findById(params.userId);
     if (!user) {
       return NextResponse.json({ response: "User not found" }, { status: 404 });
     }
-    const userId = user._id;
+    // Verify logged in user
+    const verification = await verifyUser(req.headers, user.username)
+    if (verification.status !== 200) {
+      return NextResponse.json({ response: verification.response }, { status: verification.status });
+    }    
+    const userId = params.userId;
     let rewardHistory = await ChallengeProgress.aggregate([
     // 1. Match userId
       {
-        $match: { "userId": userId }
+        $match: { "userId": new mongoose.Types.ObjectId(userId) }
       }, 
     // 2. Separate checkpoint passed
       {
@@ -84,7 +105,7 @@ export const GET = async (
         }
       },
       {
-        $sort: { checkpointPassedDate: -1}
+        $sort: sort
       }
     ]);
 
