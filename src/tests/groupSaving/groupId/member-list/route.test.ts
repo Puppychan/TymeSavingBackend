@@ -1,18 +1,23 @@
 import { NextRequest } from "next/server";
 import { defaultUser, mockGroupSaving } from "src/tests/support-data";
-import mongoose from "mongoose";
 import GroupSaving from "src/models/groupSaving/model";
 import * as GroupSavingUtils from "src/lib/groupSavingUtils"
 import { verifyAuth } from "src/lib/authentication";
 import { GET } from "src/app/api/groupSaving/[groupId]/member-list/route";
 import { UserRole } from "src/models/user/interface";
 import GroupSavingParticipation from "src/models/groupSavingParticipation/model";
+import { exec } from "child_process";
+import { populate } from "dotenv";
+import { Query } from "mongoose";
 // Mock the dependencies
 jest.mock("src/models/groupSaving/model", () => ({
   findById: jest.fn(),
 }));
 jest.mock("src/models/groupSavingParticipation/model", () => ({
-  find: jest.fn(),
+  find: jest.fn(() => ({
+    populate: jest.fn()
+  })),
+  exec: jest.fn()
 }));
 jest.mock("src/lib/authentication", () => ({
   verifyAuth: jest.fn(),
@@ -42,11 +47,15 @@ describe("Test GET group info", () => {
   it("success: role admin", async () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: defaultUser, status: 200 });
     jest.spyOn(GroupSaving, "findById").mockResolvedValue(mockGroupSaving);  
-    jest.spyOn(GroupSavingParticipation, "find").mockResolvedValue(mockMembers);
+    jest.spyOn(GroupSavingParticipation, 'find').mockReturnThis()
+    .mockReturnValue({
+        populate: jest.fn().mockResolvedValueOnce(mockMembers),
+    } as any);
 
     const req = {} as NextRequest;
     const res = await GET(req , { params: { groupId: mockGroupSaving._id } });
     const json = await res.json();
+    // console.log(json);
 
     expect(res.status).toBe(200);
     expect(json.response).toEqual(mockMembers);
@@ -58,7 +67,10 @@ describe("Test GET group info", () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: {...defaultUser, role: UserRole.Customer}, status: 200 });
     verifyMemberSpy.mockResolvedValue(true);
     jest.spyOn(GroupSaving, "findById").mockResolvedValue(mockGroupSaving);
-    jest.spyOn(GroupSavingParticipation, "find").mockResolvedValue(mockMembers);
+    jest.spyOn(GroupSavingParticipation, 'find').mockReturnThis()
+    .mockReturnValue({
+        populate: jest.fn().mockResolvedValueOnce(mockMembers),
+    } as any);
 
     const req = {} as NextRequest;
     const res = await GET(req , { params: { groupId: mockGroupSaving._id } });
