@@ -82,8 +82,8 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
 
     return NextResponse.json({ response: contribution }, { status: 200 });
   } catch (error: any) {
-    console.log('Error getting member list:', error);
-    return NextResponse.json({ response: 'Failed to get member list'}, { status: 500 });
+    console.log('Error getting contribution:', error);
+    return NextResponse.json({ response: 'Failed to get contribution: ' + error}, { status: 500 });
   }
 };
 
