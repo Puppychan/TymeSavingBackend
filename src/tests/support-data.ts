@@ -26,6 +26,7 @@ export const mockGroupSaving = {
   defaultApproveStatus: ApproveStatuses.Approved,
   isClosed: false,
   endDate: new Date("2024-12-30"),
+  createdDate: new Date(),
 } as IGroupSaving;
 
 export const mockGroupSavingParticipation = {

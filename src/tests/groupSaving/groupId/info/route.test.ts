@@ -91,7 +91,7 @@ describe("Test GET group info", () => {
     expect(verifyMemberSpy).toHaveBeenCalledWith(defaultUser._id, mockGroupSaving._id);
   });
 
-  it("should return not found", async () => {
+  it("failed: group not found", async () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: defaultUser, status: 200 });
     jest.spyOn(GroupSaving, "aggregate").mockResolvedValue([]);  
 

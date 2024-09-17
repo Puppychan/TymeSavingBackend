@@ -13,8 +13,6 @@ export const GET = async (req: NextRequest) => {
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
-      const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
-      const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
 
       await connectMongoDB();
 
@@ -48,8 +46,6 @@ export const GET = async (req: NextRequest) => {
       list = await GroupSaving.aggregate([
           { $match: query },
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
-          { $skip: (pageNo - 1) * pageSize },
-          { $limit: pageSize }
         ])
        
       return NextResponse.json({ response: list }, { status: 200 });
