@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import GroupSaving from "src/models/groupSaving/model";
@@ -28,8 +27,8 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
     };
       return NextResponse.json({ response: result }, { status: 200 });
   } catch (error: any) {
-    console.log('Error getting member list:', error);
-    return NextResponse.json({ response: 'Failed to get member list'}, { status: 500 });
+    console.log('Error getting group info:', error);
+    return NextResponse.json({ response: 'Failed to get group info: ' + error}, { status: 500 });
   }
 };
 
