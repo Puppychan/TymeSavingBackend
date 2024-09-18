@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { NextRequest, NextResponse } from "next/server";
 import { connectMongoDB } from "src/config/connectMongoDB";
 import SharedBudget from "src/models/sharedBudget/model";
@@ -15,7 +14,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
     }
     // show name, description, username of hostedBy, createdDate, number of participants
     const memberCount = await SharedBudgetParticipation.countDocuments({ sharedBudget: params.sharedBudgetId, role: 'Member' });
-    const hostedByUser = await User.findById(new ObjectId(sharedBudget.hostedBy));
+    const hostedByUser = await User.findById(sharedBudget.hostedBy);
     if(!hostedByUser){
         console.log('Error with Shared Budget: Host not found', sharedBudget.hostedBy);
         return NextResponse.json({ response: 'Error with Shared Budget: Host not found' }, { status: 500 });
@@ -29,8 +28,8 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
     };
       return NextResponse.json({ response: result }, { status: 200 });
   } catch (error: any) {
-    console.log('Error getting member list:', error);
-    return NextResponse.json({ response: 'Failed to get member list'}, { status: 500 });
+    console.log('Error gettinggroup info:', error);
+    return NextResponse.json({ response: 'Failed to get group info: ' + error}, { status: 500 });
   }
 };
 

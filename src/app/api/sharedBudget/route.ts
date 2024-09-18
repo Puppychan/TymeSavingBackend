@@ -56,6 +56,6 @@ export const POST = async (req: NextRequest) => {
     await dbSession.endSession();  // End the session
 
     console.log("Error creating shared budget: ", error);
-    return NextResponse.json({ response: 'Failed to create shared budget'}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to create shared budget: ' + error}, { status: 500 });
   }
 };

@@ -123,8 +123,8 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
 
     return NextResponse.json({ response: histrory }, { status: 200 });
   } catch (error: any) {
-    console.log('Error getting member list:', error);
-    return NextResponse.json({ response: 'Failed to get member list'}, { status: 500 });
+    console.log('Error getting transactions in group:', error);
+    return NextResponse.json({ response: 'Failed to get transactions in group: ' + error}, { status: 500 });
   }
 };
 
