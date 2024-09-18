@@ -39,8 +39,8 @@ export const DELETE = async (req: NextRequest, { params }: { params: { groupId: 
         return NextResponse.json({ response: 'Cannot delete this group saving as there are transactions associated with it' }, { status: 400 });
       }
 
-      await GroupSavingParticipation.deleteMany({ groupSaving: params.groupId }).session(dbSession)
-      await GroupSaving.findOneAndDelete({ _id: params.groupId}).session(dbSession)
+      await GroupSavingParticipation.deleteMany({ groupSaving: params.groupId }, {session: dbSession});
+      await GroupSaving.findOneAndDelete({ _id: params.groupId}, { session: dbSession });
 
       await dbSession.commitTransaction();  // Commit the transaction
       await dbSession.endSession();  // End the session

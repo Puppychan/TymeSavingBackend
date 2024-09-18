@@ -24,6 +24,7 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
         if (!isMember)
           return NextResponse.json({ response: 'This user is neither an admin nor a member of the group saving' }, { status: 401 });
       }
+
       
       const group = await GroupSaving.aggregate([
         {
@@ -63,6 +64,6 @@ export const GET = async (req: NextRequest, { params }: { params: { groupId: str
       return NextResponse.json({ response: group[0] }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting group saving:', error);
-    return NextResponse.json({ response: 'Failed to get group saving'}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to get group saving: ' + error}, { status: 500 });
   }
 };

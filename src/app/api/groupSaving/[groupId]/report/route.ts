@@ -32,7 +32,7 @@ export const GET = async(req: NextRequest, { params }: { params: { groupId: stri
 
     const groupSaving = await GroupSaving.findById(groupId);
     if(!groupSaving){
-      throw "GroupSavingReport: Cannot find GroupSaving";
+      return NextResponse.json({ response: 'GroupSavingReport: Cannot find GroupSaving' }, { status: 404 });
     }
     var response = {information: {}, categories: [], users: [], transactions: []};
     // Fetch basic information
@@ -46,6 +46,6 @@ export const GET = async(req: NextRequest, { params }: { params: { groupId: stri
     return NextResponse.json({ response: response }, { status: 200 });
   }
   catch (error: any) {
-      return NextResponse.json({ response: error.message }, { status: 500 });
+    return NextResponse.json({ response: "Failed to get report " + error }, { status: 500 });
   }
 }

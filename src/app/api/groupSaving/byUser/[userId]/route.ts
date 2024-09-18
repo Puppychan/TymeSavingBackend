@@ -8,14 +8,13 @@ import { localDate } from "src/lib/datetime";
 // GET: get group saving list of a user
 export const GET = async (req: NextRequest, { params }: { params: { userId: string }}) => {
   try {
+    
       const searchParams = req.nextUrl.searchParams
       const name = searchParams.get('name')
       const from = searchParams.get('fromDate')
       const to = searchParams.get('toDate')
       const sort = searchParams.get('sort') || 'descending' // sort: ascending/descending
       const showClosedExpired = searchParams.get('showClosedExpired') ?? 'true'; // also show closed or expired groups
-      const pageNo = searchParams.get('pageNo') ? parseInt(searchParams.get('pageNo')) : 1
-      const pageSize = searchParams.get('pageSize') ? parseInt(searchParams.get('pageSize')) : 10
       await connectMongoDB();
 
       const verification = await verifyAuth(req.headers, params.userId)
@@ -66,10 +65,7 @@ export const GET = async (req: NextRequest, { params }: { params: { userId: stri
           { $match: query },
           { $sort: { createdDate: (sort === 'ascending') ? 1 : -1 } },
           { $replaceRoot: { newRoot: "$groupSaving" } },
-          // { $skip: (pageNo - 1) * pageSize },
-          // { $limit: pageSize }
         ])
-      // console.log("Group Saving List: ", list);
        
       return NextResponse.json({ response: list }, { status: 200 });
   } catch (error: any) {
