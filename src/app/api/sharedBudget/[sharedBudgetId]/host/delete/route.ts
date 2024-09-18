@@ -5,6 +5,7 @@ import { verifyAuth } from "src/lib/authentication";
 import { checkDeletableSharedBudget } from "src/lib/sharedBudgetUtils";
 import SharedBudget from "src/models/sharedBudget/model";
 import SharedBudgetParticipation from "src/models/sharedBudgetParticipation/model";
+import { UserRole } from "src/models/user/interface";
 
 // DELETE: delete a shared budget (available only for the Host of the shared budget)
 // TODO: CHECK IF THERE IS ANY TRANSACTION ASSOCIATED WITH THIS SHARED BUDGET
@@ -27,8 +28,10 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
 
-      if (authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
-        return NextResponse.json({ response: 'Only the Host can delete this shared budget' }, { status: 401 });
+      if (authUser.role !== UserRole.Admin) {
+        if (authUser._id.toString() !== sharedBudget.hostedBy.toString()) {
+          return NextResponse.json({ response: 'Only the Host and Admin can delete this shared budget' }, { status: 401 });
+        }
       }
 
       const deletable = await checkDeletableSharedBudget(params.sharedBudgetId)
@@ -36,8 +39,8 @@ export const DELETE = async (req: NextRequest, { params }: { params: { sharedBud
         return NextResponse.json({ response: 'Cannot delete this shared budget as there are transactions associated with it' }, { status: 400 });
       }
 
-      await SharedBudgetParticipation.deleteMany({ sharedBudget: params.sharedBudgetId }).session(dbSession)
-      await SharedBudget.findOneAndDelete({ _id: params.sharedBudgetId}).session(dbSession)
+      await SharedBudgetParticipation.deleteMany({ sharedBudget: params.sharedBudgetId }, {session: dbSession})
+      await SharedBudget.findOneAndDelete({ _id: params.sharedBudgetId}, {session: dbSession})
 
       await dbSession.commitTransaction();  // Commit the transaction
       await dbSession.endSession();  // End the session

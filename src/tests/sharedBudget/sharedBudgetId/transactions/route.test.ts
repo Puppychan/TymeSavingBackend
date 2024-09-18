@@ -1,15 +1,15 @@
 import { ObjectId } from 'mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyAuth } from 'src/lib/authentication';
-import GroupSaving from 'src/models/groupSaving/model';
+import SharedBudget from 'src/models/sharedBudget/model';
 import Transaction from 'src/models/transaction/model';
 import { UserRole } from 'src/models/user/interface';
-import { GET } from 'src/app/api/groupSaving/[groupId]/transactions/route';
-import { defaultUser, mockGroupSaving } from 'src/tests/support-data';
-import * as GroupSavingUtils from 'src/lib/groupSavingUtils';
+import { GET } from 'src/app/api/sharedBudget/[sharedBudgetId]/transactions/route';
+import { defaultUser, mockSharedBudget } from 'src/tests/support-data';
+import * as SharedBudgetUtils from 'src/lib/sharedBudgetUtils';
 import { TransactionCategory, TransactionType } from 'src/models/transaction/interface';
 
-jest.mock("src/models/groupSaving/model", () => ({
+jest.mock("src/models/sharedBudget/model", () => ({
   findById: jest.fn(),
 }));
 jest.mock('src/models/transaction/model', () => ({
@@ -19,7 +19,7 @@ jest.mock('src/models/transaction/model', () => ({
 jest.mock("src/lib/authentication", () => ({
   verifyAuth: jest.fn(),
 }));
-jest.mock("src/lib/groupSavingUtils", () => ({
+jest.mock("src/lib/sharedBudgetUtils", () => ({
   verifyMember: jest.fn(),
 }));
 jest.mock('mongoose', () => ({
@@ -27,16 +27,16 @@ jest.mock('mongoose', () => ({
 }));
 
 describe('Test GET contribution', () => {
-  let groupId = mockGroupSaving._id;
-  let apiEndPoint =  `http://localhost:3000/api/groupSaving/${groupId}/contribution`
+  let groupId = mockSharedBudget._id;
+  let apiEndPoint =  `http://localhost:3000/api/sharedBudget/${groupId}/contribution`
   let searchParams: string
-  let params = { groupId: groupId }
+  let params = { sharedBudgetId: groupId }
   let verifyMemberSpy
 
   beforeEach(() => {
     jest.resetAllMocks();
     searchParams = '';
-    verifyMemberSpy = jest.spyOn(GroupSavingUtils, "verifyMember")
+    verifyMemberSpy = jest.spyOn(SharedBudgetUtils, "verifyMember")
   });
 
   afterEach(() => {
@@ -46,7 +46,7 @@ describe('Test GET contribution', () => {
 
   it('success: admin + with search params', async () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: defaultUser, status: 200 });
-    jest.spyOn(GroupSaving, 'findById').mockResolvedValue(mockGroupSaving);
+    jest.spyOn(SharedBudget, 'findById').mockResolvedValue(mockSharedBudget);
     jest.spyOn(Transaction, 'aggregate').mockResolvedValue([]);
 
     let userId = new ObjectId();
@@ -95,7 +95,7 @@ describe('Test GET contribution', () => {
     expect(json.response).toStrictEqual([]);
     expect(verifyMemberSpy).not.toHaveBeenCalled();
     expect(Transaction.aggregate).toHaveBeenCalledWith([
-      { $match: { savingGroupId: new ObjectId(groupId) } },
+      { $match: { budgetGroupId: new ObjectId(groupId) } },
       { $match: query },
       { $sort: { createdDate: 1 } },
       { $lookup: { 
@@ -136,7 +136,7 @@ describe('Test GET contribution', () => {
   it('success: member + no search params', async () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: {...defaultUser, role: UserRole.Customer}, status: 200 });
     verifyMemberSpy.mockResolvedValue(true);
-    jest.spyOn(GroupSaving, 'findById').mockResolvedValue(mockGroupSaving);
+    jest.spyOn(SharedBudget, 'findById').mockResolvedValue(mockSharedBudget);
     jest.spyOn(Transaction, 'aggregate').mockResolvedValue([]);
 
     let query = {}
@@ -152,7 +152,7 @@ describe('Test GET contribution', () => {
     expect(json.response).toStrictEqual([]);
     expect(verifyMemberSpy).toHaveBeenCalled();
     expect(Transaction.aggregate).toHaveBeenCalledWith([
-      { $match: { savingGroupId: new ObjectId(groupId) } },
+      { $match: { budgetGroupId: new ObjectId(groupId) } },
       { $match: query },
       { $sort: { createdDate: -1 } },
       { $lookup: { 
@@ -213,14 +213,14 @@ describe('Test GET contribution', () => {
     const json = await res.json();
 
     expect(res.status).toBe(401);
-    expect(json.response).toBe('This user is neither an admin nor a member of the group saving' );
+    expect(json.response).toBe('This user is neither an admin nor a member of the shared budget' );
     expect(verifyMemberSpy).toHaveBeenCalled();
-    expect(GroupSaving.findById).not.toHaveBeenCalled();
+    expect(SharedBudget.findById).not.toHaveBeenCalled();
   });
 
-  it('failed: should return 404 if group saving not found', async () => {
+  it('failed: should return 404 if shared budget not found', async () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: defaultUser, status: 200 });
-    jest.spyOn(GroupSaving, 'findById').mockResolvedValue(null);
+    jest.spyOn(SharedBudget, 'findById').mockResolvedValue(null);
 
     searchParams = ``;
     const req = new NextRequest(new URL(apiEndPoint + searchParams));
@@ -228,12 +228,12 @@ describe('Test GET contribution', () => {
     const json = await res.json();
 
     expect(res.status).toBe(404);
-    expect(json.response).toBe('Group Saving not found');
+    expect(json.response).toBe('Shared Budget not found');
   });
 
   it('failed: should return 500 if error occurs', async () => {
     (verifyAuth as jest.Mock).mockResolvedValue({ response: defaultUser, status: 200 });
-    jest.spyOn(GroupSaving, 'findById').mockResolvedValue(mockGroupSaving);
+    jest.spyOn(SharedBudget, 'findById').mockResolvedValue(mockSharedBudget);
     const error = new Error('Internal server error');
     jest.spyOn(Transaction, "aggregate").mockImplementationOnce(() => { throw error });
 

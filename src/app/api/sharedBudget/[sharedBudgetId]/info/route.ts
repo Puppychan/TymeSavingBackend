@@ -47,7 +47,7 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
           }
         }
       ]);
-      if (!sharedBudget || SharedBudget.length < 1) {
+      if (!sharedBudget || sharedBudget.length < 1) {
         return NextResponse.json({ response: 'Shared Budget not found' }, { status: 404 });
       }
       // if(sharedBudget.endDate <= localDate(new Date()) || sharedBudget.isClosed){
@@ -63,6 +63,6 @@ export const GET = async (req: NextRequest, { params }: { params: { sharedBudget
       return NextResponse.json({ response: sharedBudget[0] }, { status: 200 });
   } catch (error: any) {
     console.log('Error getting shared budget:', error);
-    return NextResponse.json({ response: 'Failed to get shared budget'}, { status: 500 });
+    return NextResponse.json({ response: 'Failed to get shared budget: ' + error}, { status: 500 });
   }
 };
