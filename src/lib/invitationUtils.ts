@@ -282,12 +282,13 @@ export const isUserInGroup = async (
         if (!savingGroup) {
           throw "CheckInvitation: GroupSaving not found";
         }
-        const existSBP = await GroupSavingParticipation.find({
+        const existGSP = await GroupSavingParticipation.find({
           userId: userId,
-          sharedBudget: groupId,
+          groupSaving: groupId,
         });
-        if (existSBP) {
+        if (existGSP) {
           console.log("CheckInvitation: User is already in this GroupSaving");
+          console.log(existGSP);
           resolve(true);
           return;
         }
