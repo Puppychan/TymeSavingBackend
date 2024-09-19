@@ -151,8 +151,16 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
           }
         },
         {
-          $sort: {
-            numCheckpointPassed: -1
+          $addFields: {
+            members: {
+              $sortArray: {
+                input: "$members",
+                sortBy: {
+                  numCheckpointPassed: -1, // Sort by numCheckpointPassed in descending order
+                  currentProgress: -1 // Sort by currentProgress in descending order
+                }
+              }
+            }
           }
         }
       ]);      
