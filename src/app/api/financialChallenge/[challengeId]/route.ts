@@ -149,6 +149,11 @@ export const GET = async (req: NextRequest, { params }: { params: { challengeId:
           $project:{
             creator: 0
           }
+        },
+        {
+          $sort: {
+            numCheckpointPassed: -1
+          }
         }
       ]);      
 
