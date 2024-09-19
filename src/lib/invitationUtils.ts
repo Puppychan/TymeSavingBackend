@@ -264,7 +264,7 @@ export const isUserInGroup = async (
           throw "CheckInvitation: SharedBudget not found";
         }
         const existSBP = await SharedBudgetParticipation.find({
-          userId: userId,
+          user: userId,
           sharedBudget: groupId,
         });
         if (existSBP) {
@@ -282,8 +282,8 @@ export const isUserInGroup = async (
         if (!savingGroup) {
           throw "CheckInvitation: GroupSaving not found";
         }
-        const existGSP = await GroupSavingParticipation.find({
-          userId: userId,
+        const existGSP = await GroupSavingParticipation.findOne({
+          user: userId,
           groupSaving: groupId,
         });
         if (existGSP) {
